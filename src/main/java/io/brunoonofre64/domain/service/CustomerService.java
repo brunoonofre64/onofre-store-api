@@ -2,6 +2,7 @@ package io.brunoonofre64.domain.service;
 
 import io.brunoonofre64.api.v1.dto.CustomerDTO;
 import io.brunoonofre64.api.v1.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.entities.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

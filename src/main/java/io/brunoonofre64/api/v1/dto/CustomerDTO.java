@@ -12,8 +12,8 @@ import java.util.UUID;
 public class CustomerDTO {
     private String uuid;
     private String name;
+    private String age;
     private LocalDateTime inclusionDate;
-
     @PrePersist
     private void prePersist() {
         inclusionDate = LocalDateTime.now();

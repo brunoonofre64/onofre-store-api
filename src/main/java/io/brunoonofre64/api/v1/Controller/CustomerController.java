@@ -28,7 +28,7 @@ public class CustomerController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<CustomerDTO> getAllCustomers(Pageable pageable) {
-        return getAllCustomers(pageable);
+        return customerService.getAllCustomers(pageable);
     }
 
     @PutMapping("/{uuid}")

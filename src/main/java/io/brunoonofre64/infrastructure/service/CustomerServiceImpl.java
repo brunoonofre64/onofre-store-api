@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-
     private CustomerRepository customerRepository;
     private CustomerMapper mapper;
     @Override

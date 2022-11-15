@@ -5,6 +5,7 @@ import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,8 @@ public class CustomerControllerTestIT {
     }
 
     @Test
-    void mustShowCustomers() throws Exception{
+    @DisplayName("retorna 10 clientes em uma pagina")
+    void mustShowTenCustomers() throws Exception{
 
         CustomerEntity customerEntity = buildCustomerDefault();
         customerEntity.setId(null);

@@ -1,15 +1,13 @@
 package io.brunoonofre64.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

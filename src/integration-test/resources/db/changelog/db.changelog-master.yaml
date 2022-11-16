@@ -7,3 +7,4 @@ databaseChangelog:
   - include:
       file: 001_CREATE_TABLES.sql
       relativeToChangelogFile: true
+

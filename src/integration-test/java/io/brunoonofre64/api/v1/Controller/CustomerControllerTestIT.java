@@ -7,22 +7,29 @@ import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static io.brunoonofre64.api.v1.utils.ConstantsTest.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("TEST-H2")
 @AutoConfigureMockMvc
-@AllArgsConstructor
 public class CustomerControllerTestIT {
+    @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -38,8 +45,9 @@ public class CustomerControllerTestIT {
         customerEntity.setId(null);
 
        mockMvc.perform(MockMvcRequestBuilders.get(WEB_METHOD_TEST.V1_CUSTOMER))
-               .andExpect(MockMvcResultMatchers.status().isOk())
-               .andDo(MockMvcResultHandlers.print());
+               .andDo(print())
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.[0].uuid").value(customerEntity.getUuid()));
    }
 
 

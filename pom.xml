@@ -76,7 +76,7 @@
 			<artifactId>liquibase-core</artifactId>
 			<scope>test</scope>
 		</dependency>
-</dependencies>
+	</dependencies>
 
 
 	<build>

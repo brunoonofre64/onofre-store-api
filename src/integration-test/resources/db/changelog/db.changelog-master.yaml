@@ -1,5 +1,4 @@
-databaseChangelog:
-
+databaseChangeLog:
   - changeSet:
       id: 1
       author: bruno.onofre

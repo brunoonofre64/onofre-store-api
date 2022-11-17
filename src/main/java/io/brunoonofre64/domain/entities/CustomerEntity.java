@@ -13,9 +13,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "TBL_CLIENTE")
+@SequenceGenerator(name = "sequenceCustomer", sequenceName = "SQ_CUSTOMER", allocationSize = 1)
 public class CustomerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceCustomer")
     @Column(name = "ID")
     private Long id;
     @Column(name = "UUID", nullable = false, length = 36)

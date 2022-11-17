@@ -9,12 +9,13 @@ public interface ConstantsTest {
 
     Long ID_DEFAULT = 1L;
     String TEXT_DEFAULT = "TEST";
+    String AGE_DEFAULT = "50";
     String SLASH = "/";
 
     interface CUSTOMER_ENTITY{
         Long ID = ID_DEFAULT;
         String NAME = TEXT_DEFAULT;
-        String AGE = TEXT_DEFAULT;
+        String AGE = AGE_DEFAULT;
     }
 
     interface WEB_METHOD_TEST {

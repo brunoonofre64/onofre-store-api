@@ -11,9 +11,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("TEST-H2")
+@AutoConfigureTestDatabase
 @AutoConfigureMockMvc
 public class CustomerControllerTestIT {
     @Autowired
@@ -44,21 +48,24 @@ public class CustomerControllerTestIT {
     }
 
     @Test
-    @DisplayName("retorna 10 clientes em uma pagina")
-    void mustShowTenCustomers() throws Exception{
+    @DisplayName("list returns list of customers inside page object when successful")
+    void list_ReturnsListOfCustomersInsidePageObject_WhenSuccessful(){
+        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
 
-        CustomerEntity customerEntity = buildCustomerDefault();
-        customerEntity.setId(null);
+        String expectedName = customerEntity.getName();
 
+        PageableResponse<CustomerEntity> customerPage = testRestTemplate.exchange(WEB_METHOD_TEST.V1_CUSTOMER,
+                HttpMethod.GET, null,
+                new ParameterizedTypeReference<PageableResponse<CustomerEntity>>() {
+                }).getBody();
 
-        MvcResult mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.get(WEB_METHOD_TEST.V1_CUSTOMER))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("pageSize").value(10))
-                .andReturn();
+        Assertions.assertThat(customerPage).isNotNull();
 
+        Assertions.assertThat(customerPage.toList())
+                .isNotEmpty()
+                .hasSize(1);
 
+        Assertions.assertThat(customerPage.toList().get(0).getName()).isEqualTo(expectedName);
     }
 
 

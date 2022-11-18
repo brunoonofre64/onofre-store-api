@@ -25,6 +25,7 @@ public class CustomerController {
     public CustomerDTO getCustomerByUuid(@PathVariable String uuid) {
         return customerService.getCustomerByUuid(uuid);
     }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<CustomerDTO> getAllCustomers(Pageable pageable) {

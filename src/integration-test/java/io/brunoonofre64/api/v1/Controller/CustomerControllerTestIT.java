@@ -37,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerControllerTestIT {
     @Autowired
     private CustomerRepository customerRepository;
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired

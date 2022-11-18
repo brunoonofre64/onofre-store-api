@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper mapper;
     @Override
     public CustomerDTO saveNewCustomerInDb(DataToCreateCustomerDTO dto) {
-        if(dto == null || dto.getName() == null || dto.getAge() == null) {
+        if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
         CustomerEntity entity = mapper.convertDTOToEntity(dto);

@@ -16,6 +16,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO saveNewCustomerInDb(@RequestBody DataToCreateCustomerDTO dto) {
        return customerService.saveNewCustomerInDb(dto);
     }

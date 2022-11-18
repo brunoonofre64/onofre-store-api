@@ -1,4 +1,4 @@
-package io.brunoonofre64.api.wrapper;
+package io.brunoonofre64.api.v1.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;

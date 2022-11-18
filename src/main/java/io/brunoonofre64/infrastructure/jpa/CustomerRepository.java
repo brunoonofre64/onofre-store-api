@@ -10,4 +10,5 @@ public interface CustomerRepository extends PagingAndSortingRepository<CustomerE
     CustomerEntity findByUuid(String uuid);
     Page<CustomerDTO> findAllBy(Pageable pageable);
     void deleteByUuid(String uuid);
+    boolean existsByUuid(String uuid);
 }

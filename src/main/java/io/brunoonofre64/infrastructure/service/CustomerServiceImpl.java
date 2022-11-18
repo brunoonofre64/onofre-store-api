@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomerByUuid(String uuid) {
-        if(ObjectUtils.isEmpty(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
         CustomerEntity entity = customerRepository.findByUuid(uuid);
@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
     @Override
     public CustomerDTO updateCustomerByUuid(String uuid, DataToCreateCustomerDTO dto) {
-        if(ObjectUtils.isEmpty(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
         if(dto == null || dto.getName() == null || dto.getAge() == null) {
@@ -77,11 +77,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void deleteCustomerOfDb(String uuid) {
-        if(ObjectUtils.isEmpty(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
         customerRepository.deleteByUuid(uuid);
     }
+
     private Page<CustomerDTO> getCustomerDTOS(Page<CustomerEntity> entity) {
         Page<CustomerDTO> dto = entity.map(new Function<CustomerEntity, CustomerDTO>() {
             @Override

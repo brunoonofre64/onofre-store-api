@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 @AllArgsConstructor
 public class ApplicationHandler extends ResponseEntityExceptionHandler {
-
     private ReloadableResourceBundleMessageSource messageBundle;
+
     @ExceptionHandler(CustomerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handlerCustomerException(CustomerException ex) {
@@ -34,6 +34,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(DtoNullOrIsEmptyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handlerDtoNullOrIsEmptyException(DtoNullOrIsEmptyException ex) {
@@ -46,6 +47,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(ListIsEmptyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handlerListIsEmptyException(ListIsEmptyException ex) {

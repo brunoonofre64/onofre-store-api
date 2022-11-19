@@ -1,9 +1,11 @@
 package io.brunoonofre64.api.v1.Controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.brunoonofre64.api.v1.wrapper.PageableResponse;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
+import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,18 +19,25 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static io.brunoonofre64.api.v1.utils.ConstantsTest.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("TEST-H2")
-@AutoConfigureTestDatabase
 @AutoConfigureMockMvc
 public class CustomerControllerTestIT {
     @Autowired
@@ -37,27 +46,24 @@ public class CustomerControllerTestIT {
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private TestRestTemplate testRestTemplate;
 
     @BeforeEach
     public void setUp() {
-        customerRepository.deleteAll();;
+        customerRepository.deleteAll();
     }
 
     @Test
     @DisplayName("Save new customer em DB, and verify if respnse status is created")
     void mustSaveNewCustomerInDataBase_doneSuccessfuly() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-
         String customerRequest = objectMapper.writeValueAsString(customerEntity);
 
         mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(customerRequest))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(TEXT_DEFAULT))
-                .andDo(MockMvcResultHandlers.print());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerRequest))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value(TEXT_DEFAULT))
+                .andDo(print());
 
         Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
@@ -73,10 +79,10 @@ public class CustomerControllerTestIT {
         mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerRequest))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof DtoNullOrIsEmptyException))
-                .andDo(MockMvcResultHandlers.print());
+                .andDo(print());
 
         Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
@@ -92,35 +98,63 @@ public class CustomerControllerTestIT {
         mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerRequest))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof DtoNullOrIsEmptyException))
-                .andDo(MockMvcResultHandlers.print());
+                .andDo(print());
 
         Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
 
     @Test
     @DisplayName("list returns list of customers inside page object when successful")
-    void list_ReturnsListOfCustomersInsidePageObject_WhenSuccessful() throws Exception {
+    void list_ReturnsListOfCustomersInsidePageObject_andReturnOk() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String expectedName = customerEntity.getName();
+        String customerRequest = objectMapper.writeValueAsString(customerEntity);
 
-        PageableResponse<CustomerEntity> customerPage = testRestTemplate.exchange(WEB_METHOD_TEST.V1_CUSTOMER,
-                HttpMethod.GET, null,
-                new ParameterizedTypeReference<PageableResponse<CustomerEntity>>() {
-                }).getBody();
+        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerRequest))
+                .andExpect(status().isOk())
+                .andDo(print());
 
-        Assertions.assertThat(customerPage).isNotNull();
-        Assertions.assertThat(customerPage.toList())
-                .isNotEmpty()
-                .hasSize(1);
-
-        Assertions.assertThat(customerPage.toList().get(0).getName()).isEqualTo(expectedName);
+        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
 
+    @Test
+    @DisplayName("must show customer by uuid, and return status ok")
+    void mustShowCustomerByUud_andReturnOk() throws Exception {
+        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
+        String customerRequest = objectMapper.writeValueAsString(customerEntity);
 
+        String expectedUuid = customerEntity.getUuid();
 
+        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerRequest))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
+    }
+
+    @Test
+    @DisplayName("try to get customer by uuid nonexistent and return bad request")
+    void tryToGetCustomerByUuidInvalid_andReturnBadRequest() throws Exception {
+        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
+        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String uuidInvalid = "123";
+
+        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", uuidInvalid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException()
+                        instanceof UuidNotFoundOrNullException))
+                .andDo(print());
+
+        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
+    }
 }
 
 

@@ -31,8 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static io.brunoonofre64.api.v1.utils.ConstantsTest.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -151,6 +150,28 @@ public class CustomerControllerTestIT {
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof UuidNotFoundOrNullException))
+                .andDo(print());
+
+        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
+    }
+
+    @Test
+    @DisplayName("Update new data of customer em DB, and verify if respnse status is no content")
+    void mustUpdateNewDataOfCustomerInDataBase_doneSuccessfuly() throws Exception {
+        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
+        customerEntity.setName(TEXT_DEFAULT_UPDATE);
+        String expectedUuid = customerEntity.getUuid();
+        String expectedName = TEXT_DEFAULT_UPDATE;
+
+
+        customerRepository.save(customerEntity);
+        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+
+        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(customerRequest))
+                .andExpect(status().isNoContent())
+                .andExpect(jsonPath("$.name").value(expectedName))
                 .andDo(print());
 
         Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();

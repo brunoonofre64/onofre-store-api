@@ -9,10 +9,12 @@ public interface ConstantsTest {
 
     Long ID_DEFAULT = 1L;
     String TEXT_DEFAULT = "TEST";
+    String TEXT_DEFAULT_UPDATE = "TEST UPDATE";
     String AGE_DEFAULT = "50";
     String SLASH = "/";
 
     interface CUSTOMER_ENTITY{
+        String NAME_UPDATE = TEXT_DEFAULT_UPDATE;
         Long ID = ID_DEFAULT;
         String NAME = TEXT_DEFAULT;
         String AGE = AGE_DEFAULT;
@@ -32,4 +34,5 @@ public interface ConstantsTest {
                 .inclusionDate(LocalDateTime.now())
                 .build();
     }
+
 }

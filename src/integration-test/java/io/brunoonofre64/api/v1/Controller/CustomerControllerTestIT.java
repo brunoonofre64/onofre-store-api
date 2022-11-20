@@ -147,17 +147,14 @@ public class CustomerControllerTestIT {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
         customerEntity.setName(TEXT_DEFAULT_UPDATE);
         String expectedUuid = customerEntity.getUuid();
-        String expectedName = TEXT_DEFAULT_UPDATE;
 
-
-        customerRepository.save(customerEntity);
         String customerRequest = objectMapper.writeValueAsString(customerEntity);
 
         mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerRequest))
                 .andExpect(status().isNoContent())
-                .andExpect(jsonPath("$.name").value(expectedName))
+                .andExpect(jsonPath("$.name").value(TEXT_DEFAULT_UPDATE))
                 .andDo(print());
 
         Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();

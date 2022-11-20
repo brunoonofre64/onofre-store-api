@@ -1,5 +1,6 @@
 package io.brunoonofre64.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,9 +31,18 @@ public class CustomerEntity {
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
 
+    @Column(name = "ALT_DATE")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private LocalDateTime modifyDate;
+
     @PrePersist
     private void prePersist() {
         inclusionDate = LocalDateTime.now();
         uuid = UUID.randomUUID().toString();
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        modifyDate = LocalDateTime.now();
     }
 }

@@ -30,8 +30,6 @@ public interface ConstantsTest {
                 .id(CUSTOMER_ENTITY.ID)
                 .name(CUSTOMER_ENTITY.NAME)
                 .age(CUSTOMER_ENTITY.AGE)
-                .uuid(UUID.randomUUID().toString())
-                .inclusionDate(LocalDateTime.now())
                 .build();
     }
 

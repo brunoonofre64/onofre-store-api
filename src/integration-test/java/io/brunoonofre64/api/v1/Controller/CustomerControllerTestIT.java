@@ -215,7 +215,7 @@ public class CustomerControllerTestIT {
     }
 
     @Test
-    @DisplayName("try deçete by an UUID invalid, and verify if return bad request")
+    @DisplayName("try delete by an UUID invalid, and verify if return bad request")
     void tryDeleteByUuidInvalid_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
         String customerRequest = objectMapper.writeValueAsString(customerEntity);

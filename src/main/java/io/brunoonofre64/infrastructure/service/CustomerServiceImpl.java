@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
-        if(dto == null || dto.getName() == null || dto.getAge() == null) {
+        if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
         CustomerEntity entity = customerRepository.findByUuid(uuid);

@@ -9,7 +9,7 @@
 * Separação da regra de negócio dos casos de uso
 * Tratamento personalizado de erros da API com Exception Handling
 * Teste de integração
-* Liquibase, para gerenciar a criação e exclusão de tabelas na minha cama de teste de integração
+* Liquibase, para gerenciar a criação e exclusão de tabelas na minha camada de teste de integração
 * Externalização das menssagem de erro lançadas pela API
 * E etc..
 
@@ -25,7 +25,7 @@
 
 ![Camada main](images/mainn.jpg)
 
-##### OBS: Perceba que ambas fizeram o mesmo caminho até chegar no controller.
+##### OBS: Percebam que ambas fizeram o mesmo caminho até chegar no controller.
 
 
 

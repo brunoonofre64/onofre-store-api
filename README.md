@@ -45,6 +45,8 @@
 ###### Responsável por criar contexto da aplicação Spring, permitindo a injeção de dependência e demais funcionalidades do framework
 * *****webEnvironment*****
 ###### O parâmetro webEnvironment = WebEnvironment. RANDOM_PORT serve para indicar que queremos que a aplicação suba com uma porta aleatória.
+* *****ActiveProfiles*****
+###### É uma anotação de nível de classe usada para declarar quais perfis de definição serão inicializados junto com a aplicação, em nosso caso o "TEST-H2", é um perfil já configurado em um arquivo application-TEST-H2.properties.
 * *****AutoConfigureMockMvc*****
 ###### Anotação que pode ser aplicada a uma classe de teste para ativar e configurar a configuração automática do MockMvc.
 ###### --------------------------------------------------------------------------------------------------------------------------------------------------

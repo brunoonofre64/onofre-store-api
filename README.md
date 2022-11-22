@@ -23,7 +23,7 @@
 
 ###### Camada main:
 
-![Camada main](images/main.jpg)
+![Camada main](images/mainn.jpg)
 
 ##### OBS: Perceba que ambas fizeram o mesmo caminho até chegar no controller.
 

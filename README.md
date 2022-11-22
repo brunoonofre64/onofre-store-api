@@ -1,6 +1,7 @@
 # Integration-Test Project 👨🏻‍💻
 ###### Projeto inicializado usando o [Spring Initializr](https://start.spring.io/) 🍃
 ###### Usado Java 11
+###### Classe de testes [Integration-Test](https://github.com/brunoonofre64/Integration-Test/blob/master/src/integration-test/java/io/brunoonofre64/api/v1/Controller/CustomerControllerTestIT.java)
 ###### --------------------------------------------------------------------------------------------------------------------------------------------------
 ## JAVA ☕ + SpringBoot 🍃
 ### Aqui neste projeto, foi desenvolvida uma RESTFUL API, onde pude usar as melhores boas práticas de desenvolvimento que possuo conhecimento, tais como:
@@ -44,7 +45,9 @@
 ###### Responsável por criar contexto da aplicação Spring, permitindo a injeção de dependência e demais funcionalidades do framework
 * *****webEnvironment*****
 ###### O parâmetro webEnvironment = WebEnvironment. RANDOM_PORT serve para indicar que queremos que a aplicação suba com uma porta aleatória.
-
+* *****AutoConfigureMockMvc*****
+###### Anotação que pode ser aplicada a uma classe de teste para ativar e configurar a configuração automática do MockMvc.
+###### --------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

@@ -35,7 +35,16 @@
 ##### Nossa classe deve possuir o mesmo nome do Controller, do qual ela irá simular as requisições, com a diferença que no final acrescentamos *****TestIT*****, ex: ******CustomerControllerTestIT******
 ###### --------------------------------------------------------------------------------------------------------------------------------------------------
 
-#### Anotações na class:
+#### Anotações na classe:
+
+![Camada main](images/anotacoes.jpg)
+
+* *****SpringBootTest*****
+###### Responsável por criar contexto da aplicação Spring, permitindo a injeção de dependência e demais funcionalidades do framework
+* *****webEnvironment*****
+###### O parâmetro webEnvironment = WebEnvironment. RANDOM_PORT serve para indicar que queremos que a aplicação suba com uma porta aleatória.
+
+
 
 
 

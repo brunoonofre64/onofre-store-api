@@ -1,8 +1,11 @@
 # Integration-Test Project 👨🏻‍💻
+###### Projeto inicializado usando o [Spring Initializr](https://start.spring.io/) 🍃
+###### Usado Java 11
 ## JAVA ☕ + SpringBoot 🍃
 ### Aqui neste projeto, foi desenvolvida uma RESTFUL API, onde pude usar as melhores boas práticas de desenvolvimento que possuo conhecimento, tais como:
 
 * Orientação ao Objeto
+* Stream API
 * Data Transfer Object (DTO)
 * Padrão Repository
 * Clean Code
@@ -26,6 +29,15 @@
 ![Camada main](images/mainn.jpg)
 
 ##### OBS: Percebam que ambas fizeram o mesmo caminho até chegar no controller.
+
+
+#### ****Classe de teste:****
+##### Nossa classe deve possuir o mesmo nome do Controller, do qual ela irá simular as requisições, com a diferença que no final acrescentamos *****TestIT*****, ex: ******CustomerControllerTestIT******
+###### -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#### Anotações na class:
+
+
 
 
 

@@ -19,7 +19,7 @@
 ###### Exemplo abaixo:
 ###### Camada de Teste de Integração:
 
-![Camada de teste de integração](images/teste integracao.jpg)
+![Camada de teste de integração](images/integracao.jpg)
 
 ###### Camada main:
 

@@ -1,9 +1,11 @@
 package io.brunoonofre64.api.v1.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.brunoonofre64.api.v1.dto.CustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
+import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +17,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import io.brunoonofre64.api.v1.dto.DataToCreateCustomerDTO;
 
 import static io.brunoonofre64.api.v1.utils.ConstantsTest.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,6 +37,8 @@ public class CustomerControllerTestIT {
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @BeforeEach
     public void setUp() {
@@ -42,136 +48,134 @@ public class CustomerControllerTestIT {
     @Test
     @DisplayName("Save new customer em DB, and verify if return is created")
     void mustSaveNewCustomerInDataBase_doneSuccessfuly() throws Exception {
-        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(buildDefaultCustomerDTO());
 
         mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(TEXT_DEFAULT))
-                .andExpect(check -> Assertions.assertThat(customerRequest).isNotNull().isNotEmpty())
+                .andExpect(check -> assertThat(requestBody).isNotNull().isNotEmpty())
                 .andDo(print());
     }
 
     @Test
     @DisplayName("Try to save new customer in BD, with an empty field, and verify if return is bad request")
     void tryToSave_newCustomerInBdWithEmptyField_andReturnBadRequest() throws Exception {
-        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        customerEntity.setName("");
+        DataToCreateCustomerDTO dto = buildDefaultCustomerDTO();
+        dto.setName("");
 
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof DtoNullOrIsEmptyException))
-                .andExpect(check -> Assertions.assertThat(customerRequest).isNotNull())
+                .andExpect(check -> assertThat(requestBody).isNotNull())
                 .andDo(print());
     }
 
     @Test
     @DisplayName("Try to save new customer in BD, with an null field, and verify if return is bad request")
     void tryToSave_newCustomerInBdWithNullField_andReturnBadRequest() throws Exception {
-        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        customerEntity.setName(null);
+        DataToCreateCustomerDTO dto = buildDefaultCustomerDTO();
+        dto.setName(null);
 
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof DtoNullOrIsEmptyException))
                 .andDo(print());
-
-        Assertions.assertThat(customerRequest).isNotEmpty();
     }
 
     @Test
     @DisplayName("list returns list of customers inside page object when successful")
     void list_ReturnsListOfCustomersInsidePageObject_andReturnOk() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isOk())
+                .andExpect(check -> assertThat(requestBody).isNotEmpty().isNotNull())
                 .andDo(print());
-
-        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
 
     @Test
     @DisplayName("must show customer by uuid, and verify if return is ok")
     void mustShowCustomerByUud_andReturnOk() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
 
-        String expectedUuid = customerEntity.getUuid();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String expectedUuid = dto.getUuid();
 
-        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), expectedUuid)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(TEXT_DEFAULT))
+                .andExpect(check -> assertThat(requestBody).isNotEmpty().isNotNull())
                 .andDo(print());
-
-        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
 
     @Test
     @DisplayName("try to get customer by uuid nonexistent and verify if return is bad request")
     void tryToGetCustomerByUuidInvalid_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
-        String uuidInvalid = "123";
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
 
-        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", uuidInvalid)
+        String requestBody = objectMapper.writeValueAsString(dto);
+
+        mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), UUID_INVALID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof UuidNotFoundOrNullException))
                 .andDo(print());
-
-        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
 
     @Test
     @DisplayName("Update new data of customer em DB, and verify if return is no content")
     void mustUpdateNewDataOfCustomerInDataBase_doneSuccessfuly() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        customerEntity.setName(TEXT_DEFAULT_UPDATE);
-        String expectedUuid = customerEntity.getUuid();
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        dto.setName(TEXT_DEFAULT_UPDATE);
 
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String expectedUuid = dto.getUuid();
 
-        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), expectedUuid)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.name").value(TEXT_DEFAULT_UPDATE))
+                .andExpect(check -> assertThat(requestBody).isNotEmpty().isNotNull())
                 .andDo(print());
-
-        Assertions.assertThat(customerRequest).isNotEmpty().isNotNull();
     }
 
     @Test
     @DisplayName("Try update new data of customer with an null field, and verify if return bad request")
     void tryUpdateNewDataOfCustomerWithNullField_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        customerEntity.setName(null);
-        String expectedUuid = customerEntity.getUuid();
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        dto.setName(null);
 
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String expectedUuid = dto.getUuid();
 
-        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), expectedUuid)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof DtoNullOrIsEmptyException))
@@ -182,14 +186,15 @@ public class CustomerControllerTestIT {
     @DisplayName("Try update new data of customer with an empty field, and verify if return bad request")
     void tryUpdateNewDataOfCustomerWithEmptyField_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        customerEntity.setName("");
-        String expectedUuid = customerEntity.getUuid();
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        dto.setName("");
 
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String expectedUuid = dto.getUuid();
 
-        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+        mockMvc.perform(put(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), expectedUuid)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof DtoNullOrIsEmptyException))
@@ -200,12 +205,12 @@ public class CustomerControllerTestIT {
     @DisplayName("Must delete custome of DB by UUID, and return no content")
     void mustDeleteCustomerOfDatabaseByUuid_andReturnNoContent() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
+        String requestBody = objectMapper.writeValueAsString(customerEntity);
         String expectedUuid = customerEntity.getUuid();
 
-        mockMvc.perform(delete(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuid)
+        mockMvc.perform(delete(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), expectedUuid)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(customerRequest))
+                .content(requestBody))
                 .andExpect(status().isNoContent())
                 .andExpect(check -> customerRepository.existsByUuid(expectedUuid))
                 .andDo(print());
@@ -215,16 +220,22 @@ public class CustomerControllerTestIT {
     @DisplayName("try delete by an UUID invalid, and verify if return bad request")
     void tryDeleteByUuidInvalid_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        String customerRequest = objectMapper.writeValueAsString(customerEntity);
-        String expectedUuidInvalid = "123";
+        String requestBody = objectMapper.writeValueAsString(customerEntity);
 
-        mockMvc.perform(delete(WEB_METHOD_TEST.V1_CUSTOMER + "/{uuid}", expectedUuidInvalid)
+        mockMvc.perform(delete(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), UUID_INVALID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerRequest))
+                        .content(requestBody))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof UuidNotFoundOrNullException))
                 .andDo(print());
+    }
+    private DataToCreateCustomerDTO buildDefaultCustomerDTO() {
+        return DataToCreateCustomerDTO
+                .builder()
+                .name(TEXT_DEFAULT)
+                .age(AGE_DEFAULT)
+                .build();
     }
 }
 

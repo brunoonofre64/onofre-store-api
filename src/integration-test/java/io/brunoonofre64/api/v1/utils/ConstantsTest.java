@@ -2,12 +2,12 @@ package io.brunoonofre64.api.v1.utils;
 
 import io.brunoonofre64.domain.entities.CustomerEntity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 public interface ConstantsTest {
 
     Long ID_DEFAULT = 1L;
+
+    String UUID = "{uudi}";
+    String  UUID_INVALID = "123";
     String TEXT_DEFAULT = "TEST";
     String TEXT_DEFAULT_UPDATE = "TEST UPDATE";
     String AGE_DEFAULT = "50";
@@ -23,7 +23,6 @@ public interface ConstantsTest {
     interface WEB_METHOD_TEST {
         String V1_CUSTOMER = "/api/v1/cliente";
     }
-
     static CustomerEntity buildCustomerDefault() {
         return CustomerEntity
                 .builder()
@@ -32,5 +31,4 @@ public interface ConstantsTest {
                 .age(CUSTOMER_ENTITY.AGE)
                 .build();
     }
-
 }

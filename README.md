@@ -72,12 +72,12 @@
 
 ![post_ok](images/post_ok.jpg)
 
-* *****Interface-para-auxílio-nos-testes-constantes*****
-
-![post_ok](images/interfaceConstantsTests.jpg)
-
 * *****requestBody***** 
 * ###### Ele receberá o corpo da nossa requisição, onde o objectMapper chama o seu método writeValueAsString(), que pode converter objetos em geral em JSON, e ele recebe um método que cria um dto com as propriedades necessárias, para ocorrer tudo bem no teste da requisição.
+
+* *****Interface-para-auxílio-nos-testes-constantes*****
+![post_ok](images/interfaceConstantsTests.jpg)
+
 * *****perform***** 
 * ###### mockMvc, como já foi explicado antes, ele será o ponto de partida, para o nosso teste, ele chama o método perform(), onde ele recebe a classe MockMvcRequestBuilder() que através dela, chamamos o método statico que referencia o tipo de requição da nossa API, nesse caso será o método POST, mas esse conceito, serve para os demais métodos HTTP.
 * ###### No corpo do nosso método POST, passaremos a URI, no caso, eu atribuo a variável String V1_CUSTOMER dentro de uma interface, junto de outras situações estáticas, para reuso durante os nossos testes.

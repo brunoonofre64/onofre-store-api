@@ -76,6 +76,7 @@
 * ###### Ele receberá o corpo da nossa requisição, onde o objectMapper chama o seu método writeValueAsString(), que pode converter objetos em geral em JSON, e ele recebe um método que cria um dto com as propriedades necessárias, para ocorrer tudo bem no teste da requisição.
 
 * *****Interface***** *****para***** *****auxílio***** *****nos***** *****testes***** *****constantes*****
+* ###### A imagem abaixo servirá como guia, de variaveis e objetos státicos, usados no decorrer dos testes.
 
 ![post_ok](images/interfaceConstantsTests.jpg)
 

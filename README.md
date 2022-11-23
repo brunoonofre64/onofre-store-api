@@ -104,7 +104,7 @@
 
 ![exception](images/exception.jpg)
 
-* ###### No teste acima, tentaremos fazer o cadastrode um cliente, com o atributo name vazio, será esperado o status bad request, e uso uma lambda somada ao assertTrue do JUnit, para verificar se a exceção que o result aponta, é uma instância de DtoNullOrIsEmptyException.
+* ###### No teste acima, tentaremos fazer o cadastro de um cliente, com o atributo "name" vazio, será esperado o status bad request, e uso uma lambda somada ao assertTrue do JUnit, para verificar se a exceção que o result aponta, é uma instância de DtoNullOrIsEmptyException.
 
 
 

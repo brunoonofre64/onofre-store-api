@@ -62,7 +62,7 @@
 * ###### É  definido como um ponto de entrada principal para testes Spring MVC do lado do servidor. Testes com MockMvc ficam em algum lugar entre os testes de unidade e integração.
 * *****CustomerMapper*****
 * ###### É uma interface pública que possui métodos de conversão que auxiliam quando por exemplo, converter um CustomerEntity em CustomerDTO e vice-versa.
-* ****@BeforeEach**** ****E**** ****setUp****
+* *****@BeforeEach***** ****E**** ****setUp****
 * ###### Um método anotado com @BeforeEach, é executado antes de qualquer método que for executado dentro da classe de testede integração.
 * ###### Nosso método setUp(), somado ao @BeforeEach, sempre antes da execução de qualquer método, ele fará um deleteAll() no repositório, assim garantindo que nosso banco de dados estará vazio, e pronto para o próximo teste.
 ###### --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -70,11 +70,16 @@
 #### Casos de testes:
 * ###### Nosso primeiro caso de teste será a simulação de uma requisição POST, onde dará tudo certo.
 
-![injetados](images/post_ok.jpg)
+![post_ok](images/post_ok.jpg)
 
-* ****requestBody**** 
-* ###### asd
+* *****requestBody***** 
+* ###### Ele receberá o corpo da nossa requisição, onde o objectMapper chama seu método writeValueAsString(), que pode converter objetos em geral em JSON, e ele recebe um método que cria um dto com as propriedades necessárias, para que ocorra tudo bem no teste da requisição.
+* *****perform***** 
+* ###### mockMvc, como já foi explicado antes, ele será o ponto de partida, para o nosso teste, ele chama o método perform(), onde ele recebe a classe MockMvcRequestBuilder() que através dela, chamamos o método statico que referencia o tipo de requição da nossa API, nesse caso será o método POST, mas esse conceito, serve para todos os demais métodos HTTP.
+* ###### No corpo do nosso método POST, passaremos a URI, no caso, eu atribui a variável String V1_CUSTOMER dentro de uma interface, junto de outras situações estáticas, para reuso durante nossos testes.
+* *****Interface-para-auxílio-nos-testes-constantes*****
 
+![post_ok](images/interfaceConstantsTests.jpg)
 
 
 

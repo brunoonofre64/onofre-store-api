@@ -85,7 +85,10 @@
 * ###### No corpo do nosso método POST, passaremos a URI, no caso, eu atribuo o caminho no formato String na variável estática V1_CUSTOMER dentro de uma interface, junto de outras situações estáticas, para reuso durante os nossos testes.
 
 * *****contentType*****
-* ###### É através dele que definimos um "cabeçalho" do conteudo que será recebido, e através da classe MediaType, chamamos seu atributo estático, que referencia o objeto no formato JSON.
+* ###### É através dele que definimos um "cabeçalho" do conteudo que será recebido, e através da classe MediaType, chamam o seu atributo estático, que referencia o objeto que será recebido em formato JSON.
+
+* *****content*****
+* ###### Defina o corpo da solicitação como uma string UTF-8. Se o conteúdo for fornecido e contentType(MediaType) for definido como APPLICATION_JSON,  o conteúdo será analisado e usado para preencher o mapa de parâmetros de solicitação. Parâmetros: conteúdo – o conteúdo do corpo.
 
 
 

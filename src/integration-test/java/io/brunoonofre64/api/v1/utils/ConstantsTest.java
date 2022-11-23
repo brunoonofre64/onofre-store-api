@@ -3,9 +3,7 @@ package io.brunoonofre64.api.v1.utils;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 
 public interface ConstantsTest {
-
     Long ID_DEFAULT = 1L;
-
     String UUID = "{uudi}";
     String  UUID_INVALID = "123";
     String TEXT_DEFAULT = "TEST";

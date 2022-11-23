@@ -90,8 +90,21 @@
 * *****content*****
 * ###### Defina o corpo da solicitação como uma string UTF-8. Se o conteúdo for fornecido e contentType(MediaType) for definido como APPLICATION_JSON,  o conteúdo será analisado e usado para preencher o mapa de parâmetros de solicitação. Parâmetros: conteúdo – o conteúdo do corpo.
 
+* *****andExpect*****
+* ###### Ele recebe a classe MockMvcResultMatcher, onde deixamos visivel no código apenas seus atributos estáticos, como o status().isCreated(), que é referente ao tipo de retorno esperado, nos casos de testar erros, poderá chamar um status().isBadRequest() por exemplo.
+* ###### O jsonPath, também é um atributo estático do MockMvcResultMatcher, ele recebe uma expressão que referência um atributo passado no requestBody, usando "$.nomeAtributo" e também chamaremos o value() onde passaremos o resultado esperado do atributo
+* ###### E ainda conseguimos usar dentro do andExpect() lambdas, que somadas com o JUnit ajudam a fazer outras validações.
 
+* *****andDo*****
+* ###### Ele recebe e retorna um ResultHandler. O print(), por exemplo, executa uma ação genérica no resultado de uma solicitação executada — por exemplo, imprimindo informações de depuração.
 
+###### --------------------------------------------------------------------------------------------------------------------------------------------------
+* *****Testaremos***** *****um***** *****erro***** *****esperado*****
+* ###### Exemplo abaixo:
+
+![exception](images/exception.jpg)
+
+* ###### No teste acima, tentaremos fazer o cadastrode um cliente, com o atributo name vazio, será esperado o status bad request, e uso uma lambda somada ao assertTrue do JUnit, para verificar se a exceção que o result aponta, é uma instância de DtoNullOrIsEmptyException.
 
 
 

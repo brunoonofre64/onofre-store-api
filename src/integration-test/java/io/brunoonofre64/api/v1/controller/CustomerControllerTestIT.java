@@ -1,4 +1,4 @@
-package io.brunoonofre64.api.v1.Controller;
+package io.brunoonofre64.api.v1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.brunoonofre64.api.v1.dto.CustomerDTO;
@@ -7,7 +7,6 @@ import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

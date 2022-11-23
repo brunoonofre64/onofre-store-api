@@ -1,4 +1,4 @@
-package io.brunoonofre64.api.v1.Controller;
+package io.brunoonofre64.api.v1.controller;
 
 import io.brunoonofre64.api.v1.dto.CustomerDTO;
 import io.brunoonofre64.api.v1.dto.DataToCreateCustomerDTO;

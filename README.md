@@ -81,9 +81,10 @@
 
 * *****perform***** 
 * ###### mockMvc, como já foi explicado antes, ele será o ponto de partida, para o nosso teste, ele chama o método perform(), onde ele recebe a classe MockMvcRequestBuilder() que através dela, chamamos o método statico que referencia o tipo de requição da nossa API, nesse caso será o método POST, mas esse conceito, serve para os demais métodos HTTP.
-* ###### No corpo do nosso método POST, passaremos a URI, no caso, eu atribuo a variável String V1_CUSTOMER dentro de uma interface, junto de outras situações estáticas, para reuso durante os nossos testes.
+* ###### No corpo do nosso método POST, passaremos a URI, no caso, eu atribuo o caminho no formato String na variável estática V1_CUSTOMER dentro de uma interface, junto de outras situações estáticas, para reuso durante os nossos testes.
 
-
+* *****contentType*****
+* ###### É através dele que definimos um "cabeçalho" do conteudo que será recebido, e através da classe MediaType, chamamos seu atributo estático, que referencia o objeto no formato JSON.
 
 
 

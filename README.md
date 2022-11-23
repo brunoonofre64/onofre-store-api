@@ -1,4 +1,5 @@
 # Integration-Test Project 👨🏻‍💻
+##### Este teste é super importante porque evita que os dados se percam na interface entre os módulos ou que ocorra um resultado inadequado sobre o outro, ou seja, é fundamental para não comprometer a qualidade do software.
 ###### Projeto inicializado usando o [Spring Initializr](https://start.spring.io/) 🍃
 ###### Usado Java 11
 ###### Classe de testes [Integration-Test](https://github.com/brunoonofre64/Integration-Test/blob/master/src/integration-test/java/io/brunoonofre64/api/v1/Controller/CustomerControllerTestIT.java)

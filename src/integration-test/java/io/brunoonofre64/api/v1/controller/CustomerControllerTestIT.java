@@ -2,6 +2,7 @@ package io.brunoonofre64.api.v1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.brunoonofre64.api.v1.dto.CustomerDTO;
+import io.brunoonofre64.api.v1.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import io.brunoonofre64.api.v1.dto.DataToCreateCustomerDTO;
 
 import static io.brunoonofre64.api.v1.utils.ConstantsTest.*;
 import static org.assertj.core.api.Assertions.assertThat;

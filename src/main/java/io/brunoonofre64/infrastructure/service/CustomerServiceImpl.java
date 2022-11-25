@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.api.v1.dto.CustomerDTO;
-import io.brunoonofre64.api.v1.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerDTO;
+import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

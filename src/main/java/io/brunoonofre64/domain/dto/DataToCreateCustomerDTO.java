@@ -1,4 +1,4 @@
-package io.brunoonofre64.api.v1.dto;
+package io.brunoonofre64.domain.dto;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,6 @@
 package io.brunoonofre64;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class IntegrationTestApplicationTests {
 
 	@Test
-	void contextLoads() {
+	@DisplayName("should normally start the main class")
+	void main() {
+		IntegrationTestApplication.main(new String[]{});
 	}
 
 }

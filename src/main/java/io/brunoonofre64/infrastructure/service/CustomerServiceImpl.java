@@ -57,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
         pageable = PageRequest.of(0,10);
 
         Page<CustomerEntity> entity = customerRepository.findAll(pageable);
-        Page<CustomerDTO> dto = getCustomerDTOS(entity);
+        Page<CustomerDTO> dto = mapPagesCustomerEntityToDTO(entity);
         return dto;
     }
 
@@ -87,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteByUuid(uuid);
     }
 
-    private Page<CustomerDTO> getCustomerDTOS(Page<CustomerEntity> entity) {
+    public Page<CustomerDTO> mapPagesCustomerEntityToDTO(Page<CustomerEntity> entity) {
         Page<CustomerDTO> dto = entity.map(new Function<CustomerEntity, CustomerDTO>() {
             @Override
             public CustomerDTO apply(CustomerEntity customerEntity) {

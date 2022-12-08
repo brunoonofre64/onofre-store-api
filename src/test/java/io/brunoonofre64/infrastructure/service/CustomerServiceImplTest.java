@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +36,10 @@ public class CustomerServiceImplTest {
     private final static String NAME = "NAME";
 
     private final static String AGE = "AGE";
+
+    private static final String NAME_2 = "NAME_2";
+
+    private static final String AGE_2 = "AGE_2";
 
     private final static LocalDateTime INC_DATE = LocalDateTime.now();
 
@@ -61,9 +66,15 @@ public class CustomerServiceImplTest {
 
     private CustomerEntity customerEntity;
 
+    private CustomerEntity customerEntityUpdate;
+
     private CustomerDTO customerDTO;
 
+    private CustomerDTO customerDTOUpdate;
+
     private DataToCreateCustomerDTO createCustomerDTO;
+
+    private DataToCreateCustomerDTO createCustomerDTOUpdate;
 
     @BeforeEach
     void setup() {
@@ -74,30 +85,33 @@ public class CustomerServiceImplTest {
     @Test
     @DisplayName("Must save new customer an then return CustomerDTO intance.")
     void mustSaveNewCustomerAnThenReturnCustomerDtoIntance() {
-        when(mapper.convertDTOToEntity(createCustomerDTO)).thenReturn(customerEntity);
-        when(mapper.convertEntityToDTO(customerEntity)).thenReturn(customerDTO);
-        when(repository.save(customerEntity)).thenReturn(customerEntity);
+        when(mapper.convertDTOToEntity(any())).thenReturn(customerEntity);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+        when(repository.save(any())).thenReturn(customerEntity);
 
-        CustomerDTO reponse = service.saveNewCustomerInDb(createCustomerDTO);
+        CustomerDTO response = service.saveNewCustomerInDb(createCustomerDTO);
 
-        assertNotNull(reponse);
-        assertEquals(UUID, reponse.getUuid());
-        assertEquals(NAME, reponse.getName());
+        assertNotNull(response);
+        assertEquals(CustomerDTO.class, response.getClass() );
+        assertEquals(UUID, response.getUuid());
+        assertEquals(NAME, response.getName());
+        assertEquals(INC_DATE, response.getInclusionDate());
     }
 
     @Test
     @DisplayName("When search for a customer by uuid and returns the instance.")
     void whenFindByUuidAnThenReturnCustomerInstance() {
-        when(repository.findByUuid(anyString())).thenReturn(customerEntity);
-        when(repository.existsByUuid(anyString())).thenReturn(true);
-        when(mapper.convertEntityToDTO(customerEntity)).thenReturn(customerDTO);
+        when(repository.findByUuid(any())).thenReturn(customerEntity);
+        when(repository.existsByUuid(any())).thenReturn(true);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
 
-        CustomerDTO reponse = service.getCustomerByUuid(UUID);
+        CustomerDTO response = service.getCustomerByUuid(UUID);
 
-        assertNotNull(reponse);
-        assertEquals(CustomerDTO.class, reponse.getClass());
-        assertEquals(UUID, reponse.getUuid());
-        assertEquals(NAME, reponse.getName());
+        assertNotNull(response);
+        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(UUID, response.getUuid());
+        assertEquals(NAME, response.getName());
+        assertEquals(INC_DATE, response.getInclusionDate());
     }
 
     @Test
@@ -115,6 +129,26 @@ public class CustomerServiceImplTest {
         assertEquals(1, reponse.getSize());
     }
 
+    @Test
+    @DisplayName("Must update data of customer and return an instance.")
+    void mustUpdateCustomerAndReturnAnInstance() {
+        startCustomerDatatoUpdate();
+
+        when(repository.existsByUuid(UUID)).thenReturn(true);
+        when(repository.findByUuid(UUID)).thenReturn(customerEntity);
+        when(repository.save(any())).thenReturn(customerEntityUpdate);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTOUpdate);
+
+        CustomerDTO response = service.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
+
+        assertNotNull(response);
+        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(NAME_2, response.getName());
+        assertEquals(AGE_2, response.getAge());
+        assertEquals(INC_DATE, response.getInclusionDate());
+        assertEquals(MODF_DATE, response.getModifyDate());
+    }
+
     private Page<CustomerEntity> buildCustomerEntityPaged() {
         List<CustomerEntity> entityList = Arrays.asList(customerEntity);
         return customerEntityPage = new PageImpl<>(entityList);
@@ -129,5 +163,11 @@ public class CustomerServiceImplTest {
         customerEntity = new CustomerEntity(ID, UUID, NAME, AGE, INC_DATE, MODF_DATE);
         createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE);
         customerDTO = new CustomerDTO(UUID, NAME, AGE, INC_DATE, MODF_DATE);
+    }
+
+    private void startCustomerDatatoUpdate() {
+        customerEntityUpdate = new CustomerEntity(ID, UUID, NAME_2, AGE_2, INC_DATE, MODF_DATE);
+        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, INC_DATE, MODF_DATE);
+        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2);
     }
 }

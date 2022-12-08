@@ -6,6 +6,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 
 @Configuration
 public class MessageBundleConfig {
+
     @Bean
     public ReloadableResourceBundleMessageSource exceptionResourceBundleMessageSource() {
         ReloadableResourceBundleMessageSource bundle = new ReloadableResourceBundleMessageSource();

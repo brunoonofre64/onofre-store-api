@@ -4,11 +4,17 @@ import io.brunoonofre64.domain.entities.CustomerEntity;
 
 public interface ConstantsTest {
     Long ID_DEFAULT = 1L;
+
     String UUID = "{uudi}";
+
     String  UUID_INVALID = "123";
+
     String TEXT_DEFAULT = "TEST";
+
     String TEXT_DEFAULT_UPDATE = "TEST UPDATE";
+
     String AGE_DEFAULT = "50";
+
     String SLASH = "/";
 
     interface CUSTOMER_ENTITY{

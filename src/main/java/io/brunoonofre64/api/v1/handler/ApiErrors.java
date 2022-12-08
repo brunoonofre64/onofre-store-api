@@ -10,8 +10,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiErrors {
+
     private String title;
+
     private LocalDateTime timestamp;
+
     private int codeStatus;
+
     private String details;
 }

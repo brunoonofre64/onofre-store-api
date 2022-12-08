@@ -16,10 +16,12 @@ import java.util.UUID;
 @Table(name = "TBL_CLIENTE")
 @SequenceGenerator(name = "sequenceCustomer", sequenceName = "SQ_CUSTOMER", allocationSize = 1)
 public class CustomerEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceCustomer")
     @Column(name = "ID")
     private Long id;
+
     @Column(name = "UUID", nullable = false, length = 36)
     private String uuid;
 
@@ -28,6 +30,7 @@ public class CustomerEntity {
 
     @Column(name = "CUSTOMER_AGE", nullable = false, length = 3)
     private String age;
+
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
 

@@ -23,8 +23,11 @@ import java.util.function.Function;
 @Service
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
+
     private CustomerRepository customerRepository;
+
     private CustomerMapper mapper;
+
     @Override
     public CustomerDTO saveNewCustomerInDb(DataToCreateCustomerDTO dto) {
         if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
@@ -57,6 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
         Page<CustomerDTO> dto = getCustomerDTOS(entity);
         return dto;
     }
+
     @Override
     public CustomerDTO updateCustomerByUuid(String uuid, DataToCreateCustomerDTO dto) {
         if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
@@ -73,6 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return mapper.convertEntityToDTO(entity);
     }
+
     @Override
     @Transactional
     public void deleteCustomerOfDb(String uuid) {

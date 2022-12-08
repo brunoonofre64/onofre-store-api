@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class DataToCreateCustomerDTO {
+
     private String name;
+
     private String age;
 }

@@ -12,9 +12,13 @@ import java.util.UUID;
 @Setter
 public class CustomerDTO {
     private String uuid;
+
     private String name;
+
     private String age;
+
     private LocalDateTime inclusionDate;
+
     private LocalDateTime modifyDate;
 
     @PrePersist

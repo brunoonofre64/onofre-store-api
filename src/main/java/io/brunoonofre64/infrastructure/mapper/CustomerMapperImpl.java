@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerMapperImpl implements CustomerMapper {
+
     @Override
     public CustomerDTO convertEntityToDTO(CustomerEntity entity) {
         if(entity == null) {

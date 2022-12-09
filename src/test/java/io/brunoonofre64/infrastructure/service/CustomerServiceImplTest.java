@@ -7,6 +7,7 @@ import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,18 +100,36 @@ class CustomerServiceImplTest {
     @Test
     @DisplayName("Must throw error when try saver new customer with name null.")
     void mustThrowErroWhenTrySaveNewCustomerWithNameNull() {
-        createCustomerDTO.setName(null);
+       createCustomerDTO.setName(null);
 
-        when(serviceMock.saveNewCustomerInDb(any()))
-                .thenThrow(new DtoNullOrIsEmptyException(DTO_NULL_OR_IS_EMPTY));
+        Throwable ex =  assertThrows(DtoNullOrIsEmptyException.class,
+                () -> service.saveNewCustomerInDb(createCustomerDTO));
 
-        try {
-        serviceMock.saveNewCustomerInDb(createCustomerDTO);
-        } catch (Exception ex) {
-            assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
-            assertSame(null, createCustomerDTO.getName());
-        }
+        assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
     }
+
+    @Test
+    @DisplayName("Must throw error when try saver new customer with name empty.")
+    void mustThrowErroWhenTrySaveNewCustomerWithNameEmpty() {
+        createCustomerDTO.setName("");
+
+       Throwable ex =  assertThrows(DtoNullOrIsEmptyException.class,
+                () -> service.saveNewCustomerInDb(createCustomerDTO));
+
+       assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw error when try saver new customer with dto null.")
+    void mustThrowErroWhenTrySaveNewCustomerWithDtoNull() {
+        createCustomerDTO = null;
+
+        Throwable ex =  assertThrows(DtoNullOrIsEmptyException.class,
+                () -> service.saveNewCustomerInDb(createCustomerDTO));
+
+        assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+    }
+
 
     @Test
     @DisplayName("When search for a customer by uuid and returns the instance.")
@@ -134,7 +153,7 @@ class CustomerServiceImplTest {
         pageable = PageRequest.of(0,10);
 
         when(repository.findAll(pageable)).thenReturn(buildCustomerEntityPaged());
-        when(serviceMock.mapPagesCustomerEntityToDTO(buildCustomerEntityPaged())).thenReturn(buildCustomerDtoPaged());
+        when(serviceMock.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
 
         Page<CustomerDTO> reponse = service.getAllCustomers(pageable);
 

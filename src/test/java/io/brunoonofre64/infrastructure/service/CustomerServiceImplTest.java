@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -25,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class CustomerServiceImplTest {
+class CustomerServiceImplTest {
     private final static Long ID = 1L;
 
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
@@ -147,6 +148,19 @@ public class CustomerServiceImplTest {
         assertEquals(AGE_2, response.getAge());
         assertEquals(INC_DATE, response.getInclusionDate());
         assertEquals(MODF_DATE, response.getModifyDate());
+    }
+
+    @Test
+    @DisplayName("Must delete customer of database and reponse return null.")
+    void mustDeleteCustomerOfDataBaseAndRepponseReturnNull() {
+        when(repository.existsByUuid(UUID)).thenReturn(true);
+        doNothing().when(serviceMock).deleteCustomerOfDb(UUID);
+
+       serviceMock.deleteCustomerOfDb(UUID);
+
+        verify(serviceMock).deleteCustomerOfDb(UUID);
+        verify(serviceMock, times(1)).deleteCustomerOfDb(UUID);
+        verify(serviceMock, atLeastOnce()).deleteCustomerOfDb(UUID);
     }
 
     private Page<CustomerEntity> buildCustomerEntityPaged() {

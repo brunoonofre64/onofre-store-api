@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.function.Function;
-
 @Service
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
@@ -57,8 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
         pageable = PageRequest.of(0,10);
 
         Page<CustomerEntity> entity = customerRepository.findAll(pageable);
-        Page<CustomerDTO> dto = mapPagesCustomerEntityToDTO(entity);
-        return dto;
+        return mapPagesCustomerEntityToDTO(entity);
     }
 
     @Override
@@ -88,18 +85,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Page<CustomerDTO> mapPagesCustomerEntityToDTO(Page<CustomerEntity> entity) {
-        Page<CustomerDTO> dto = entity.map(new Function<CustomerEntity, CustomerDTO>() {
-            @Override
-            public CustomerDTO apply(CustomerEntity customerEntity) {
-                CustomerDTO customerDTO = new CustomerDTO();
+        return entity.map(this::mapPagetoDto);
+    }
 
-                customerDTO.setUuid(customerEntity.getUuid());
-                customerDTO.setName(customerEntity.getName());
-                customerDTO.setAge(customerEntity.getAge());
-                customerDTO.setInclusionDate(customerEntity.getInclusionDate());
-                return customerDTO;
-            }
-        });
-        return dto;
+    private CustomerDTO mapPagetoDto(CustomerEntity entity) {
+        return mapper.convertEntityToDTO(entity);
     }
 }

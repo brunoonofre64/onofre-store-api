@@ -3,6 +3,8 @@ package io.brunoonofre64.infrastructure.service;
 import io.brunoonofre64.domain.dto.CustomerDTO;
 import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
+import io.brunoonofre64.domain.enums.CodeMessage;
+import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +21,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static io.brunoonofre64.domain.enums.CodeMessage.DTO_NULL_OR_IS_EMPTY;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -61,10 +62,6 @@ class CustomerServiceImplTest {
     @Mock
     private Pageable pageable;
 
-    private Page<CustomerEntity> customerEntityPage;
-
-    private Page<CustomerDTO> customerDTOPage;
-
     private CustomerEntity customerEntity;
 
     private CustomerEntity customerEntityUpdate;
@@ -97,6 +94,22 @@ class CustomerServiceImplTest {
         assertEquals(UUID, response.getUuid());
         assertEquals(NAME, response.getName());
         assertEquals(INC_DATE, response.getInclusionDate());
+    }
+
+    @Test
+    @DisplayName("Must throw error when try saver new customer with name null.")
+    void mustThrowErroWhenTrySaveNewCustomerWithNameNull() {
+        createCustomerDTO.setName(null);
+
+        when(serviceMock.saveNewCustomerInDb(any()))
+                .thenThrow(new DtoNullOrIsEmptyException(DTO_NULL_OR_IS_EMPTY));
+
+        try {
+        serviceMock.saveNewCustomerInDb(createCustomerDTO);
+        } catch (Exception ex) {
+            assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+            assertSame(null, createCustomerDTO.getName());
+        }
     }
 
     @Test
@@ -164,12 +177,14 @@ class CustomerServiceImplTest {
     }
 
     private Page<CustomerEntity> buildCustomerEntityPaged() {
-        List<CustomerEntity> entityList = Arrays.asList(customerEntity);
+        List<CustomerEntity> entityList = Collections.singletonList(customerEntity);
+        Page<CustomerEntity> customerEntityPage;
         return customerEntityPage = new PageImpl<>(entityList);
     }
 
     private Page<CustomerDTO> buildCustomerDtoPaged() {
-        List<CustomerDTO> entityList = Arrays.asList(customerDTO);
+        List<CustomerDTO> entityList = Collections.singletonList(customerDTO);
+        Page<CustomerDTO> customerDTOPage;
         return customerDTOPage = new PageImpl<>(entityList);
     }
 

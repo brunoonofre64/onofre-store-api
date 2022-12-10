@@ -5,6 +5,8 @@ import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
+import io.brunoonofre64.domain.exception.ListIsEmptyException;
+import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import org.junit.jupiter.api.Assertions;
@@ -22,10 +24,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static io.brunoonofre64.domain.enums.CodeMessage.DTO_NULL_OR_IS_EMPTY;
+import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -35,6 +40,8 @@ class CustomerServiceImplTest {
     private final static Long ID = 1L;
 
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
+
+    private final static String UUID_NONEXISTENT = "123";
 
     private final static String NAME = "NAME";
 
@@ -148,6 +155,51 @@ class CustomerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Must throw exception by UUID null.")
+    void mustThrowErrorByUuidNull() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.getCustomerByUuid(null));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw exception by UUID is empty.")
+    void mustThrowErrorByUuidIsEmpty() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.getCustomerByUuid(""));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw a error by UUID not exists.")
+    void mustThrowErrorByUuidNotExists() {
+        when(repository.existsByUuid(UUID)).thenReturn(false);
+
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.getCustomerByUuid(UUID_NONEXISTENT));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must find by uuid in repository, and return a customer instance.")
+    void mustFindCustomerByUuidInRepostory(){
+        when(repository.existsByUuid(UUID)).thenReturn(true);
+        when(repository.findByUuid(UUID)).thenReturn(customerEntity);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+
+        CustomerEntity response = repository.findByUuid(UUID);
+
+        assertNotNull(response);
+        assertEquals(CustomerEntity.class, response.getClass());
+        assertEquals(NAME, response.getName());
+        assertEquals(UUID, response.getUuid());
+        assertEquals(AGE, response.getAge());
+    }
+
+    @Test
     @DisplayName("Must look for all paged clients and return the instance.")
     void mustFindAllCustomerPagedAnReturnAnInstance() {
         pageable = PageRequest.of(0,10);
@@ -156,6 +208,42 @@ class CustomerServiceImplTest {
         when(serviceMock.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
 
         Page<CustomerDTO> reponse = service.getAllCustomers(pageable);
+
+        assertNotNull(reponse);
+        assertEquals(PageImpl.class, reponse.getClass());
+        assertEquals(1, reponse.getSize());
+    }
+
+    @Test
+    @DisplayName("Must throw a error by page null.")
+    void mustThrowErrorByPageIsNull() {
+        pageable = null;
+
+        Throwable ex = assertThrows(ListIsEmptyException.class,
+                () -> service.getAllCustomers(pageable));
+
+        assertEquals(ListIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw a error by page is empty.")
+    void mustThrowErrorByPageIsEmpty() {
+        Page<CustomerDTO> accessPage = new PageImpl<>(Collections.emptyList());
+        pageable = accessPage.getPageable();
+
+        Throwable ex = assertThrows(ListIsEmptyException.class,
+                () -> service.getAllCustomers(pageable));
+
+        assertEquals(ListIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must find CustomerEntity paged of database, and then turn a instance.")
+    void mustMapperCustomerEntityToDTOAnThenReturnInstance() {
+        pageable = PageRequest.of(0,10);
+
+        when(repository.findAll(pageable)).thenReturn(buildCustomerEntityPaged());
+        Page<CustomerEntity> reponse = repository.findAll(pageable);
 
         assertNotNull(reponse);
         assertEquals(PageImpl.class, reponse.getClass());

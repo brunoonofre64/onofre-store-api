@@ -3,13 +3,11 @@ package io.brunoonofre64.infrastructure.service;
 import io.brunoonofre64.domain.dto.CustomerDTO;
 import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
-import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,22 +19,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static io.brunoonofre64.domain.enums.CodeMessage.DTO_NULL_OR_IS_EMPTY;
-import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class CustomerServiceImplTest {
+
     private final static Long ID = 1L;
 
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
@@ -215,6 +209,20 @@ class CustomerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Must look for all paged customers of repository, and then return instance.")
+    void mustFindAllCustomerPagedOfRepositoryAnReturnAnInstance() {
+        pageable = PageRequest.of(0,10);
+
+        when(repository.findAll(pageable)).thenReturn(buildCustomerEntityPaged());
+
+        Page<CustomerEntity> reponse = repository.findAll(pageable);
+
+        assertNotNull(reponse);
+        assertEquals(PageImpl.class, reponse.getClass());
+        assertEquals(1, reponse.getSize());
+    }
+
+    @Test
     @DisplayName("Must throw a error by page null.")
     void mustThrowErrorByPageIsNull() {
         pageable = null;
@@ -238,19 +246,6 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Must find CustomerEntity paged of database, and then turn a instance.")
-    void mustMapperCustomerEntityToDTOAnThenReturnInstance() {
-        pageable = PageRequest.of(0,10);
-
-        when(repository.findAll(pageable)).thenReturn(buildCustomerEntityPaged());
-        Page<CustomerEntity> reponse = repository.findAll(pageable);
-
-        assertNotNull(reponse);
-        assertEquals(PageImpl.class, reponse.getClass());
-        assertEquals(1, reponse.getSize());
-    }
-
-    @Test
     @DisplayName("Must update data of customer and return an instance.")
     void mustUpdateCustomerAndReturnAnInstance() {
         startCustomerDatatoUpdate();
@@ -271,6 +266,72 @@ class CustomerServiceImplTest {
     }
 
     @Test
+    @DisplayName("When try update by uuid null, and then throw a error.")
+    void mustThrowErrorByTryUpdateWithUuidNull() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.updateCustomerByUuid(null, createCustomerDTO));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("When try update by uuid empty, and then throw a error.")
+    void mustThrowErrorByTryUpdateWithUuidEmpty() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.updateCustomerByUuid("", createCustomerDTO));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("When try update by uuid nonexistence, and then throw a error.")
+    void mustThrowErrorByTryUpdateWithUuidnoNonexistence() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.updateCustomerByUuid(UUID_NONEXISTENT, createCustomerDTO));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("When try update by new name null, and then throw a error.")
+    void mustThrowErrorByTryUpdateWithNewNameNull() {
+        createCustomerDTO.setName(null);
+
+        when(repository.existsByUuid(UUID)).thenReturn(true);
+
+        Throwable ex = assertThrows(DtoNullOrIsEmptyException.class,
+                () -> service.updateCustomerByUuid(UUID, createCustomerDTO));
+
+        assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("When try update by new name empty, and then throw a error.")
+    void mustThrowErrorByTryUpdateWithNewNameEmpty() {
+        createCustomerDTO.setName("");
+
+        when(repository.existsByUuid(UUID)).thenReturn(true);
+
+        Throwable ex = assertThrows(DtoNullOrIsEmptyException.class,
+                () -> service.updateCustomerByUuid(UUID, createCustomerDTO));
+
+        assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("When try update by new dto null, and then throw a error.")
+    void mustThrowErrorByTryUpdateWithDTONull() {
+        createCustomerDTO = null;
+
+        when(repository.existsByUuid(UUID)).thenReturn(true);
+
+        Throwable ex = assertThrows(DtoNullOrIsEmptyException.class,
+                () -> service.updateCustomerByUuid(UUID, createCustomerDTO));
+
+        assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
     @DisplayName("Must delete customer of database and reponse return null.")
     void mustDeleteCustomerOfDataBaseAndRepponseReturnNull() {
         when(repository.existsByUuid(UUID)).thenReturn(true);
@@ -283,16 +344,96 @@ class CustomerServiceImplTest {
         verify(serviceMock, atLeastOnce()).deleteCustomerOfDb(UUID);
     }
 
+    @Test
+    @DisplayName("Must delete customer of repository by uuid with success.")
+    void mustDeleteCustomerOfRepositoryByUuidWithSuccess() {
+        when((repository.existsByUuid(any()))).thenReturn(true);
+        doNothing().when(repository).deleteByUuid(UUID);
+
+        repository.deleteByUuid(UUID);
+
+        verify(repository).deleteByUuid(UUID);
+        verify(repository, times(1)).deleteByUuid(UUID);
+        verify(repository, atLeastOnce()).deleteByUuid(UUID);
+    }
+
+    @Test
+    @DisplayName("Must throw error when try to delete by uuid null.")
+    void mustThrowErrorWhenDeleteByUuidNull() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+        () -> service.deleteCustomerOfDb(null));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw error when try to delete by uuid empty.")
+    void mustThrowErrorWhenDeleteByUuidEmpty() {
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.deleteCustomerOfDb(""));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw error when try to delete by uuid nonexistence.")
+    void mustThrowErrorWhenDeleteByUuidNonexistence() {
+        when(repository.existsById(any())).thenReturn(false);
+
+        Throwable ex = assertThrows(UuidNotFoundOrNullException.class,
+                () -> service.deleteCustomerOfDb(UUID_NONEXISTENT));
+
+        assertEquals(UuidNotFoundOrNullException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must mapper CustomerEntity to dto, and then return instance.")
+    void mustMapperCustomerEntityToDTOAnThenReturnInstance() {
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+
+        CustomerDTO response = mapper.convertEntityToDTO(customerEntity);
+
+        assertNotNull(response);
+        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(NAME, response.getName());
+        assertEquals(UUID, response.getUuid());
+        assertEquals(AGE, response.getAge());
+    }
+
+    @Test
+    @DisplayName("Must mapper DTO to CustomerEntity, and then return dto instance.")
+    void mustMapperDTOToCustomerEntityAnThenReturnInstance() {
+        when(mapper.convertDTOToEntity(any())).thenReturn(customerEntity);
+
+        CustomerEntity response = mapper.convertDTOToEntity(createCustomerDTO);
+
+        assertNotNull(response);
+        assertEquals(CustomerEntity.class, response.getClass());
+        assertEquals(NAME, response.getName());
+        assertEquals(UUID, response.getUuid());
+        assertEquals(AGE, response.getAge());
+    }
+
+    @Test
+    @DisplayName("Must mapper CustomerEntity paged to dtoPaged, and then return instance.")
+    void mustMapperCustomerEntityPagedToDtoPagedAnReturnInstance() {
+        when(serviceMock.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
+
+        Page<CustomerDTO> reponse = serviceMock.mapPagesCustomerEntityToDTO(buildCustomerEntityPaged());
+
+        assertNotNull(reponse);
+        assertEquals(PageImpl.class, reponse.getClass());
+        assertEquals(1, reponse.getSize());
+    }
+
     private Page<CustomerEntity> buildCustomerEntityPaged() {
         List<CustomerEntity> entityList = Collections.singletonList(customerEntity);
-        Page<CustomerEntity> customerEntityPage;
-        return customerEntityPage = new PageImpl<>(entityList);
+        return new PageImpl<>(entityList);
     }
 
     private Page<CustomerDTO> buildCustomerDtoPaged() {
         List<CustomerDTO> entityList = Collections.singletonList(customerDTO);
-        Page<CustomerDTO> customerDTOPage;
-        return customerDTOPage = new PageImpl<>(entityList);
+        return new PageImpl<>(entityList);
     }
 
     private void startCustomer() {

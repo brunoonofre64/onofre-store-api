@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerDTO> getAllCustomers(Pageable pageable) {
-        if(ObjectUtils.isEmpty(this) || pageable == null) {
+        if(ObjectUtils.isEmpty(pageable) || pageable.isUnpaged()) {
             throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }
         pageable = PageRequest.of(0,10);

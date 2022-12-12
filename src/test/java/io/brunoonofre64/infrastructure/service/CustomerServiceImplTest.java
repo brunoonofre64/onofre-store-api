@@ -35,6 +35,10 @@ class CustomerServiceImplTest {
 
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
 
+    private final static String CPF = "38915839668"; //GERADO ALEATORIAMENTE
+
+    private final static String CPF_2 = "86132623507"; //GERADO ALEATORIAMENTE
+
     private final static String UUID_NONEXISTENT = "123";
 
     private final static String NAME = "NAME";
@@ -437,14 +441,14 @@ class CustomerServiceImplTest {
     }
 
     private void startCustomer() {
-        customerEntity = new CustomerEntity(ID, UUID, NAME, AGE, INC_DATE, MODF_DATE);
-        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE);
-        customerDTO = new CustomerDTO(UUID, NAME, AGE, INC_DATE, MODF_DATE);
+        customerEntity = new CustomerEntity(ID, UUID, CPF, NAME, AGE, INC_DATE, MODF_DATE);
+        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE, CPF);
+        customerDTO = new CustomerDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerEntityUpdate = new CustomerEntity(ID, UUID, NAME_2, AGE_2, INC_DATE, MODF_DATE);
-        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, INC_DATE, MODF_DATE);
-        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2);
+        customerEntityUpdate = new CustomerEntity(ID, UUID, CPF, NAME_2, AGE_2, INC_DATE, MODF_DATE);
+        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2, CPF_2);
     }
 }

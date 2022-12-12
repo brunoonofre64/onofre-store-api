@@ -10,6 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,7 +25,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handlerCustomerException(CustomerException ex) {
+    public ResponseEntity<ApiErrors> handlerCustomerException(CustomerException ex) {
         ApiErrors apiErrors = ApiErrors
                 .builder()
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
@@ -37,7 +38,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DtoNullOrIsEmptyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handlerDtoNullOrIsEmptyException(DtoNullOrIsEmptyException ex) {
+    public ResponseEntity<ApiErrors> handlerDtoNullOrIsEmptyException(DtoNullOrIsEmptyException ex) {
         ApiErrors apiErrors = ApiErrors
                 .builder()
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
@@ -50,7 +51,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ListIsEmptyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handlerListIsEmptyException(ListIsEmptyException ex) {
+    public ResponseEntity<ApiErrors> handlerListIsEmptyException(ListIsEmptyException ex) {
         ApiErrors apiErrors = ApiErrors
                 .builder()
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
@@ -63,13 +64,26 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UuidNotFoundOrNullException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handlerUuidNotFoundOrNullException(UuidNotFoundOrNullException ex) {
+    public ResponseEntity<ApiErrors> handlerUuidNotFoundOrNullException(UuidNotFoundOrNullException ex) {
         ApiErrors apiErrors = ApiErrors
                 .builder()
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
                 .details(getCodeMessage(CodeMessage.UUID_NOT_FOUND_OR_NULL))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TransactionSystemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerTransactionSystemException(TransactionSystemException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }

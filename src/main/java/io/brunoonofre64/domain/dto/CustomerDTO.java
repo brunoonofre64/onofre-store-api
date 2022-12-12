@@ -1,5 +1,6 @@
 package io.brunoonofre64.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,10 @@ public class CustomerDTO {
 
     private String age;
 
-    private LocalDateTime inclusionDate;
+    private String cpf;
 
+    private LocalDateTime inclusionDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime modifyDate;
 
     @PrePersist

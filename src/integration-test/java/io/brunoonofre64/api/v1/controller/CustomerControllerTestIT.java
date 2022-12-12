@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("TEST-H2")
 @AutoConfigureMockMvc
-public class CustomerControllerTestIT {
+class CustomerControllerTestIT {
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -237,6 +237,7 @@ public class CustomerControllerTestIT {
                 .builder()
                 .name(TEXT_DEFAULT)
                 .age(AGE_DEFAULT)
+                .cpf(CPF_DEFAULT)
                 .build();
     }
 }

@@ -7,6 +7,8 @@ public interface ConstantsTest {
 
     String UUID = "{uudi}";
 
+    String CPF_DEFAULT = "86132623507";
+
     String  UUID_INVALID = "123";
 
     String TEXT_DEFAULT = "TEST";
@@ -18,10 +20,11 @@ public interface ConstantsTest {
     String SLASH = "/";
 
     interface CUSTOMER_ENTITY{
-        String NAME_UPDATE = TEXT_DEFAULT_UPDATE;
         Long ID = ID_DEFAULT;
         String NAME = TEXT_DEFAULT;
         String AGE = AGE_DEFAULT;
+
+        String CPF = CPF_DEFAULT;
     }
 
     interface WEB_METHOD_TEST {
@@ -33,6 +36,7 @@ public interface ConstantsTest {
                 .id(CUSTOMER_ENTITY.ID)
                 .name(CUSTOMER_ENTITY.NAME)
                 .age(CUSTOMER_ENTITY.AGE)
+                .cpf(CUSTOMER_ENTITY.CPF)
                 .build();
     }
 }

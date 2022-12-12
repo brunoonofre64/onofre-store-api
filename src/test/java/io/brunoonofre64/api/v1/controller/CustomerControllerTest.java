@@ -26,6 +26,10 @@ class CustomerControllerTest {
 
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
 
+    private final static String CPF = "38915839668"; //GERADO ALEATORIAMENTE
+
+    private final static String CPF_2 = "86132623507"; //GERADO ALEATORIAMENTE
+
     private final static String NAME = "NAME";
 
     private final static String AGE = "AGE";
@@ -108,7 +112,7 @@ class CustomerControllerTest {
         assertNotNull(response);
         assertEquals(CustomerDTO.class, response.getClass());
         assertEquals(NAME_2, response.getName());
-        assertEquals(AGE_2, response.getAge());
+        assertEquals(CPF_2, response.getCpf());
         assertEquals(INC_DATE, response.getInclusionDate());
         assertEquals(MODF_DATE, response.getModifyDate());
     }
@@ -130,12 +134,12 @@ class CustomerControllerTest {
         return new PageImpl<>(entityList);
     }
     private void startCustomer() {
-        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE);
-        customerDTO = new CustomerDTO(UUID, NAME, AGE, INC_DATE, MODF_DATE);
+        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE, CPF);
+        customerDTO = new CustomerDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, INC_DATE, MODF_DATE);
-        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2);
+        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2, CPF_2);
     }
 }

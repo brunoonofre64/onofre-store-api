@@ -1,40 +1,40 @@
 package io.brunoonofre64.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-import org.hibernate.validator.constraints.br.CPF;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "TBL_CUSTOMER")
-@SequenceGenerator(name = "sequenceCustomer", sequenceName = "SQ_CUSTOMER", allocationSize = 1)
-public class CustomerEntity {
+@Table(name = "TBL_PRODUCT")
+@SequenceGenerator(name = "sequenceProduct", sequenceName = "SQ_PRODUCT", allocationSize = 1)
+public class ProductEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceCustomer")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceProduct" )
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "UUID", nullable = false, length = 36)
     private String uuid;
 
-    @CPF
-    @Column(name = "CPF")
-    private String cpf;
+    @Column(name = "PRODUCT_NAME", nullable = false, length = 100)
+    private String productName;
 
-    @Column(name = "CUSTOMER_NAME", nullable = false, length = 100)
-    private String name;
+    @Column(name = "DESCRIPTION", nullable = false, length = 150)
+    private String description;
 
-    @Column(name = "CUSTOMER_AGE", nullable = false, length = 3)
-    private String age;
+    @Column(name = "UNIT_VALUE", nullable = false)
+    private BigDecimal unitValue;
 
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
@@ -46,7 +46,7 @@ public class CustomerEntity {
     @PrePersist
     private void prePersist() {
         inclusionDate = LocalDateTime.now();
-        uuid = UUID.randomUUID().toString();
+        uuid = java.util.UUID.randomUUID().toString();
     }
 
     @PreUpdate

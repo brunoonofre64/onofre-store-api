@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,6 +39,9 @@ public class CustomerEntity {
 
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
+
+    @OneToMany(mappedBy = "customerEntity")
+    private List<RequestEntity> requests;
 
     @Column(name = "MODF_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)

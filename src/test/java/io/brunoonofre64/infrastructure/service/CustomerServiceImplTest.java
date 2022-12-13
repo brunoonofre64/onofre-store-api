@@ -3,6 +3,7 @@ package io.brunoonofre64.infrastructure.service;
 import io.brunoonofre64.domain.dto.CustomerDTO;
 import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
+import io.brunoonofre64.domain.entities.RequestEntity;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
@@ -48,6 +49,8 @@ class CustomerServiceImplTest {
     private static final String NAME_2 = "NAME_2";
 
     private static final String AGE_2 = "AGE_2";
+
+    private static  final List<RequestEntity> REQUESTS = List.of(new RequestEntity());
 
     private final static LocalDateTime INC_DATE = LocalDateTime.now();
 
@@ -441,13 +444,13 @@ class CustomerServiceImplTest {
     }
 
     private void startCustomer() {
-        customerEntity = new CustomerEntity(ID, UUID, CPF, NAME, AGE, INC_DATE, MODF_DATE);
+        customerEntity = new CustomerEntity(ID, UUID, CPF, NAME, AGE, INC_DATE, REQUESTS, MODF_DATE);
         createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE, CPF);
         customerDTO = new CustomerDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerEntityUpdate = new CustomerEntity(ID, UUID, CPF, NAME_2, AGE_2, INC_DATE, MODF_DATE);
+        customerEntityUpdate = new CustomerEntity(ID, UUID, CPF, NAME_2, AGE_2, INC_DATE, REQUESTS, MODF_DATE);
         customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
         createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2, CPF_2);
     }

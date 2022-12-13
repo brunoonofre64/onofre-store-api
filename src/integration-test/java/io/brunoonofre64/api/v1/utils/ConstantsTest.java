@@ -1,6 +1,9 @@
 package io.brunoonofre64.api.v1.utils;
 
 import io.brunoonofre64.domain.entities.CustomerEntity;
+import io.brunoonofre64.domain.entities.RequestEntity;
+
+import java.util.List;
 
 public interface ConstantsTest {
     Long ID_DEFAULT = 1L;
@@ -23,8 +26,8 @@ public interface ConstantsTest {
         Long ID = ID_DEFAULT;
         String NAME = TEXT_DEFAULT;
         String AGE = AGE_DEFAULT;
-
         String CPF = CPF_DEFAULT;
+        List<RequestEntity> REQUESTS_LIST = List.of(new RequestEntity());
     }
 
     interface WEB_METHOD_TEST {
@@ -37,6 +40,7 @@ public interface ConstantsTest {
                 .name(CUSTOMER_ENTITY.NAME)
                 .age(CUSTOMER_ENTITY.AGE)
                 .cpf(CUSTOMER_ENTITY.CPF)
+                .requests(CUSTOMER_ENTITY.REQUESTS_LIST)
                 .build();
     }
 }

@@ -10,7 +10,7 @@ public interface ConstantsTest {
 
     String UUID = "{uudi}";
 
-    String CPF_DEFAULT = "86132623507";
+    String CPF_DEFAULT = "861.326.235-07";
 
     String  UUID_INVALID = "123";
 

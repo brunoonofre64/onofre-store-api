@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.brunoonofre64.domain.dto.CustomerDTO;
 import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
+import io.brunoonofre64.domain.exception.CpfRepeatedException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
@@ -80,6 +81,24 @@ class CustomerControllerTestIT {
     }
 
     @Test
+    @DisplayName("Try to save new customer in BD, with cpf repetead, and verify if return is bad request")
+    void tryToSave_newCustomerInBdWithCpfRepetead_andReturnBadRequest() throws Exception {
+        CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
+        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+
+        String requestBody = objectMapper.writeValueAsString(dto);
+
+        mockMvc.perform(post(WEB_METHOD_TEST.V1_CUSTOMER)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException()
+                        instanceof CpfRepeatedException))
+                .andExpect(check -> assertThat(requestBody).isNotNull())
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("Try to save new customer in BD, with an null field, and verify if return is bad request")
     void tryToSave_newCustomerInBdWithNullField_andReturnBadRequest() throws Exception {
         DataToCreateCustomerDTO dto = buildDefaultCustomerDTO();
@@ -101,6 +120,7 @@ class CustomerControllerTestIT {
     void list_ReturnsListOfCustomersInsidePageObject_andReturnOk() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
         CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+
         String requestBody = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(get(WEB_METHOD_TEST.V1_CUSTOMER)
@@ -207,6 +227,7 @@ class CustomerControllerTestIT {
     @DisplayName("Must delete custome of DB by UUID, and return no content")
     void mustDeleteCustomerOfDatabaseByUuid_andReturnNoContent() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
+
         String requestBody = objectMapper.writeValueAsString(customerEntity);
         String expectedUuid = customerEntity.getUuid();
 
@@ -222,6 +243,7 @@ class CustomerControllerTestIT {
     @DisplayName("try delete by an UUID invalid, and verify if return bad request")
     void tryDeleteByUuidInvalid_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
+
         String requestBody = objectMapper.writeValueAsString(customerEntity);
 
         mockMvc.perform(delete(WEB_METHOD_TEST.V1_CUSTOMER.concat(SLASH).concat(UUID), UUID_INVALID)

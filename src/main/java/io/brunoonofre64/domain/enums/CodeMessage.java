@@ -17,9 +17,11 @@ public enum CodeMessage {
 
     FIELD_NULL_OR_IS_EMPTY("FIELD_NULL_OR_IS_EMPTY"),
 
-    CPF_INVALID_FORMAT("CPF_INVALID_FORMAT");
+    CPF_INVALID_FORMAT("CPF_INVALID_FORMAT"),
 
-    private String value;
+    CPF_REPEATED("CPF_REPEATED");
+
+    final String value;
 
     CodeMessage(String value) {
         this.value = value;

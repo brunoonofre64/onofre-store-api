@@ -10,4 +10,6 @@ public interface CustomerRepository extends PagingAndSortingRepository<CustomerE
     void deleteByUuid(String uuid);
 
     boolean existsByUuid(String uuid);
+
+    boolean existsByCpf(String cpf);
 }

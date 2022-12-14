@@ -1,10 +1,7 @@
 package io.brunoonofre64.api.v1.handler;
 
 import io.brunoonofre64.domain.enums.CodeMessage;
-import io.brunoonofre64.domain.exception.CustomerException;
-import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
-import io.brunoonofre64.domain.exception.ListIsEmptyException;
-import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
+import io.brunoonofre64.domain.exception.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -84,6 +81,19 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
                 .details(getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CpfRepeatedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerCpfRepeatedException(CpfRepeatedException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.CPF_REPEATED))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }

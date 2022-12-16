@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,4 +41,10 @@ public class RequestEntity {
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     private CustomerEntity customerEntity;
+
+    @ManyToMany
+    @JoinTable(name = "REQUEST_ITEMS",
+    joinColumns = @JoinColumn(name = "REQUEST_ID"),
+    inverseJoinColumns = @JoinColumn(name = "PRODUTC_ID"))
+    private List<ProductEntity> products;
 }

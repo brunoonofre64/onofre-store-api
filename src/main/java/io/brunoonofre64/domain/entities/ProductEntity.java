@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -37,19 +36,12 @@ public class ProductEntity {
     @Column(name = "UNIT_VALUE", nullable = false)
     private BigDecimal unitValue;
 
-    @ManyToMany(mappedBy = "products")
-    private List<RequestEntity> requests;
-
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
 
     @Column(name = "MODF_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime modifyDate;
-
-    @ManyToOne
-    @JoinColumn(name = "STOCK_ID")
-    private StockEntity stockEntity;
 
     @PrePersist
     private void prePersist() {

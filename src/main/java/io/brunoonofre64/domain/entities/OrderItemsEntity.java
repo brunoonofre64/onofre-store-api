@@ -13,12 +13,12 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "REQUEST_ITEMS")
-@SequenceGenerator(name = "requestItemsSequence", sequenceName = "SQ_requestItems", allocationSize = 1)
-public class RequestItemsEntity {
+@Table(name = "ORDER_ITEMS")
+@SequenceGenerator(name = "orderItemsSequence", sequenceName = "SQ_ORDER_ITEMS", allocationSize = 1)
+public class OrderItemsEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestItemsSequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderItemsSequence")
     @Column(name = "ID")
     private Long id;
 
@@ -33,8 +33,8 @@ public class RequestItemsEntity {
     private ProductEntity productEntity;
 
     @ManyToOne
-    @JoinColumn(name = "REQUEST_ID")
-    private RequestEntity requestEntity;
+    @JoinColumn(name = "ORDER_ID")
+    private OrderEntity orderEntity;
 
     @PrePersist
     private void prePersist() {

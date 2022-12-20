@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.utils;
 
 import io.brunoonofre64.domain.entities.CustomerEntity;
-import io.brunoonofre64.domain.entities.RequestEntity;
+import io.brunoonofre64.domain.entities.OrderEntity;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface ConstantsTest {
         String NAME = TEXT_DEFAULT;
         String AGE = AGE_DEFAULT;
         String CPF = CPF_DEFAULT;
-        List<RequestEntity> REQUESTS_LIST = List.of(new RequestEntity());
+        List<OrderEntity> REQUESTS_LIST = List.of(new OrderEntity());
     }
 
     interface WEB_METHOD_TEST {

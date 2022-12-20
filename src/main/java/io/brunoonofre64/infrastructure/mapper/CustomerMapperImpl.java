@@ -6,7 +6,9 @@ import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.CustomerException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
+import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -40,5 +42,13 @@ public class CustomerMapperImpl implements CustomerMapper {
         entity.setAge(dto.getAge());
         entity.setCpf(dto.getCpf());
         return entity;
+    }
+
+    @Override
+    public Page<CustomerDTO> mapPagesCustomerEntityToDTO(Page<CustomerEntity> entity) {
+        if(ObjectUtils.isEmpty(entity)) {
+            throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
+        }
+        return entity.map(this::convertEntityToDTO);
     }
 }

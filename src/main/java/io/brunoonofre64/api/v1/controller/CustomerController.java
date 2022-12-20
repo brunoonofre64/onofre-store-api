@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/cliente")
@@ -17,7 +19,7 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDTO saveNewCustomerInDb(@RequestBody DataToCreateCustomerDTO dto) {
+    public CustomerDTO saveNewCustomerInDb(@RequestBody @Valid DataToCreateCustomerDTO dto) {
        return customerService.saveNewCustomerInDb(dto);
     }
 
@@ -36,7 +38,7 @@ public class CustomerController {
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public CustomerDTO updateCustomerByUuid(@PathVariable String uuid,
-                                            @RequestBody DataToCreateCustomerDTO dto) {
+                                            @RequestBody @Valid DataToCreateCustomerDTO dto) {
         return customerService.updateCustomerByUuid(uuid, dto);
     }
 

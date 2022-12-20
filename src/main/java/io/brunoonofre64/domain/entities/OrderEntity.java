@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,9 +19,12 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "TBL_REQUEST")
+@Table(name = "TBL_ORDER")
+@SQLDelete(sql = "UPDATE TBL_ORDER SET STATUS = 'APPROVED' WHERE UUID = ?", check = ResultCheckStyle.COUNT)
+@FilterDef(name = "deleteOrder", parameters = @ParamDef(name = "deleted", type = "Status"))
+@Filter(name = "deleteOrder", condition = "Status = :deleted")
 @SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)
-public class RequestEntity {
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestSequence")
@@ -30,10 +36,10 @@ public class RequestEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
-    private Status status;
+    private Status status = Status.APPROVED;
 
-    @Column(name = "REQUEST_DATE", nullable = false)
-    private LocalDateTime requestDate;
+    @Column(name = "ORDER_DATE", nullable = false)
+    private LocalDateTime orderDate;
 
     @Column(name = "TOTAL", nullable = false)
     private BigDecimal total;
@@ -42,9 +48,11 @@ public class RequestEntity {
     @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     private CustomerEntity customerEntity;
 
-    @ManyToMany
-    @JoinTable(name = "REQUEST_ITEMS",
-    joinColumns = @JoinColumn(name = "REQUEST_ID"),
-    inverseJoinColumns = @JoinColumn(name = "PRODUTC_ID"))
-    private List<ProductEntity> products;
+    @OneToMany(mappedBy = "orderEntity")
+    private List<OrderItemsEntity> orderItems;
+
+    @PrePersist
+    private void prePersist() {
+        uuid = java.util.UUID.randomUUID().toString();
+    }
 }

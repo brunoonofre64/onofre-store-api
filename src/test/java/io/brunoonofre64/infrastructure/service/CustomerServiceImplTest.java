@@ -3,7 +3,8 @@ package io.brunoonofre64.infrastructure.service;
 import io.brunoonofre64.domain.dto.CustomerDTO;
 import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
-import io.brunoonofre64.domain.entities.RequestEntity;
+import io.brunoonofre64.domain.entities.OrderEntity;
+import io.brunoonofre64.domain.exception.CpfRepeatedException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
@@ -50,7 +51,7 @@ class CustomerServiceImplTest {
 
     private static final String AGE_2 = "AGE_2";
 
-    private static  final List<RequestEntity> REQUESTS = List.of(new RequestEntity());
+    private static  final List<OrderEntity> REQUESTS = List.of(new OrderEntity());
 
     private final static LocalDateTime INC_DATE = LocalDateTime.now();
 
@@ -94,6 +95,7 @@ class CustomerServiceImplTest {
     void mustSaveNewCustomerAnThenReturnCustomerDtoIntance() {
         when(mapper.convertDTOToEntity(any())).thenReturn(customerEntity);
         when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+        when(repository.existsByCpf(any())).thenReturn(false);
         when(repository.save(any())).thenReturn(customerEntity);
 
         CustomerDTO response = service.saveNewCustomerInDb(createCustomerDTO);
@@ -114,6 +116,17 @@ class CustomerServiceImplTest {
                 () -> service.saveNewCustomerInDb(createCustomerDTO));
 
         assertEquals(DtoNullOrIsEmptyException.class, ex.getClass());
+    }
+
+    @Test
+    @DisplayName("Must throw error when try saver new customer with cpf repetead.")
+    void mustThrowErroWhenTrySaveNewCustomerWithCpfRepetead() {
+        when(repository.existsByCpf(any())).thenReturn(true);
+
+        Throwable ex =  assertThrows(CpfRepeatedException.class,
+                () -> service.saveNewCustomerInDb(createCustomerDTO));
+
+        assertEquals(CpfRepeatedException.class, ex.getClass());
     }
 
     @Test
@@ -206,7 +219,7 @@ class CustomerServiceImplTest {
         pageable = PageRequest.of(0,10);
 
         when(repository.findAll(pageable)).thenReturn(buildCustomerEntityPaged());
-        when(serviceMock.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
+        when(mapper.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
 
         Page<CustomerDTO> reponse = service.getAllCustomers(pageable);
 
@@ -424,9 +437,9 @@ class CustomerServiceImplTest {
     @Test
     @DisplayName("Must mapper CustomerEntity paged to dtoPaged, and then return instance.")
     void mustMapperCustomerEntityPagedToDtoPagedAnReturnInstance() {
-        when(serviceMock.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
+        when(mapper.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
 
-        Page<CustomerDTO> reponse = serviceMock.mapPagesCustomerEntityToDTO(buildCustomerEntityPaged());
+        Page<CustomerDTO> reponse = mapper.mapPagesCustomerEntityToDTO(buildCustomerEntityPaged());
 
         assertNotNull(reponse);
         assertEquals(PageImpl.class, reponse.getClass());

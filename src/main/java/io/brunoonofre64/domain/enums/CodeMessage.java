@@ -19,7 +19,9 @@ public enum CodeMessage {
 
     CPF_INVALID_FORMAT("CPF_INVALID_FORMAT"),
 
-    CPF_REPEATED("CPF_REPEATED");
+    CPF_REPEATED("CPF_REPEATED"),
+
+    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND");
 
     final String value;
 

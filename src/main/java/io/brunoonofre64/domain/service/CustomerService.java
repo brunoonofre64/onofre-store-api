@@ -5,7 +5,6 @@ import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
 public interface CustomerService {
 
     CustomerDTO saveNewCustomerInDb(DataToCreateCustomerDTO dto);

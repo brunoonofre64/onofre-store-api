@@ -41,7 +41,7 @@ public class CustomerEntity {
     private LocalDateTime inclusionDate;
 
     @OneToMany(mappedBy = "customerEntity")
-    private List<RequestEntity> requests;
+    private List<OrderEntity> requests;
 
     @Column(name = "MODF_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -4,7 +4,10 @@ import io.brunoonofre64.domain.dto.CustomerDTO;
 import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
-import io.brunoonofre64.domain.exception.*;
+import io.brunoonofre64.domain.exception.CpfRepeatedException;
+import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
+import io.brunoonofre64.domain.exception.ListIsEmptyException;
+import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
 import io.brunoonofre64.domain.service.CustomerService;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
@@ -20,7 +23,7 @@ import org.springframework.util.ObjectUtils;
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerRepository customerRepository;
+    private CustomerRepository repository;
 
     private CustomerMapper mapper;
 
@@ -29,22 +32,22 @@ public class CustomerServiceImpl implements CustomerService {
         if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        if(customerRepository.existsByCpf(dto.getCpf())) {
+        if(repository.existsByCpf(dto.getCpf())) {
             throw new CpfRepeatedException(CodeMessage.CPF_REPEATED);
         }
         CustomerEntity entity = mapper.convertDTOToEntity(dto);
 
-        customerRepository.save(entity);
+        repository.save(entity);
 
         return mapper.convertEntityToDTO(entity);
     }
 
     @Override
     public CustomerDTO getCustomerByUuid(String uuid) {
-        if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
-        CustomerEntity entity = customerRepository.findByUuid(uuid);
+        CustomerEntity entity = repository.findByUuid(uuid);
         return mapper.convertEntityToDTO(entity);
     }
 
@@ -55,23 +58,23 @@ public class CustomerServiceImpl implements CustomerService {
         }
         pageable = PageRequest.of(0,10);
 
-        Page<CustomerEntity> entity = customerRepository.findAll(pageable);
-        return mapPagesCustomerEntityToDTO(entity);
+        Page<CustomerEntity> entity = repository.findAll(pageable);
+        return mapper.mapPagesCustomerEntityToDTO(entity);
     }
 
     @Override
     public CustomerDTO updateCustomerByUuid(String uuid, DataToCreateCustomerDTO dto) {
-        if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
         if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        CustomerEntity entity = customerRepository.findByUuid(uuid);
+        CustomerEntity entity = repository.findByUuid(uuid);
         entity.setName(dto.getName());
         entity.setAge(dto.getAge());
 
-        customerRepository.save(entity);
+        repository.save(entity);
 
         return mapper.convertEntityToDTO(entity);
     }
@@ -79,23 +82,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void deleteCustomerOfDb(String uuid) {
-        if(ObjectUtils.isEmpty(uuid) || !customerRepository.existsByUuid(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
-        customerRepository.deleteByUuid(uuid);
-    }
-
-    public Page<CustomerDTO> mapPagesCustomerEntityToDTO(Page<CustomerEntity> entity) {
-        if(ObjectUtils.isEmpty(entity)) {
-            throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
-        }
-        return entity.map(this::mapPagetoDto);
-    }
-
-    private CustomerDTO mapPagetoDto(CustomerEntity entity) {
-        if(ObjectUtils.isEmpty(entity)) {
-            throw new CustomerException(CodeMessage.FIELD_NULL_OR_IS_EMPTY);
-        }
-        return mapper.convertEntityToDTO(entity);
+        repository.deleteByUuid(uuid);
     }
 }

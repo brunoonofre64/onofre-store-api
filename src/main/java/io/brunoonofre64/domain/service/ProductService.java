@@ -1,19 +1,19 @@
 package io.brunoonofre64.domain.service;
 
-import io.brunoonofre64.domain.dto.DataToCreateProductDTO;
-import io.brunoonofre64.domain.dto.ProductDTO;
+import io.brunoonofre64.domain.dto.ProductInputDTO;
+import io.brunoonofre64.domain.dto.ProductOutputDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
 
-    ProductDTO saveNewProductInDb(DataToCreateProductDTO dto);
+    ProductOutputDTO saveNewProductInDb(ProductInputDTO dto);
 
-    ProductDTO getProductByUuid(String name);
+    ProductOutputDTO getProductByUuid(String name);
 
-    Page<ProductDTO> getAllProducts(Pageable pageable);
+    Page<ProductOutputDTO> getAllProducts(Pageable pageable);
 
-    ProductDTO updateProductByUuid(String uuid, DataToCreateProductDTO dto);
+    ProductOutputDTO updateProductByUuid(String uuid, ProductInputDTO dto);
 
     void deleteProductByUuid(String uuid);
 }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductOutputDTO {
 
     private String uuid;
 

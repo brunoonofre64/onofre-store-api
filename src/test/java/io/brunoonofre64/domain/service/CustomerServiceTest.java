@@ -1,7 +1,7 @@
 package io.brunoonofre64.domain.service;
 
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,13 +48,13 @@ class CustomerServiceTest {
     @Mock
     private Pageable pageable;
 
-    private CustomerDTO customerDTO;
+    private CustomerOutputDTO customerOutputDTO;
 
-    private CustomerDTO customerDTOUpdate;
+    private CustomerOutputDTO customerOutputDTOUpdate;
 
-    private DataToCreateCustomerDTO createCustomerDTO;
+    private CustomerInputDTO createCustomerDTO;
 
-    private DataToCreateCustomerDTO createCustomerDTOUpdate;
+    private CustomerInputDTO createCustomerDTOUpdate;
 
     @BeforeEach
     void setup() {
@@ -65,12 +65,12 @@ class CustomerServiceTest {
     @Test
     @DisplayName("Must save new customer an then return CustomerDTO intance.")
     void mustSaveNewCustomerAnThenReturnCustomerDtoIntance() {
-       when(service.saveNewCustomerInDb(any())).thenReturn(customerDTO);
+       when(service.saveNewCustomerInDb(any())).thenReturn(customerOutputDTO);
 
-       CustomerDTO response = service.saveNewCustomerInDb(createCustomerDTO);
+       CustomerOutputDTO response = service.saveNewCustomerInDb(createCustomerDTO);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(NAME, response.getName());
         assertEquals(UUID, response.getUuid());
     }
@@ -78,12 +78,12 @@ class CustomerServiceTest {
     @Test
     @DisplayName("When search for a customer by uuid and returns the instance.")
     void whenFindByUuidAnThenReturnCustomerInstance() {
-       when(service.getCustomerByUuid(any())).thenReturn(customerDTO);
+       when(service.getCustomerByUuid(any())).thenReturn(customerOutputDTO);
 
-        CustomerDTO response = service.getCustomerByUuid(UUID);
+        CustomerOutputDTO response = service.getCustomerByUuid(UUID);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(UUID, response.getUuid());
         assertEquals(NAME, response.getName());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -94,7 +94,7 @@ class CustomerServiceTest {
     void mustFindAllCustomerPagedAnReturnAnInstance() {
        when(service.getAllCustomers(any())).thenReturn(buildCustomerDtoPaged());
 
-        Page<CustomerDTO> reponse = service.getAllCustomers(pageable);
+        Page<CustomerOutputDTO> reponse = service.getAllCustomers(pageable);
 
         assertNotNull(reponse);
         assertEquals(PageImpl.class, reponse.getClass());
@@ -105,12 +105,12 @@ class CustomerServiceTest {
     @DisplayName("Must update data of customer and return an instance.")
     void mustUpdateCustomerAndReturnAnInstance() {
         startCustomerDatatoUpdate();
-        when(service.updateCustomerByUuid(any(),any())).thenReturn(customerDTOUpdate);
+        when(service.updateCustomerByUuid(any(),any())).thenReturn(customerOutputDTOUpdate);
 
-        CustomerDTO response = service.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
+        CustomerOutputDTO response = service.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(NAME_2, response.getName());
         assertEquals(AGE_2, response.getAge());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -129,17 +129,17 @@ class CustomerServiceTest {
         verify(service, atLeastOnce()).deleteCustomerOfDb(UUID);
     }
 
-    private Page<CustomerDTO> buildCustomerDtoPaged() {
-        List<CustomerDTO> entityList = Collections.singletonList(customerDTO);
+    private Page<CustomerOutputDTO> buildCustomerDtoPaged() {
+        List<CustomerOutputDTO> entityList = Collections.singletonList(customerOutputDTO);
         return new PageImpl<>(entityList);
     }
     private void startCustomer() {
-        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE, CPF);
-        customerDTO = new CustomerDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
+        createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
+        customerOutputDTO = new CustomerOutputDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
-        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2, CPF_2);
+        customerOutputDTOUpdate = new CustomerOutputDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }
 }

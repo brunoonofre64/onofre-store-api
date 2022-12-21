@@ -1,8 +1,8 @@
 package io.brunoonofre64.api.v1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
@@ -65,7 +65,7 @@ class CustomerControllerTestIT {
     @Test
     @DisplayName("Try to save new customer in BD, with an empty field, and verify if return is bad request")
     void tryToSave_newCustomerInBdWithEmptyField_andReturnBadRequest() throws Exception {
-        DataToCreateCustomerDTO dto = buildDefaultCustomerDTO();
+        CustomerInputDTO dto = buildDefaultCustomerDTO();
         dto.setName("");
 
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -84,7 +84,7 @@ class CustomerControllerTestIT {
     @DisplayName("Try to save new customer in BD, with cpf repetead, and verify if return is bad request")
     void tryToSave_newCustomerInBdWithCpfRepetead_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
 
         String requestBody = objectMapper.writeValueAsString(dto);
 
@@ -101,7 +101,7 @@ class CustomerControllerTestIT {
     @Test
     @DisplayName("Try to save new customer in BD, with an null field, and verify if return is bad request")
     void tryToSave_newCustomerInBdWithNullField_andReturnBadRequest() throws Exception {
-        DataToCreateCustomerDTO dto = buildDefaultCustomerDTO();
+        CustomerInputDTO dto = buildDefaultCustomerDTO();
         dto.setName(null);
 
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -119,7 +119,7 @@ class CustomerControllerTestIT {
     @DisplayName("list returns list of customers inside page object when successful")
     void list_ReturnsListOfCustomersInsidePageObject_andReturnOk() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
 
         String requestBody = objectMapper.writeValueAsString(dto);
 
@@ -135,7 +135,7 @@ class CustomerControllerTestIT {
     @DisplayName("must show customer by uuid, and verify if return is ok")
     void mustShowCustomerByUud_andReturnOk() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
 
         String requestBody = objectMapper.writeValueAsString(dto);
         String expectedUuid = dto.getUuid();
@@ -153,7 +153,7 @@ class CustomerControllerTestIT {
     @DisplayName("try to get customer by uuid nonexistent and verify if return is bad request")
     void tryToGetCustomerByUuidInvalid_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
 
         String requestBody = objectMapper.writeValueAsString(dto);
 
@@ -170,7 +170,7 @@ class CustomerControllerTestIT {
     @DisplayName("Update new data of customer em DB, and verify if return is no content")
     void mustUpdateNewDataOfCustomerInDataBase_doneSuccessfuly() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
         dto.setName(TEXT_DEFAULT_UPDATE);
 
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -189,7 +189,7 @@ class CustomerControllerTestIT {
     @DisplayName("Try update new data of customer with an null field, and verify if return bad request")
     void tryUpdateNewDataOfCustomerWithNullField_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
         dto.setName(null);
 
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -208,7 +208,7 @@ class CustomerControllerTestIT {
     @DisplayName("Try update new data of customer with an empty field, and verify if return bad request")
     void tryUpdateNewDataOfCustomerWithEmptyField_andReturnBadRequest() throws Exception {
         CustomerEntity customerEntity = customerRepository.save(buildCustomerDefault());
-        CustomerDTO dto = customerMapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO dto = customerMapper.convertEntityToDTO(customerEntity);
         dto.setName("");
 
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -254,8 +254,8 @@ class CustomerControllerTestIT {
                         instanceof UuidNotFoundOrNullException))
                 .andDo(print());
     }
-    private DataToCreateCustomerDTO buildDefaultCustomerDTO() {
-        return DataToCreateCustomerDTO
+    private CustomerInputDTO buildDefaultCustomerDTO() {
+        return CustomerInputDTO
                 .builder()
                 .name(TEXT_DEFAULT)
                 .age(AGE_DEFAULT)

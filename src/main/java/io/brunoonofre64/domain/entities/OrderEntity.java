@@ -46,7 +46,7 @@ public class OrderEntity {
 
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID", nullable = false)
-    private CustomerEntity customerEntity;
+    private CustomerEntity customer;
 
     @OneToMany(mappedBy = "orderEntity")
     private List<OrderItemsEntity> orderItems;

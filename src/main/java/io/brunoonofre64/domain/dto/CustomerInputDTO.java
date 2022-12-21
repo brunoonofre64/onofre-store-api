@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.br.CPF;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataToCreateCustomerDTO {
+public class CustomerInputDTO {
 
     private String name;
 

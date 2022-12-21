@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,13 +48,13 @@ class CustomerControllerTest {
     @Mock
     private Pageable pageable;
 
-    private CustomerDTO customerDTO;
+    private CustomerOutputDTO customerOutputDTO;
 
-    private CustomerDTO customerDTOUpdate;
+    private CustomerOutputDTO customerOutputDTOUpdate;
 
-    private DataToCreateCustomerDTO createCustomerDTO;
+    private CustomerInputDTO createCustomerDTO;
 
-    private DataToCreateCustomerDTO createCustomerDTOUpdate;
+    private CustomerInputDTO createCustomerDTOUpdate;
 
     @BeforeEach
     void setup() {
@@ -65,12 +65,12 @@ class CustomerControllerTest {
     @Test
     @DisplayName("Must save new customer an then return CustomerDTO intance.")
     void mustSaveNewCustomerAnThenReturnCustomerDtoIntance() {
-        when(controller.saveNewCustomerInDb(any())).thenReturn(customerDTO);
+        when(controller.saveNewCustomerInDb(any())).thenReturn(customerOutputDTO);
 
-        CustomerDTO response = controller.saveNewCustomerInDb(createCustomerDTO);
+        CustomerOutputDTO response = controller.saveNewCustomerInDb(createCustomerDTO);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(NAME, response.getName());
         assertEquals(UUID, response.getUuid());
     }
@@ -78,12 +78,12 @@ class CustomerControllerTest {
     @Test
     @DisplayName("When search for a customer by uuid and returns the instance.")
     void whenFindByUuidAnThenReturnCustomerInstance() {
-        when(controller.getCustomerByUuid(any())).thenReturn(customerDTO);
+        when(controller.getCustomerByUuid(any())).thenReturn(customerOutputDTO);
 
-        CustomerDTO response = controller.getCustomerByUuid(UUID);
+        CustomerOutputDTO response = controller.getCustomerByUuid(UUID);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(UUID, response.getUuid());
         assertEquals(NAME, response.getName());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -94,7 +94,7 @@ class CustomerControllerTest {
     void mustFindAllCustomerPagedAnReturnAnInstance() {
         when(controller.getAllCustomers(any())).thenReturn(buildCustomerDtoPaged());
 
-        Page<CustomerDTO> reponse = controller.getAllCustomers(pageable);
+        Page<CustomerOutputDTO> reponse = controller.getAllCustomers(pageable);
 
         assertNotNull(reponse);
         assertEquals(PageImpl.class, reponse.getClass());
@@ -105,12 +105,12 @@ class CustomerControllerTest {
     @DisplayName("Must update data of customer and return an instance.")
     void mustUpdateCustomerAndReturnAnInstance() {
         startCustomerDatatoUpdate();
-        when(controller.updateCustomerByUuid(any(),any())).thenReturn(customerDTOUpdate);
+        when(controller.updateCustomerByUuid(any(),any())).thenReturn(customerOutputDTOUpdate);
 
-        CustomerDTO response = controller.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
+        CustomerOutputDTO response = controller.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(NAME_2, response.getName());
         assertEquals(CPF_2, response.getCpf());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -129,17 +129,17 @@ class CustomerControllerTest {
         verify(controller, atLeastOnce()).deleteCustomerOfDb(UUID);
     }
 
-    private Page<CustomerDTO> buildCustomerDtoPaged() {
-        List<CustomerDTO> entityList = Collections.singletonList(customerDTO);
+    private Page<CustomerOutputDTO> buildCustomerDtoPaged() {
+        List<CustomerOutputDTO> entityList = Collections.singletonList(customerOutputDTO);
         return new PageImpl<>(entityList);
     }
     private void startCustomer() {
-        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE, CPF);
-        customerDTO = new CustomerDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
+        createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
+        customerOutputDTO = new CustomerOutputDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
-        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2, CPF_2);
+        customerOutputDTOUpdate = new CustomerOutputDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }
 }

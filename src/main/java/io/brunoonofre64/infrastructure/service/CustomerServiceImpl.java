@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper mapper;
 
     @Override
-    public CustomerDTO saveNewCustomerInDb(DataToCreateCustomerDTO dto) {
+    public CustomerOutputDTO saveNewCustomerInDb(CustomerInputDTO dto) {
         if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerByUuid(String uuid) {
+    public CustomerOutputDTO getCustomerByUuid(String uuid) {
         if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Page<CustomerDTO> getAllCustomers(Pageable pageable) {
+    public Page<CustomerOutputDTO> getAllCustomers(Pageable pageable) {
         if(ObjectUtils.isEmpty(pageable) || pageable.isUnpaged()) {
             throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }
@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO updateCustomerByUuid(String uuid, DataToCreateCustomerDTO dto) {
+    public CustomerOutputDTO updateCustomerByUuid(String uuid, CustomerInputDTO dto) {
         if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }

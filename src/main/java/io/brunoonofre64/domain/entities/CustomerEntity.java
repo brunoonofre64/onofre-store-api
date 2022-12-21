@@ -40,7 +40,7 @@ public class CustomerEntity {
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
 
-    @OneToMany(mappedBy = "customerEntity")
+    @OneToMany(mappedBy = "customer")
     private List<OrderEntity> requests;
 
     @Column(name = "MODF_DATE")

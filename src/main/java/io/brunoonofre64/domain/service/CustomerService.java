@@ -1,19 +1,19 @@
 package io.brunoonofre64.domain.service;
 
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CustomerService {
 
-    CustomerDTO saveNewCustomerInDb(DataToCreateCustomerDTO dto);
+    CustomerOutputDTO saveNewCustomerInDb(CustomerInputDTO dto);
 
-    CustomerDTO getCustomerByUuid(String uuid);
+    CustomerOutputDTO getCustomerByUuid(String uuid);
 
-    Page<CustomerDTO> getAllCustomers(Pageable pageable);
+    Page<CustomerOutputDTO> getAllCustomers(Pageable pageable);
 
-    CustomerDTO updateCustomerByUuid(String uuid, DataToCreateCustomerDTO dto);
+    CustomerOutputDTO updateCustomerByUuid(String uuid, CustomerInputDTO dto);
 
     void deleteCustomerOfDb(String uuid);
 }

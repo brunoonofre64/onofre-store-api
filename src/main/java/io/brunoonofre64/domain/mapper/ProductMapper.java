@@ -1,15 +1,15 @@
 package io.brunoonofre64.domain.mapper;
 
-import io.brunoonofre64.domain.dto.DataToCreateProductDTO;
-import io.brunoonofre64.domain.dto.ProductDTO;
+import io.brunoonofre64.domain.dto.ProductInputDTO;
+import io.brunoonofre64.domain.dto.ProductOutputDTO;
 import io.brunoonofre64.domain.entities.ProductEntity;
 import org.springframework.data.domain.Page;
 
 public interface ProductMapper {
 
-    ProductDTO convertEntityToDTO(ProductEntity entity);
+    ProductOutputDTO convertEntityToDTO(ProductEntity entity);
 
-    ProductEntity convertDTOToEntity(DataToCreateProductDTO dto);
+    ProductEntity convertDTOToEntity(ProductInputDTO dto);
 
-    Page<ProductDTO> mapPagesProductEntityToDTO(Page<ProductEntity> entity);
+    Page<ProductOutputDTO> mapPagesProductEntityToDTO(Page<ProductEntity> entity);
 }

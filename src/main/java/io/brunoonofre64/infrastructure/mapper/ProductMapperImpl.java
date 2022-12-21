@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.mapper;
 
-import io.brunoonofre64.domain.dto.DataToCreateProductDTO;
-import io.brunoonofre64.domain.dto.ProductDTO;
+import io.brunoonofre64.domain.dto.ProductInputDTO;
+import io.brunoonofre64.domain.dto.ProductOutputDTO;
 import io.brunoonofre64.domain.entities.ProductEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
@@ -14,8 +14,8 @@ import org.springframework.util.ObjectUtils;
 public class ProductMapperImpl implements ProductMapper {
 
     @Override
-    public ProductDTO convertEntityToDTO(ProductEntity entity) {
-        ProductDTO dto = new ProductDTO();
+    public ProductOutputDTO convertEntityToDTO(ProductEntity entity) {
+        ProductOutputDTO dto = new ProductOutputDTO();
         dto.setUuid(entity.getUuid());
         dto.setProductName(entity.getProductName());
         dto.setDescription(entity.getDescription());
@@ -27,7 +27,7 @@ public class ProductMapperImpl implements ProductMapper {
     }
 
     @Override
-    public ProductEntity convertDTOToEntity(DataToCreateProductDTO dto) {
+    public ProductEntity convertDTOToEntity(ProductInputDTO dto) {
         ProductEntity entity = new ProductEntity();
         entity.setProductName(dto.getProductName());
         entity.setDescription(dto.getDescription());
@@ -37,7 +37,7 @@ public class ProductMapperImpl implements ProductMapper {
     }
 
     @Override
-        public Page<ProductDTO> mapPagesProductEntityToDTO(Page<ProductEntity> entity) {
+        public Page<ProductOutputDTO> mapPagesProductEntityToDTO(Page<ProductEntity> entity) {
             if(ObjectUtils.isEmpty(entity)) {
                 throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
             }

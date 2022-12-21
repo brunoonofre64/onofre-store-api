@@ -1,7 +1,8 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.DataToCreateOrderDTO;
-import io.brunoonofre64.domain.dto.OrderDTO;
+import io.brunoonofre64.domain.dto.OrderInputDTO;
+import io.brunoonofre64.domain.dto.OrderOutputDTO;
+import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
@@ -9,7 +10,9 @@ import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.OrderMapper;
 import io.brunoonofre64.domain.service.OrderService;
+import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import io.brunoonofre64.infrastructure.jpa.OrderRepository;
+import io.brunoonofre64.infrastructure.jpa.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -23,58 +26,68 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private OrderRepository repository;
+    private OrderRepository orderRepository;
+
+    private CustomerRepository customerRepository;
+
+    private ProductRepository productRepository;
 
     private OrderMapper mapper;
 
 
     @Override
-    public OrderDTO saveNewOrderInDb(DataToCreateOrderDTO dto) {
+    public OrderEntity saveNewOrderInDb(OrderInputDTO dto) {
        if(validateIfDtoFieldIsNotNullOrEmpty(dto)) {
            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
        }
-       OrderEntity orderEntity = mapper.convertDTOToEntity(dto);
-       repository.save(orderEntity);
+       CustomerEntity customer = getCustomerIfUuidExistInDataBase(dto);
 
-       return mapper.convertEntityToDTO(orderEntity);
+       OrderEntity order = new OrderEntity();
+       order.setStatus(dto.getStatus());
+       order.setOrderDate(dto.getOrderDate());
+       order.setTotal(dto.getTotal());
+       order.setCustomer(customer);
+
+
+      return null;
     }
 
     @Override
-    public OrderDTO getOrderByUuid(String uuid) {
-        if(ObjectUtils.isEmpty(uuid) || repository.existsByUuid(uuid)) {
+    public OrderOutputDTO getOrderByUuid(String uuid) {
+        if(ObjectUtils.isEmpty(uuid) || orderRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException((CodeMessage.UUID_NOT_FOUND_OR_NULL));
         }
-        OrderEntity entity = repository.findByUuid(uuid);
+        OrderEntity entity = orderRepository.findByUuid(uuid);
         return mapper.convertEntityToDTO(entity);
     }
 
     @Override
-    public List<OrderDTO> getAllOrderTheseCustomer() {
+    public List<OrderOutputDTO> getAllOrderTheseCustomer() {
         if(ObjectUtils.isEmpty(this)) {
             throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }
-        return repository
+        return orderRepository
                 .findAll().stream()
                 .map(this::convertEntityToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public OrderDTO updateOrderByUuidAndNewItems(String uuid, DataToCreateOrderDTO dto) {
-        if(ObjectUtils.isEmpty(uuid) || repository.existsByUuid(uuid)) {
+    public OrderOutputDTO updateOrderByUuidAndNewItems(String uuid, OrderInputDTO dto) {
+        if(ObjectUtils.isEmpty(uuid) || orderRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException((CodeMessage.UUID_NOT_FOUND_OR_NULL));
         }
         if(validateIfDtoFieldIsNotNullOrEmpty(dto)) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        OrderEntity entity = repository.findByUuid(uuid);
+        OrderEntity entity = orderRepository.findByUuid(uuid);
         entity.setUuid(dto.getUuid());
-        entity.setCustomerEntity(dto.getCustomerEntity());
+        entity.setCustomer(dto.getCustomerEntity());
         entity.setStatus(dto.getStatus());
         entity.setOrderDate(dto.getOrderDate());
         entity.setTotal(dto.getTotal());
 
-        repository.save(entity);
+        orderRepository.save(entity);
 
         return mapper.convertEntityToDTO(entity);
     }
@@ -82,19 +95,32 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void deleteOrderByUuid(String uuid) {
-        if(ObjectUtils.isEmpty(uuid) || repository.existsByUuid(uuid)) {
+        if(ObjectUtils.isEmpty(uuid) || orderRepository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException((CodeMessage.UUID_NOT_FOUND_OR_NULL));
         }
-        repository.deleteByUuid(uuid);
+        orderRepository.deleteByUuid(uuid);
     }
 
-    private OrderDTO convertEntityToDTO(OrderEntity entity) {
+    public CustomerEntity getCustomerIfUuidExistInDataBase(OrderInputDTO dto) {
+        if(ObjectUtils.isEmpty(dto)) {
+            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
+        }
+        String uuidCustomer = dto.getCustomerEntity().getUuid();
+
+        try{
+            return customerRepository.findByUuid(uuidCustomer);
+        } catch (Exception ex) {
+            throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
+        }
+    }
+
+    private OrderOutputDTO convertEntityToDTO(OrderEntity entity) {
         return mapper.convertEntityToDTO(entity);
     }
 
-    private boolean validateIfDtoFieldIsNotNullOrEmpty(DataToCreateOrderDTO dto) {
+    private boolean validateIfDtoFieldIsNotNullOrEmpty(OrderInputDTO dto) {
         return ObjectUtils.isEmpty(dto.getUuid()) && ObjectUtils.isEmpty(dto.getOrderDate())
-                && ObjectUtils.isEmpty(dto.getCustomerEntity()) && CollectionUtils.isEmpty(dto.getProducts())
+                && ObjectUtils.isEmpty(dto.getCustomerEntity()) && CollectionUtils.isEmpty(dto.getOrderItems())
                 && dto.getCustomerEntity() == null && ObjectUtils.isEmpty(dto.getStatus());
     }
 }

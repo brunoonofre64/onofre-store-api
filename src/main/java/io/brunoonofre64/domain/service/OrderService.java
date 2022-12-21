@@ -1,19 +1,20 @@
 package io.brunoonofre64.domain.service;
 
-import io.brunoonofre64.domain.dto.DataToCreateOrderDTO;
-import io.brunoonofre64.domain.dto.OrderDTO;
+import io.brunoonofre64.domain.dto.OrderInputDTO;
+import io.brunoonofre64.domain.dto.OrderOutputDTO;
+import io.brunoonofre64.domain.entities.OrderEntity;
 
 import java.util.List;
 
 public interface OrderService {
 
-    OrderDTO saveNewOrderInDb(DataToCreateOrderDTO dto);
+    OrderEntity saveNewOrderInDb(OrderInputDTO dto);
 
-    OrderDTO getOrderByUuid(String uuid);
+    OrderOutputDTO getOrderByUuid(String uuid);
 
-    List<OrderDTO> getAllOrderTheseCustomer();
+    List<OrderOutputDTO> getAllOrderTheseCustomer();
 
-    OrderDTO updateOrderByUuidAndNewItems(String uuid, DataToCreateOrderDTO dto);
+    OrderOutputDTO updateOrderByUuidAndNewItems(String uuid, OrderInputDTO dto);
 
     void deleteOrderByUuid(String uuid);
 }

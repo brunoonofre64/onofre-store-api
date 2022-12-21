@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.DataToCreateProductDTO;
-import io.brunoonofre64.domain.dto.ProductDTO;
+import io.brunoonofre64.domain.dto.ProductInputDTO;
+import io.brunoonofre64.domain.dto.ProductOutputDTO;
 import io.brunoonofre64.domain.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,26 +18,26 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDTO saveNewProductInDb(@RequestBody DataToCreateProductDTO dto) {
+    public ProductOutputDTO saveNewProductInDb(@RequestBody ProductInputDTO dto) {
         return service.saveNewProductInDb(dto);
     }
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductDTO getProductByUuid(@PathVariable String uuid) {
+    public ProductOutputDTO getProductByUuid(@PathVariable String uuid) {
         return service.getProductByUuid(uuid);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+    public Page<ProductOutputDTO> getAllProducts(Pageable pageable) {
         return service.getAllProducts(pageable);
     }
 
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ProductDTO updateProductByUuid(@PathVariable String uuid,
-                                          @RequestBody DataToCreateProductDTO dto) {
+    public ProductOutputDTO updateProductByUuid(@PathVariable String uuid,
+                                                @RequestBody ProductInputDTO dto) {
        return service.updateProductByUuid(uuid, dto);
     }
 

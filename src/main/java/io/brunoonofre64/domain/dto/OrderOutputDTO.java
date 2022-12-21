@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderDTO {
+public class OrderOutputDTO {
 
     private String uuid;
 

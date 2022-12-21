@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
@@ -76,13 +76,13 @@ class CustomerServiceImplTest {
 
     private CustomerEntity customerEntityUpdate;
 
-    private CustomerDTO customerDTO;
+    private CustomerOutputDTO customerOutputDTO;
 
-    private CustomerDTO customerDTOUpdate;
+    private CustomerOutputDTO customerOutputDTOUpdate;
 
-    private DataToCreateCustomerDTO createCustomerDTO;
+    private CustomerInputDTO createCustomerDTO;
 
-    private DataToCreateCustomerDTO createCustomerDTOUpdate;
+    private CustomerInputDTO createCustomerDTOUpdate;
 
     @BeforeEach
     void setup() {
@@ -94,14 +94,14 @@ class CustomerServiceImplTest {
     @DisplayName("Must save new customer an then return CustomerDTO intance.")
     void mustSaveNewCustomerAnThenReturnCustomerDtoIntance() {
         when(mapper.convertDTOToEntity(any())).thenReturn(customerEntity);
-        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerOutputDTO);
         when(repository.existsByCpf(any())).thenReturn(false);
         when(repository.save(any())).thenReturn(customerEntity);
 
-        CustomerDTO response = service.saveNewCustomerInDb(createCustomerDTO);
+        CustomerOutputDTO response = service.saveNewCustomerInDb(createCustomerDTO);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass() );
+        assertEquals(CustomerOutputDTO.class, response.getClass() );
         assertEquals(UUID, response.getUuid());
         assertEquals(NAME, response.getName());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -157,12 +157,12 @@ class CustomerServiceImplTest {
     void whenFindByUuidAnThenReturnCustomerInstance() {
         when(repository.findByUuid(any())).thenReturn(customerEntity);
         when(repository.existsByUuid(any())).thenReturn(true);
-        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerOutputDTO);
 
-        CustomerDTO response = service.getCustomerByUuid(UUID);
+        CustomerOutputDTO response = service.getCustomerByUuid(UUID);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(UUID, response.getUuid());
         assertEquals(NAME, response.getName());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -202,7 +202,7 @@ class CustomerServiceImplTest {
     void mustFindCustomerByUuidInRepostory(){
         when(repository.existsByUuid(UUID)).thenReturn(true);
         when(repository.findByUuid(UUID)).thenReturn(customerEntity);
-        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerOutputDTO);
 
         CustomerEntity response = repository.findByUuid(UUID);
 
@@ -221,7 +221,7 @@ class CustomerServiceImplTest {
         when(repository.findAll(pageable)).thenReturn(buildCustomerEntityPaged());
         when(mapper.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
 
-        Page<CustomerDTO> reponse = service.getAllCustomers(pageable);
+        Page<CustomerOutputDTO> reponse = service.getAllCustomers(pageable);
 
         assertNotNull(reponse);
         assertEquals(PageImpl.class, reponse.getClass());
@@ -256,7 +256,7 @@ class CustomerServiceImplTest {
     @Test
     @DisplayName("Must throw a error by page is empty.")
     void mustThrowErrorByPageIsEmpty() {
-        Page<CustomerDTO> accessPage = new PageImpl<>(Collections.emptyList());
+        Page<CustomerOutputDTO> accessPage = new PageImpl<>(Collections.emptyList());
         pageable = accessPage.getPageable();
 
         Throwable ex = assertThrows(ListIsEmptyException.class,
@@ -273,12 +273,12 @@ class CustomerServiceImplTest {
         when(repository.existsByUuid(UUID)).thenReturn(true);
         when(repository.findByUuid(UUID)).thenReturn(customerEntity);
         when(repository.save(any())).thenReturn(customerEntityUpdate);
-        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTOUpdate);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerOutputDTOUpdate);
 
-        CustomerDTO response = service.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
+        CustomerOutputDTO response = service.updateCustomerByUuid(UUID, createCustomerDTOUpdate);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(NAME_2, response.getName());
         assertEquals(AGE_2, response.getAge());
         assertEquals(INC_DATE, response.getInclusionDate());
@@ -409,12 +409,12 @@ class CustomerServiceImplTest {
     @Test
     @DisplayName("Must mapper CustomerEntity to dto, and then return instance.")
     void mustMapperCustomerEntityToDTOAnThenReturnInstance() {
-        when(mapper.convertEntityToDTO(any())).thenReturn(customerDTO);
+        when(mapper.convertEntityToDTO(any())).thenReturn(customerOutputDTO);
 
-        CustomerDTO response = mapper.convertEntityToDTO(customerEntity);
+        CustomerOutputDTO response = mapper.convertEntityToDTO(customerEntity);
 
         assertNotNull(response);
-        assertEquals(CustomerDTO.class, response.getClass());
+        assertEquals(CustomerOutputDTO.class, response.getClass());
         assertEquals(NAME, response.getName());
         assertEquals(UUID, response.getUuid());
         assertEquals(AGE, response.getAge());
@@ -439,7 +439,7 @@ class CustomerServiceImplTest {
     void mustMapperCustomerEntityPagedToDtoPagedAnReturnInstance() {
         when(mapper.mapPagesCustomerEntityToDTO(any())).thenReturn(buildCustomerDtoPaged());
 
-        Page<CustomerDTO> reponse = mapper.mapPagesCustomerEntityToDTO(buildCustomerEntityPaged());
+        Page<CustomerOutputDTO> reponse = mapper.mapPagesCustomerEntityToDTO(buildCustomerEntityPaged());
 
         assertNotNull(reponse);
         assertEquals(PageImpl.class, reponse.getClass());
@@ -451,20 +451,20 @@ class CustomerServiceImplTest {
         return new PageImpl<>(entityList);
     }
 
-    private Page<CustomerDTO> buildCustomerDtoPaged() {
-        List<CustomerDTO> entityList = Collections.singletonList(customerDTO);
+    private Page<CustomerOutputDTO> buildCustomerDtoPaged() {
+        List<CustomerOutputDTO> entityList = Collections.singletonList(customerOutputDTO);
         return new PageImpl<>(entityList);
     }
 
     private void startCustomer() {
         customerEntity = new CustomerEntity(ID, UUID, CPF, NAME, AGE, INC_DATE, REQUESTS, MODF_DATE);
-        createCustomerDTO = new DataToCreateCustomerDTO(NAME, AGE, CPF);
-        customerDTO = new CustomerDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
+        createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
+        customerOutputDTO = new CustomerOutputDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
         customerEntityUpdate = new CustomerEntity(ID, UUID, CPF, NAME_2, AGE_2, INC_DATE, REQUESTS, MODF_DATE);
-        customerDTOUpdate = new CustomerDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
-        createCustomerDTOUpdate = new DataToCreateCustomerDTO(NAME_2, AGE_2, CPF_2);
+        customerOutputDTOUpdate = new CustomerOutputDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }
 }

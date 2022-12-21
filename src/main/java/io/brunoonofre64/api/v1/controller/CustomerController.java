@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.CustomerDTO;
-import io.brunoonofre64.domain.dto.DataToCreateCustomerDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.CustomerInputDTO;
 import io.brunoonofre64.domain.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,26 +19,26 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDTO saveNewCustomerInDb(@RequestBody @Valid DataToCreateCustomerDTO dto) {
+    public CustomerOutputDTO saveNewCustomerInDb(@RequestBody @Valid CustomerInputDTO dto) {
        return customerService.saveNewCustomerInDb(dto);
     }
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO getCustomerByUuid(@PathVariable String uuid) {
+    public CustomerOutputDTO getCustomerByUuid(@PathVariable String uuid) {
         return customerService.getCustomerByUuid(uuid);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<CustomerDTO> getAllCustomers(Pageable pageable) {
+    public Page<CustomerOutputDTO> getAllCustomers(Pageable pageable) {
         return customerService.getAllCustomers(pageable);
     }
 
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public CustomerDTO updateCustomerByUuid(@PathVariable String uuid,
-                                            @RequestBody @Valid DataToCreateCustomerDTO dto) {
+    public CustomerOutputDTO updateCustomerByUuid(@PathVariable String uuid,
+                                                  @RequestBody @Valid CustomerInputDTO dto) {
         return customerService.updateCustomerByUuid(uuid, dto);
     }
 

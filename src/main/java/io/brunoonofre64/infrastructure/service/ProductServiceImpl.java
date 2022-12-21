@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.DataToCreateProductDTO;
-import io.brunoonofre64.domain.dto.ProductDTO;
+import io.brunoonofre64.domain.dto.ProductInputDTO;
+import io.brunoonofre64.domain.dto.ProductOutputDTO;
 import io.brunoonofre64.domain.entities.ProductEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper mapper;
 
     @Override
-    public ProductDTO saveNewProductInDb(DataToCreateProductDTO dto) {
+    public ProductOutputDTO saveNewProductInDb(ProductInputDTO dto) {
         if(validateIfDtoFieldIsNotNullOrEmpty(dto)) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO getProductByUuid(String uuid) {
+    public ProductOutputDTO getProductByUuid(String uuid) {
         if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new ProductNotFoundInStock(CodeMessage.PRODUCT_NOT_FOUND);
         }
@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+    public Page<ProductOutputDTO> getAllProducts(Pageable pageable) {
         if(ObjectUtils.isEmpty(pageable) || pageable.isUnpaged()) {
             throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }
@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProductByUuid(String uuid, DataToCreateProductDTO dto) {
+    public ProductOutputDTO updateProductByUuid(String uuid, ProductInputDTO dto) {
         if(ObjectUtils.isEmpty(uuid) || repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
         repository.deleteByUuid(uuid);
     }
 
-   private boolean validateIfDtoFieldIsNotNullOrEmpty(DataToCreateProductDTO dto) {
+   private boolean validateIfDtoFieldIsNotNullOrEmpty(ProductInputDTO dto) {
         return ObjectUtils.isEmpty(dto.getProductName()) && ObjectUtils.isEmpty(dto.getDescription())
                 && ObjectUtils.isEmpty(dto.getUnitValue());
    }

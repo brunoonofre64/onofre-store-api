@@ -20,14 +20,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_ORDER")
-@SQLDelete(sql = "UPDATE TBL_ORDER SET STATUS = 'APPROVED' WHERE UUID = ?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE TBL_ORDER SET STATUS = 'CANCELED' WHERE ID= ?", check = ResultCheckStyle.COUNT)
 @FilterDef(name = "deleteOrder", parameters = @ParamDef(name = "deleted", type = "Status"))
 @Filter(name = "deleteOrder", condition = "Status = :deleted")
-@SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)
+//@SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)
 public class OrderEntity {
 
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestSequence")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestSequence")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 

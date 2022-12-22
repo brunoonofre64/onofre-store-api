@@ -16,8 +16,8 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String saveNewOrderInDb(@RequestBody OrderInputDTO dto) {
+    public Long saveNewOrderInDb(@RequestBody OrderInputDTO dto) {
         OrderEntity order =  service.saveNewOrderInDb(dto);
-        return order.getUuid();
+        return order.getId();
     }
 }

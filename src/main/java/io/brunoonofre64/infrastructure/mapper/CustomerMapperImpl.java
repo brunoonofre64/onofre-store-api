@@ -22,6 +22,7 @@ public class CustomerMapperImpl implements CustomerMapper {
         }
         CustomerOutputDTO dto = new CustomerOutputDTO();
 
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setCpf(entity.getCpf());
         dto.setAge(entity.getAge());

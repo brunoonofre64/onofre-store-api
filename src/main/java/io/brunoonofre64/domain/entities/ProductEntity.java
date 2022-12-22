@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -39,9 +38,6 @@ public class ProductEntity {
 
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
-
-    @OneToMany(mappedBy = "product")
-    private List<OrderItemsEntity> orderItems;
 
     @Column(name = "MODF_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)

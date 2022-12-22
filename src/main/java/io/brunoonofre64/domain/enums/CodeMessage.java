@@ -21,7 +21,9 @@ public enum CodeMessage {
 
     CPF_REPEATED("CPF_REPEATED"),
 
-    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND");
+    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND"),
+
+    ORDER_NOT_FOUND("ORDER_NOT_FOUND");
 
     final String value;
 

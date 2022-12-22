@@ -16,6 +16,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerOutputDTO {
+
+    private Long id;
+
     private String uuid;
 
     private String name;

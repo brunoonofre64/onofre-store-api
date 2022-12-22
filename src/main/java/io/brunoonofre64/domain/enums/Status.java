@@ -6,6 +6,5 @@ public enum Status {
     CANCELED,
     SEPARATION,
     SENT,
-    ON_MY_WAY,
-    DONE
+    ON_MY_WAY
 }

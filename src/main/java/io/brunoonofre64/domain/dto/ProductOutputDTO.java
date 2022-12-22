@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 public class ProductOutputDTO {
 
+    private Long id;
+
     private String uuid;
 
     private String productName;

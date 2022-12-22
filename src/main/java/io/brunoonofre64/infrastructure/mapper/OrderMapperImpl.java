@@ -13,6 +13,7 @@ public class OrderMapperImpl implements OrderMapper {
     public OrderOutputDTO convertEntityToDTO(OrderEntity orderEntity) {
         OrderOutputDTO dto = new OrderOutputDTO();
 
+        dto.setId(orderEntity.getId());
         dto.setUuid(orderEntity.getUuid());
         dto.setCustomerEntity(orderEntity.getCustomer());
         dto.setOrderDate(orderEntity.getOrderDate());
@@ -26,11 +27,7 @@ public class OrderMapperImpl implements OrderMapper {
     public OrderEntity convertDTOToEntity(OrderInputDTO dto) {
         OrderEntity entity = new OrderEntity();
 
-        entity.setUuid(dto.getUuid());
-        entity.setCustomer(dto.getCustomerEntity());
-        entity.setOrderDate(dto.getOrderDate());
         entity.setTotal(dto.getTotal());
-        entity.setStatus(dto.getStatus());
 
         return entity;
     }

@@ -5,16 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class OrderInputDTO {
+public class OrderItemsInputDTO {
 
-    private Long customer;
+    private Long product;
 
-    private BigDecimal total;
-
-    private List<OrderItemsInputDTO> orderItems;
+    private BigDecimal amount;
 }

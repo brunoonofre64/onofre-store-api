@@ -14,6 +14,8 @@ import java.util.List;
 @Setter
 public class OrderOutputDTO {
 
+    private Long id;
+
     private String uuid;
 
     private Status status;

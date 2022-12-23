@@ -23,12 +23,11 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE TBL_ORDER SET STATUS = 'CANCELED' WHERE ID= ?", check = ResultCheckStyle.COUNT)
 @FilterDef(name = "deleteOrder", parameters = @ParamDef(name = "deleted", type = "Status"))
 @Filter(name = "deleteOrder", condition = "Status = :deleted")
-//@SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)
+@SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)
 public class OrderEntity {
 
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestSequence")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestSequence")
     @Column(name = "ID")
     private Long id;
 
@@ -54,6 +53,7 @@ public class OrderEntity {
 
     @PrePersist
     private void prePersist() {
+        orderDate = LocalDateTime.now();
         uuid = java.util.UUID.randomUUID().toString();
     }
 }

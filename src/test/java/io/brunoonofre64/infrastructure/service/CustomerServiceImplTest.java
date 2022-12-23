@@ -459,12 +459,12 @@ class CustomerServiceImplTest {
     private void startCustomer() {
         customerEntity = new CustomerEntity(ID, UUID, CPF, NAME, AGE, INC_DATE, REQUESTS, MODF_DATE);
         createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
-        customerOutputDTO = new CustomerOutputDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
+        customerOutputDTO = new CustomerOutputDTO(ID, UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
         customerEntityUpdate = new CustomerEntity(ID, UUID, CPF, NAME_2, AGE_2, INC_DATE, REQUESTS, MODF_DATE);
-        customerOutputDTOUpdate = new CustomerOutputDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        customerOutputDTOUpdate = new CustomerOutputDTO(ID, UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
         createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }
 }

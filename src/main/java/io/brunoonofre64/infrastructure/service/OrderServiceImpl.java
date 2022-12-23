@@ -2,13 +2,14 @@ package io.brunoonofre64.infrastructure.service;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
 import io.brunoonofre64.domain.dto.OrderItemsInputDTO;
+import io.brunoonofre64.domain.dto.OrderOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.entities.OrderItemsEntity;
 import io.brunoonofre64.domain.entities.ProductEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
-import io.brunoonofre64.domain.enums.Status;
 import io.brunoonofre64.domain.exception.*;
+import io.brunoonofre64.domain.mapper.OrderMapper;
 import io.brunoonofre64.domain.service.OrderService;
 import io.brunoonofre64.infrastructure.jpa.CustomerRepository;
 import io.brunoonofre64.infrastructure.jpa.OrderItemsRepository;
@@ -20,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,19 +36,16 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderItemsRepository orderItemsRepository;
 
+    private OrderMapper orderMapper;
+
     @Override
     @Transactional
-    public OrderEntity saveNewOrderInDb(OrderInputDTO dto) {
+    public OrderOutputDTO saveNewOrderInDb(OrderInputDTO dto) {
        if(validateIfDtoFieldIsNotNullOrEmpty(dto)) {
            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
        }
-       CustomerEntity customer = getCustomerIfIdExistInDataBase(dto);
-
-       OrderEntity order = new OrderEntity();
-       order.setStatus(Status.APPROVED);
-       order.setOrderDate(LocalDateTime.now());
-       order.setTotal(dto.getTotal());
-       order.setCustomer(customer);
+       CustomerEntity customer = getCustomerIfUuidExistInDataBase(dto);
+       OrderEntity order = orderMapper.convertDTOAndCustomerToOrderEntity(dto, customer);
 
        OrderEntity orderSuccess = orderRepository.save(order);
 
@@ -57,27 +54,33 @@ public class OrderServiceImpl implements OrderService {
 
        orderItemsRepository.saveAll(orderItems);
 
-       return order;
+       return orderMapper.convertEntityToDTO(order, customer, orderItems);
     }
 
-    public CustomerEntity getCustomerIfIdExistInDataBase(OrderInputDTO dto) {
+    public CustomerEntity getCustomerIfUuidExistInDataBase(OrderInputDTO dto) {
         if(ObjectUtils.isEmpty(dto)) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        Long idCustomer = dto.getCustomer();
+            String uuidCustomer = dto.getCustomer();
 
-           return customerRepository.findById(idCustomer)
-                   .orElseThrow(() -> new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND));
+        try{
+           return customerRepository.findByUuid(uuidCustomer);
+        } catch(Exception ex) {
+            throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
+        }
     }
 
-    public ProductEntity getProductIfIdExistInDataBase(OrderItemsInputDTO dto) {
+    public ProductEntity getProductIfUuidExistInDataBase(OrderItemsInputDTO dto) {
         if(ObjectUtils.isEmpty(dto)) {
             throw new UuidNotFoundOrNullException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        Long idProduct = dto.getProduct();
+         String uuidProduct = dto.getProduct();
 
-            return productRepository.findById(idProduct)
-                    .orElseThrow(() -> new ProductNotFoundException(CodeMessage.PRODUCT_NOT_FOUND));
+        try{
+            return productRepository.findByUuid(uuidProduct);
+        } catch (Exception ex) {
+            throw new ProductNotFoundException(CodeMessage.PRODUCT_NOT_FOUND);
+        }
     }
 
     private List<OrderItemsEntity> getOrderItems(OrderEntity order, List<OrderItemsInputDTO> orderitems) {
@@ -91,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         return orderitems
                 .stream()
                 .map(dto -> {
-                    ProductEntity product =  getProductIfIdExistInDataBase(dto);
+                    ProductEntity product =  getProductIfUuidExistInDataBase(dto);
 
                     OrderItemsEntity items = new OrderItemsEntity();
                     items.setOrderEntity(order);

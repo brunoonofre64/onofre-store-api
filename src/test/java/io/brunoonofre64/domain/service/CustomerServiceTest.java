@@ -24,6 +24,8 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class CustomerServiceTest {
 
+    private final static Long ID = 1L;
+
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
 
     private final static String CPF = "38915839668"; //GERADO ALEATORIAMENTE
@@ -135,11 +137,11 @@ class CustomerServiceTest {
     }
     private void startCustomer() {
         createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
-        customerOutputDTO = new CustomerOutputDTO(UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
+        customerOutputDTO = new CustomerOutputDTO(ID, UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerOutputDTOUpdate = new CustomerOutputDTO(UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
+        customerOutputDTOUpdate = new CustomerOutputDTO(ID, UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
         createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }
 }

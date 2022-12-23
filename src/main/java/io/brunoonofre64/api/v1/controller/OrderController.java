@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.entities.OrderEntity;
+import io.brunoonofre64.domain.dto.OrderOutputDTO;
 import io.brunoonofre64.domain.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +16,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long saveNewOrderInDb(@RequestBody OrderInputDTO dto) {
-        OrderEntity order =  service.saveNewOrderInDb(dto);
-        return order.getId();
+    public OrderOutputDTO saveNewOrderInDb(@RequestBody OrderInputDTO dto) {
+        return service.saveNewOrderInDb(dto);
     }
 }

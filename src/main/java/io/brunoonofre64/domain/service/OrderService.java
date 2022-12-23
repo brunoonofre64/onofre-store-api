@@ -1,9 +1,9 @@
 package io.brunoonofre64.domain.service;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.entities.OrderEntity;
+import io.brunoonofre64.domain.dto.OrderOutputDTO;
 
 public interface OrderService {
 
-    OrderEntity saveNewOrderInDb(OrderInputDTO dto);
+    OrderOutputDTO saveNewOrderInDb(OrderInputDTO dto);
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderInputDTO {
 
-    private Long customer;
+    private String customer;
 
     private BigDecimal total;
 

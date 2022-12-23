@@ -17,7 +17,6 @@ public class ProductMapperImpl implements ProductMapper {
     public ProductOutputDTO convertEntityToDTO(ProductEntity entity) {
         ProductOutputDTO dto = new ProductOutputDTO();
 
-        dto.setId(entity.getId());
         dto.setUuid(entity.getUuid());
         dto.setProductName(entity.getProductName());
         dto.setDescription(entity.getDescription());

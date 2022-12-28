@@ -1,6 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
+import io.brunoonofre64.domain.dto.OrderItemsInformationDTO;
 import io.brunoonofre64.domain.dto.OrderItemsInputDTO;
 import io.brunoonofre64.domain.dto.OrderOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
@@ -55,6 +56,17 @@ public class OrderServiceImpl implements OrderService {
        orderItemsRepository.saveAll(orderItems);
 
        return orderMapper.convertEntityToDTO(order, customer, orderItems);
+    }
+
+    @Override
+    public OrderItemsInformationDTO getOrderItemsInformationByUuid(String uuid) {
+        if(ObjectUtils.isEmpty(uuid) || !orderRepository.existsByUuid(uuid)) {
+            throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
+        }
+
+        OrderEntity orderItems = orderRepository.findByUuid(uuid);
+
+        return orderMapper.convertOrderItemsToInformationsDTO(orderItems);
     }
 
     public CustomerEntity getCustomerIfUuidExistInDataBase(OrderInputDTO dto) {

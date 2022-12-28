@@ -10,5 +10,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     OrderEntity findByUuid(String uuid);
 
     void deleteByUuid(String uuid);
+
 }
 

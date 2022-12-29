@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_ORDER")
-@SQLDelete(sql = "UPDATE TBL_ORDER SET STATUS = 'CANCELED' WHERE ID= ?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE TBL_ORDER SET STATUS = 'CANCELED' WHERE ID = ?", check = ResultCheckStyle.COUNT)
 @FilterDef(name = "deleteOrder", parameters = @ParamDef(name = "deleted", type = "Status"))
 @Filter(name = "deleteOrder", condition = "Status = :deleted")
 @SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)

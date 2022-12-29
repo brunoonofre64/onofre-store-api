@@ -1,8 +1,7 @@
 package io.brunoonofre64.domain.dto;
 
 import io.brunoonofre64.domain.enums.Status;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,7 +9,10 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderItemsInformationDTO {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderInformationDTO {
 
    private String uuidOrder;
 
@@ -20,7 +22,9 @@ public class OrderItemsInformationDTO {
 
    private BigDecimal total;
 
-   private String customer;
+   private String cpf;
 
-  private List<OrderItemsOutputDTO> orderItems;
+   private String nameCustomer;
+
+  private List<OrderItemsInformationtDTO> orderItems;
 }

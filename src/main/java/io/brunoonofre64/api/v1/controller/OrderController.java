@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.dto.OrderItemsInformationDTO;
+import io.brunoonofre64.domain.dto.OrderInformationDTO;
 import io.brunoonofre64.domain.dto.OrderOutputDTO;
 import io.brunoonofre64.domain.service.OrderService;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class OrderController {
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderItemsInformationDTO getOrderItemsInformationByUuid(@PathVariable String uuid) {
+    public OrderInformationDTO getOrderItemsInformationByUuid(@PathVariable String uuid) {
        return service.getOrderItemsInformationByUuid(uuid);
     }
 }

@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.mapper;
 
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
 import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.CustomerException;

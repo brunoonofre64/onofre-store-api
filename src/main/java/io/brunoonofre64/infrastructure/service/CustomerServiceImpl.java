@@ -48,6 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
         CustomerEntity entity = repository.findByUuid(uuid);
+
         return mapper.convertEntityToDTO(entity);
     }
 

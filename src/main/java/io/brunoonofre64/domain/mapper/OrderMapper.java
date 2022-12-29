@@ -1,7 +1,7 @@
 package io.brunoonofre64.domain.mapper;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.dto.OrderItemsInformationDTO;
+import io.brunoonofre64.domain.dto.OrderInformationDTO;
 import io.brunoonofre64.domain.dto.OrderOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
@@ -15,5 +15,5 @@ public interface OrderMapper {
 
     OrderEntity convertDTOAndCustomerToOrderEntity(OrderInputDTO dto, CustomerEntity customer);
 
-    OrderItemsInformationDTO convertOrderItemsToInformationsDTO(OrderEntity orders);
+    OrderInformationDTO convertOrderItemsToInformationsDTO(OrderEntity orders);
 }

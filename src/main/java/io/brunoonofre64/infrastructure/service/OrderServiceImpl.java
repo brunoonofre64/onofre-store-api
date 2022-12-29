@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
 import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.dto.OrderItemsInformationDTO;
+import io.brunoonofre64.domain.dto.OrderInformationDTO;
 import io.brunoonofre64.domain.dto.OrderItemsInputDTO;
 import io.brunoonofre64.domain.dto.OrderOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
@@ -59,12 +59,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderItemsInformationDTO getOrderItemsInformationByUuid(String uuid) {
+    public OrderInformationDTO getOrderItemsInformationByUuid(String uuid) {
         if(ObjectUtils.isEmpty(uuid) || !orderRepository.existsByUuid(uuid)) {
             throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
         }
-
-        OrderEntity orderItems = orderRepository.findByUuid(uuid);
+        OrderEntity orderItems = orderRepository.findByUuidAndFetchOrderItems(uuid);
 
         return orderMapper.convertOrderItemsToInformationsDTO(orderItems);
     }
@@ -86,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
         if(ObjectUtils.isEmpty(dto)) {
             throw new UuidNotFoundOrNullException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-         String uuidProduct = dto.getProduct();
+         String uuidProduct = dto.getUuidProduct();
 
         try{
             return productRepository.findByUuid(uuidProduct);

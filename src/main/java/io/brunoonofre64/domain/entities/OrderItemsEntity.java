@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ORDER_ITEMS")
+@Table(name = "TBL_ORDER_ITEMS")
 @SequenceGenerator(name = "orderItemsSequence", sequenceName = "SQ_ORDER_ITEMS", allocationSize = 1)
 public class OrderItemsEntity {
 

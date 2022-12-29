@@ -40,7 +40,7 @@ public interface ConstantsTest {
                 .name(CUSTOMER_ENTITY.NAME)
                 .age(CUSTOMER_ENTITY.AGE)
                 .cpf(CUSTOMER_ENTITY.CPF)
-                .requests(CUSTOMER_ENTITY.REQUESTS_LIST)
+                .orders(CUSTOMER_ENTITY.REQUESTS_LIST)
                 .build();
     }
 }

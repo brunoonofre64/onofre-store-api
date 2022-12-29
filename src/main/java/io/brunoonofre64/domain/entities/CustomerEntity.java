@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -41,7 +41,7 @@ public class CustomerEntity {
     private LocalDateTime inclusionDate;
 
     @OneToMany(mappedBy = "customer")
-    private Set<OrderEntity> orders;
+    private List<OrderEntity> orders;
 
     @Column(name = "MODF_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)

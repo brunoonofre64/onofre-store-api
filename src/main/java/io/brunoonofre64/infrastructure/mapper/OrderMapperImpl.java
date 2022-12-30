@@ -26,7 +26,7 @@ public class OrderMapperImpl implements OrderMapper {
         OrderOutputDTO dto = new OrderOutputDTO();
 
         dto.setUuid(order.getUuid());
-        dto.setOrderDate(order.getOrderDate());
+        dto.setOrderDate(order.getInclusionDate());
         dto.setStatus(order.getStatus());
         dto.setTotal(order.getTotal());
         dto.setCustomer(customerDTO);
@@ -40,7 +40,7 @@ public class OrderMapperImpl implements OrderMapper {
                .builder()
                .uuidOrder(orders.getUuid())
                .status(orders.getStatus())
-               .orderDate(orders.getOrderDate())
+               .orderDate(orders.getInclusionDate())
                .total(orders.getTotal())
                .nameCustomer(orders.getCustomer().getName())
                .cpf(orders.getCustomer().getCpf())

@@ -1,29 +1,25 @@
 package io.brunoonofre64.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_ORDER_ITEMS")
 @SequenceGenerator(name = "orderItemsSequence", sequenceName = "SQ_ORDER_ITEMS", allocationSize = 1)
-public class OrderItemsEntity {
+public class OrderItemsEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderItemsSequence")
     @Column(name = "ID")
     private Long id;
-
-    @Column(name = "UUID", nullable = false, length = 36)
-    private String uuid;
 
     @Column(name = "AMOUNT", nullable = false)
     private BigDecimal amount;
@@ -36,8 +32,12 @@ public class OrderItemsEntity {
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity orderEntity;
 
-    @PrePersist
-    private void prePersist() {
-        uuid = java.util.UUID.randomUUID().toString();
+    public OrderItemsEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id,
+                            BigDecimal amount, ProductEntity product, OrderEntity orderEntity) {
+        super(uuid, inclusionDate, modifyDate);
+        this.id = id;
+        this.amount = amount;
+        this.product = product;
+        this.orderEntity = orderEntity;
     }
 }

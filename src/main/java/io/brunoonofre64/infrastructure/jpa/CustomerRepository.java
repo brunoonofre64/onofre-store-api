@@ -15,3 +15,4 @@ public interface CustomerRepository extends PagingAndSortingRepository<CustomerE
 
     boolean existsByCpf(String cpf);
 }
+

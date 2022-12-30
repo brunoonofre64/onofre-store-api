@@ -1,10 +1,7 @@
 package io.brunoonofre64.domain.entities;
 
 import io.brunoonofre64.domain.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.*;
 
 import javax.persistence.Entity;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,22 +22,16 @@ import java.util.List;
 @FilterDef(name = "deleteOrder", parameters = @ParamDef(name = "deleted", type = "Status"))
 @Filter(name = "deleteOrder", condition = "Status = :deleted")
 @SequenceGenerator(name = "requestSequence", sequenceName = "SQ_request", allocationSize = 1)
-public class OrderEntity {
+public class OrderEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestSequence")
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "UUID", nullable = false, length = 36)
-    private String uuid;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
     private Status status = Status.APPROVED;
-
-    @Column(name = "ORDER_DATE", nullable = false)
-    private LocalDateTime orderDate;
 
     @Column(name = "TOTAL", nullable = false)
     private BigDecimal total;
@@ -51,9 +43,13 @@ public class OrderEntity {
     @OneToMany(mappedBy = "orderEntity")
     private List<OrderItemsEntity> orderItems;
 
-    @PrePersist
-    private void prePersist() {
-        orderDate = LocalDateTime.now();
-        uuid = java.util.UUID.randomUUID().toString();
+    public OrderEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id, Status status,
+                       BigDecimal total, CustomerEntity customer, List<OrderItemsEntity> orderItems) {
+        super(uuid, inclusionDate, modifyDate);
+        this.id = id;
+        this.status = status;
+        this.total = total;
+        this.customer = customer;
+        this.orderItems = orderItems;
     }
 }

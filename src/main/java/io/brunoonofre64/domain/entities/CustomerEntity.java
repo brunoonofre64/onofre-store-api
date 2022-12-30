@@ -9,10 +9,10 @@ import java.util.List;
 
 @Entity
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "TBL_CUSTOMER")
 @SequenceGenerator(name = "sequenceCustomer", sequenceName = "SQ_CUSTOMER", allocationSize = 1)
 public class CustomerEntity extends BaseEntity{

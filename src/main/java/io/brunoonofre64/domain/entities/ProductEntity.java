@@ -1,31 +1,25 @@
 package io.brunoonofre64.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "TBL_PRODUCT")
 @SequenceGenerator(name = "sequenceProduct", sequenceName = "SQ_PRODUCT", allocationSize = 1)
-public class ProductEntity {
+public class ProductEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceProduct" )
     @Column(name = "ID")
     private Long id;
-
-    @Column(name = "UUID", nullable = false, length = 36)
-    private String uuid;
 
     @Column(name = "PRODUCT_NAME", nullable = false, length = 100)
     private String productName;
@@ -36,21 +30,12 @@ public class ProductEntity {
     @Column(name = "UNIT_VALUE", nullable = false)
     private BigDecimal unitValue;
 
-    @Column(name = "INC_DATE", nullable = false)
-    private LocalDateTime inclusionDate;
-
-    @Column(name = "MODF_DATE")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private LocalDateTime modifyDate;
-
-    @PrePersist
-    private void prePersist() {
-        inclusionDate = LocalDateTime.now();
-        uuid = java.util.UUID.randomUUID().toString();
-    }
-
-    @PreUpdate
-    private void preUpdate() {
-        modifyDate = LocalDateTime.now();
+    public ProductEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id,
+                         String productName, String description, BigDecimal unitValue) {
+        super(uuid, inclusionDate, modifyDate);
+        this.id = id;
+        this.productName = productName;
+        this.description = description;
+        this.unitValue = unitValue;
     }
 }

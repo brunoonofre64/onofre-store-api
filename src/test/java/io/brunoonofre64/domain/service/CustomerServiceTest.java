@@ -1,7 +1,7 @@
 package io.brunoonofre64.domain.service;
 
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
 import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static io.brunoonofre64.utils.ConstantTest.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,25 +24,17 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class CustomerServiceTest {
 
-    private final static Long ID = 1L;
-
-    private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
-
     private final static String CPF = "38915839668"; //GERADO ALEATORIAMENTE
 
     private final static String CPF_2 = "86132623507"; //GERADO ALEATORIAMENTE
 
-    private final static String NAME = "NAME";
+    private final static String NAME = TEXT;
 
-    private final static String AGE = "AGE";
+    private final static String AGE = TEXT;
 
-    private static final String NAME_2 = "NAME_2";
+    private static final String NAME_2 = TEXT_2;
 
-    private static final String AGE_2 = "AGE_2";
-
-    private final static LocalDateTime INC_DATE = LocalDateTime.now();
-
-    private final static LocalDateTime MODF_DATE = LocalDateTime.now();
+    private static final String AGE_2 = TEXT_2;
 
     @Mock
     private CustomerService service;

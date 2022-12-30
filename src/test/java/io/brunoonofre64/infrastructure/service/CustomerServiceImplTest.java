@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
 import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.CustomerOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
@@ -457,13 +457,13 @@ class CustomerServiceImplTest {
     }
 
     private void startCustomer() {
-        customerEntity = new CustomerEntity(ID, UUID, CPF, NAME, AGE, INC_DATE, REQUESTS, MODF_DATE);
+        customerEntity = new CustomerEntity(UUID, INC_DATE, MODF_DATE, ID, CPF, NAME, AGE);
         createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
         customerOutputDTO = new CustomerOutputDTO(ID, UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerEntityUpdate = new CustomerEntity(ID, UUID, CPF, NAME_2, AGE_2, INC_DATE, REQUESTS, MODF_DATE);
+        customerEntityUpdate = new CustomerEntity(UUID, INC_DATE, MODF_DATE, ID, CPF, NAME_2, AGE_2);
         customerOutputDTOUpdate = new CustomerOutputDTO(ID, UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
         createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }

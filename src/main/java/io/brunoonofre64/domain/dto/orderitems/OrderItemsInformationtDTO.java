@@ -17,5 +17,5 @@ public class OrderItemsInformationtDTO {
 
     private BigDecimal unitValue;
 
-    private BigDecimal amount;
+    private Long amount;
 }

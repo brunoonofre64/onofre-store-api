@@ -3,7 +3,6 @@ package io.brunoonofre64.domain.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +21,7 @@ public class OrderItemsEntity extends BaseEntity{
     private Long id;
 
     @Column(name = "AMOUNT", nullable = false)
-    private BigDecimal amount;
+    private Long amount;
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID")
@@ -33,7 +32,7 @@ public class OrderItemsEntity extends BaseEntity{
     private OrderEntity orderEntity;
 
     public OrderItemsEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id,
-                            BigDecimal amount, ProductEntity product, OrderEntity orderEntity) {
+                            Long amount, ProductEntity product, OrderEntity orderEntity) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.amount = amount;

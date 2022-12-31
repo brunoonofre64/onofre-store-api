@@ -1,7 +1,6 @@
 package io.brunoonofre64.domain.entities;
 
 import lombok.*;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +21,6 @@ public class CustomerEntity extends BaseEntity{
     @Column(name = "ID")
     private Long id;
 
-    @CPF
     @Column(name = "CPF")
     private String cpf;
 

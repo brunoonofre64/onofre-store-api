@@ -19,7 +19,7 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerOutputDTO saveNewCustomerInDb(@RequestBody @Valid CustomerInputDTO dto) {
+    public CustomerOutputDTO saveNewCustomerInDb(@Valid @RequestBody CustomerInputDTO dto) {
        return customerService.saveNewCustomerInDb(dto);
     }
 

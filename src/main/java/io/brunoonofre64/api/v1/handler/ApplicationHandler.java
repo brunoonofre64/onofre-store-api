@@ -5,12 +5,15 @@ import io.brunoonofre64.domain.exception.*;
 import lombok.AllArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
@@ -94,6 +97,19 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
                 .details(getCodeMessage(CodeMessage.CPF_REPEATED))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }

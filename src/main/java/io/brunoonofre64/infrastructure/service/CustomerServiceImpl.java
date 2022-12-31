@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
 import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;

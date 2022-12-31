@@ -1,6 +1,7 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class ProductOutputDTO {
 
     private String uuid;

@@ -1,4 +1,4 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.orderitems;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

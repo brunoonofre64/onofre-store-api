@@ -1,8 +1,8 @@
 package io.brunoonofre64.api.v1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
-import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;

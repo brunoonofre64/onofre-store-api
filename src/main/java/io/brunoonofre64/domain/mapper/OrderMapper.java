@@ -1,8 +1,8 @@
 package io.brunoonofre64.domain.mapper;
 
-import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.dto.OrderInformationDTO;
-import io.brunoonofre64.domain.dto.OrderOutputDTO;
+import io.brunoonofre64.domain.dto.order.OrderInputDTO;
+import io.brunoonofre64.domain.dto.order.OrderInformationDTO;
+import io.brunoonofre64.domain.dto.order.OrderOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.entities.OrderItemsEntity;

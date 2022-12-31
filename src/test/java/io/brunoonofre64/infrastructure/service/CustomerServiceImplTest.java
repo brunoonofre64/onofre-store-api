@@ -1,9 +1,8 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.CustomerInputDTO;
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
-import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
@@ -50,8 +49,6 @@ class CustomerServiceImplTest {
     private static final String NAME_2 = "NAME_2";
 
     private static final String AGE_2 = "AGE_2";
-
-    private static  final List<OrderEntity> REQUESTS = List.of(new OrderEntity());
 
     private final static LocalDateTime INC_DATE = LocalDateTime.now();
 

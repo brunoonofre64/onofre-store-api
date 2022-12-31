@@ -1,9 +1,10 @@
 package io.brunoonofre64.infrastructure.mapper;
 
-import io.brunoonofre64.domain.dto.ProductInputDTO;
-import io.brunoonofre64.domain.dto.ProductOutputDTO;
+import io.brunoonofre64.domain.dto.product.ProductInputDTO;
+import io.brunoonofre64.domain.dto.product.ProductOutputDTO;
 import io.brunoonofre64.domain.entities.ProductEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
+import io.brunoonofre64.domain.exception.BusinessRuleException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.mapper.ProductMapper;
 import org.springframework.data.domain.Page;
@@ -15,26 +16,31 @@ public class ProductMapperImpl implements ProductMapper {
 
     @Override
     public ProductOutputDTO convertEntityToDTO(ProductEntity entity) {
-        ProductOutputDTO dto = new ProductOutputDTO();
-
-        dto.setUuid(entity.getUuid());
-        dto.setProductName(entity.getProductName());
-        dto.setDescription(entity.getDescription());
-        dto.setInclusionDate(entity.getInclusionDate());
-        dto.setModifyDate(entity.getModifyDate());
-        dto.setUnitValue(entity.getUnitValue());
-
-        return dto;
+        if(entity == null) {
+            throw new BusinessRuleException(CodeMessage.ENTITY_ISNULL);
+        }
+        return ProductOutputDTO
+                .builder()
+                .uuid(entity.getUuid())
+                .productName(entity.getProductName())
+                .description(entity.getDescription())
+                .inclusionDate(entity.getInclusionDate())
+                .modifyDate(entity.getModifyDate())
+                .unitValue(entity.getUnitValue())
+                .build();
     }
 
     @Override
     public ProductEntity convertDTOToEntity(ProductInputDTO dto) {
-        ProductEntity entity = new ProductEntity();
-        entity.setProductName(dto.getProductName());
-        entity.setDescription(dto.getDescription());
-        entity.setUnitValue(dto.getUnitValue());
-
-        return entity;
+        if(dto == null) {
+            throw new BusinessRuleException(CodeMessage.OBJECTS_ISNULL_OR_EMPTY);
+        }
+        return ProductEntity
+                .builder()
+                .productName(dto.getProductName())
+                .description(dto.getDescription())
+                .unitValue(dto.getUnitValue())
+                .build();
     }
 
     @Override

@@ -1,8 +1,8 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.dto.OrderInformationDTO;
-import io.brunoonofre64.domain.dto.OrderOutputDTO;
+import io.brunoonofre64.domain.dto.order.OrderInputDTO;
+import io.brunoonofre64.domain.dto.order.OrderInformationDTO;
+import io.brunoonofre64.domain.dto.order.OrderOutputDTO;
 import io.brunoonofre64.domain.service.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

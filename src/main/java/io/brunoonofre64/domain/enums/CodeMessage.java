@@ -23,7 +23,9 @@ public enum CodeMessage {
 
     PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND"),
 
-    ORDER_NOT_FOUND("ORDER_NOT_FOUND");
+    ORDER_NOT_FOUND("ORDER_NOT_FOUND"),
+
+    OBJECTS_ISNULL_OR_EMPTY("OBJECTS_ISNULL_OR_EMPTY");
 
     final String value;
 

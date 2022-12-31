@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
-import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
 import io.brunoonofre64.domain.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

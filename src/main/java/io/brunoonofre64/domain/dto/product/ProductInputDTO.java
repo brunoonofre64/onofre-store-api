@@ -1,4 +1,4 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.product;
 
 import lombok.Getter;
 import lombok.Setter;

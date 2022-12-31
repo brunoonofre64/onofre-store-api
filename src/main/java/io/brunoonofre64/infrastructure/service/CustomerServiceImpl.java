@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
-import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
@@ -29,9 +29,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO saveNewCustomerInDb(CustomerInputDTO dto) {
-        if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
-            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
-        }
+        validateIfAnyFieldsOfDtoIsNullOrEmpty(dto);
+
         if(repository.existsByCpf(dto.getCpf())) {
             throw new CpfRepeatedException(CodeMessage.CPF_REPEATED);
         }
@@ -44,9 +43,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO getCustomerByUuid(String uuid) {
-        if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
-            throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
-        }
+        validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(uuid);
+
         CustomerEntity entity = repository.findByUuid(uuid);
 
         return mapper.convertEntityToDTO(entity);
@@ -65,12 +63,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO updateCustomerByUuid(String uuid, CustomerInputDTO dto) {
-        if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
-            throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
-        }
-        if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
-            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
-        }
+        validateIfAnyFieldsOfDtoIsNullOrEmpty(dto);
+
+        validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(uuid);
+
         CustomerEntity entity = repository.findByUuid(uuid);
         entity.setName(dto.getName());
         entity.setAge(dto.getAge());
@@ -80,12 +76,24 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.convertEntityToDTO(entity);
     }
 
+
     @Override
     @Transactional
     public void deleteCustomerOfDb(String uuid) {
+        validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(uuid);
+
+        repository.deleteByUuid(uuid);
+    }
+
+    private void validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(String uuid) {
         if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
-        repository.deleteByUuid(uuid);
+    }
+
+    private static void validateIfAnyFieldsOfDtoIsNullOrEmpty(CustomerInputDTO dto) {
+        if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
+            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
+        }
     }
 }

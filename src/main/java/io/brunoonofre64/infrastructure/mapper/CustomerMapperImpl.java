@@ -1,10 +1,10 @@
 package io.brunoonofre64.infrastructure.mapper;
 
-import io.brunoonofre64.domain.dto.CustomerInputDTO;
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
-import io.brunoonofre64.domain.exception.CustomerException;
+import io.brunoonofre64.domain.exception.BusinessRuleException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
 import io.brunoonofre64.domain.mapper.CustomerMapper;
@@ -18,31 +18,30 @@ public class CustomerMapperImpl implements CustomerMapper {
     @Override
     public CustomerOutputDTO convertEntityToDTO(CustomerEntity entity) {
         if(entity == null) {
-            throw new CustomerException(CodeMessage.ENTITY_ISNULL);
+            throw new BusinessRuleException(CodeMessage.ENTITY_ISNULL);
         }
-        CustomerOutputDTO dto = new CustomerOutputDTO();
-
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setCpf(entity.getCpf());
-        dto.setAge(entity.getAge());
-        dto.setUuid(entity.getUuid());
-        dto.setInclusionDate(entity.getInclusionDate());
-        return dto;
+        return CustomerOutputDTO
+                .builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .cpf(entity.getCpf())
+                .age(entity.getAge())
+                .uuid(entity.getUuid())
+                .inclusionDate(entity.getInclusionDate())
+                .build();
     }
 
     @Override
     public CustomerEntity convertDTOToEntity(CustomerInputDTO dto) {
-        if(dto == null || ObjectUtils.isEmpty(dto.getAge())
-                || ObjectUtils.isEmpty(dto.getCpf()) || ObjectUtils.isEmpty(dto.getName())) {
+        if(dto == null) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        CustomerEntity entity = new CustomerEntity();
-
-        entity.setName(dto.getName());
-        entity.setAge(dto.getAge());
-        entity.setCpf(dto.getCpf());
-        return entity;
+        return CustomerEntity
+                .builder()
+                .name(dto.getName())
+                .age(dto.getAge())
+                .cpf(dto.getCpf())
+                .build();
     }
 
     @Override

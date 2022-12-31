@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.ProductInputDTO;
-import io.brunoonofre64.domain.dto.ProductOutputDTO;
+import io.brunoonofre64.domain.dto.product.ProductInputDTO;
+import io.brunoonofre64.domain.dto.product.ProductOutputDTO;
 import io.brunoonofre64.domain.entities.ProductEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;

@@ -1,5 +1,6 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.order;
 
+import io.brunoonofre64.domain.dto.orderitems.OrderItemsInformationtDTO;
 import io.brunoonofre64.domain.enums.Status;
 import lombok.*;
 

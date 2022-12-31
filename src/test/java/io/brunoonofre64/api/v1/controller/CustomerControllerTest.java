@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.CustomerOutputDTO;
-import io.brunoonofre64.domain.dto.CustomerInputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
+import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

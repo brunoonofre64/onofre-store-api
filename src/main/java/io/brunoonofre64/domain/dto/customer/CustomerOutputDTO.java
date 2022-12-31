@@ -1,15 +1,13 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerOutputDTO {
@@ -25,7 +23,7 @@ public class CustomerOutputDTO {
     private String cpf;
 
     private LocalDateTime inclusionDate;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime modifyDate;
-
 }

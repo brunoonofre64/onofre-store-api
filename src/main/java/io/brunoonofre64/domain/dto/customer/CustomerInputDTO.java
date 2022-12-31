@@ -1,4 +1,4 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.customer;
 
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;

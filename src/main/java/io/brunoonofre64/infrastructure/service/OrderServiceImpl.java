@@ -1,9 +1,9 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.OrderInputDTO;
-import io.brunoonofre64.domain.dto.OrderInformationDTO;
-import io.brunoonofre64.domain.dto.OrderItemsInputDTO;
-import io.brunoonofre64.domain.dto.OrderOutputDTO;
+import io.brunoonofre64.domain.dto.order.OrderInputDTO;
+import io.brunoonofre64.domain.dto.order.OrderInformationDTO;
+import io.brunoonofre64.domain.dto.orderitems.OrderItemsInputDTO;
+import io.brunoonofre64.domain.dto.order.OrderOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
 import io.brunoonofre64.domain.entities.OrderEntity;
 import io.brunoonofre64.domain.entities.OrderItemsEntity;
@@ -107,12 +107,12 @@ public class OrderServiceImpl implements OrderService {
                 .map(dto -> {
                     ProductEntity product =  getProductIfUuidExistInDataBase(dto);
 
-                    OrderItemsEntity items = new OrderItemsEntity();
-                    items.setOrderEntity(order);
-                    items.setAmount(dto.getAmount());
-                    items.setProduct(product);
-
-                    return items;
+                    return OrderItemsEntity
+                            .builder()
+                            .orderEntity(order)
+                            .amount(dto.getAmount())
+                            .product(product)
+                            .build();
                 }).collect(Collectors.toList());
     }
 

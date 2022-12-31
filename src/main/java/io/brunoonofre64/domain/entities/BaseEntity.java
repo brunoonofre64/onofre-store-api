@@ -22,8 +22,10 @@ public class BaseEntity {
 
     @Column(name = "UUID", nullable = false, length = 36)
     public String uuid;
+
     @Column(name = "INC_DATE", nullable = false)
     private LocalDateTime inclusionDate;
+
     @Column(name = "MODF_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime modifyDate;
@@ -33,6 +35,7 @@ public class BaseEntity {
         inclusionDate = LocalDateTime.now();
         uuid = UUID.randomUUID().toString();
     }
+
     @PreUpdate
     private void preUpdate() {
         modifyDate = LocalDateTime.now();

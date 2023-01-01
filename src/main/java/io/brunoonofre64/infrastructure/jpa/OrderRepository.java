@@ -13,5 +13,9 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     @Query("SELECT C FROM OrderEntity C LEFT JOIN FETCH C.orderItems WHERE C.uuid = :uuid")
     OrderEntity findByUuidAndFetchOrderItems(@Param("uuid") String uuid);
+
+    void deleteByUuid(String uuid);
+
+    OrderEntity findByUuid(String uuid);
 }
 

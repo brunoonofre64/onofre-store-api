@@ -29,7 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO saveNewCustomerInDb(CustomerInputDTO dto) {
-        validateIfAnyFieldsOfDtoIsNullOrEmpty(dto);
+        validateCustomer(dto);
 
         if(repository.existsByCpf(dto.getCpf())) {
             throw new CpfRepeatedException(CodeMessage.CPF_REPEATED);
@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO getCustomerByUuid(String uuid) {
-        validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(uuid);
+        validateCustomerUuid(uuid);
 
         CustomerEntity entity = repository.findByUuid(uuid);
 
@@ -63,9 +63,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO updateCustomerByUuid(String uuid, CustomerInputDTO dto) {
-        validateIfAnyFieldsOfDtoIsNullOrEmpty(dto);
+        validateCustomer(dto);
 
-        validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(uuid);
+        validateCustomerUuid(uuid);
 
         CustomerEntity entity = repository.findByUuid(uuid);
         entity.setName(dto.getName());
@@ -76,22 +76,21 @@ public class CustomerServiceImpl implements CustomerService {
         return mapper.convertEntityToDTO(entity);
     }
 
-
     @Override
     @Transactional
     public void deleteCustomerOfDb(String uuid) {
-        validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(uuid);
+        validateCustomerUuid(uuid);
 
         repository.deleteByUuid(uuid);
     }
 
-    private void validateIfUuidExistsInRepositoryAndIsNotNullOrEmpty(String uuid) {
+    private void validateCustomerUuid(String uuid) {
         if(ObjectUtils.isEmpty(uuid) || !repository.existsByUuid(uuid)) {
             throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
         }
     }
 
-    private static void validateIfAnyFieldsOfDtoIsNullOrEmpty(CustomerInputDTO dto) {
+    private static void validateCustomer(CustomerInputDTO dto) {
         if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }

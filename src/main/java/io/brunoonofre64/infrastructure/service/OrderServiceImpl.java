@@ -43,10 +43,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderOutputDTO saveNewOrderInDb(OrderInputDTO dto) {
-       if(validateIfDtoFieldIsNotNullOrEmpty(dto)) {
-           throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
-       }
-       CustomerEntity customer = getCustomerIfUuidExistInDataBase(dto);
+       validateOrder(dto);
+
+       CustomerEntity customer = getCustomerInDatabase(dto);
        OrderEntity order = orderMapper.convertDTOAndCustomerToOrderEntity(dto, customer);
 
        OrderEntity orderSuccess = orderRepository.save(order);
@@ -61,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderInformationDTO getOrderItemsInformationByUuid(String uuid) {
-        validateIfUuidIsNotNullAndOrderExistsInRepository(uuid);
+        validateOrderUuid(uuid);
 
         OrderEntity orderItems = orderRepository.findByUuidAndFetchOrderItems(uuid);
 
@@ -69,8 +68,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderInformationDTO updateStatusOfOrderByUuid(String uuid, OrderNewStatusDTO dto) {
-        validateIfUuidIsNotNullAndOrderExistsInRepository(uuid);
+    public OrderInformationDTO updateStatusOrderByUuid(String uuid, OrderNewStatusDTO dto) {
+        validateOrderUuid(uuid);
 
         if(ObjectUtils.isEmpty(dto.getStatus())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
@@ -83,13 +82,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public void cancelOrderByUuid(String uuid) {
-        validateIfUuidIsNotNullAndOrderExistsInRepository(uuid);
+    public void deleteOrderByUuid(String uuid) {
+        validateOrderUuid(uuid);
 
         orderRepository.deleteByUuid(uuid);
     }
 
-    public CustomerEntity getCustomerIfUuidExistInDataBase(OrderInputDTO dto) {
+    public CustomerEntity getCustomerInDatabase(OrderInputDTO dto) {
         if(ObjectUtils.isEmpty(dto)) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
@@ -102,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    public ProductEntity getProductIfUuidExistInDataBase(OrderItemsInputDTO dto) {
+    public ProductEntity getProductInDatabase(OrderItemsInputDTO dto) {
         if(ObjectUtils.isEmpty(dto)) {
             throw new UuidNotFoundOrNullException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
@@ -115,14 +114,17 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void validateIfUuidIsNotNullAndOrderExistsInRepository(String uuid) {
+    private void validateOrderUuid(String uuid) {
         if(ObjectUtils.isEmpty(uuid) || !orderRepository.existsByUuid(uuid)) {
             throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
         }
     }
 
-    private boolean validateIfDtoFieldIsNotNullOrEmpty(OrderInputDTO dto) {
-        return ObjectUtils.isEmpty(dto.getCustomer()) && ObjectUtils.isEmpty(dto.getTotal()) && CollectionUtils.isEmpty(dto.getOrderItems());
+    private void validateOrder(OrderInputDTO dto) {
+       if(ObjectUtils.isEmpty(dto.getCustomer()) && ObjectUtils.isEmpty(dto.getTotal())
+                && CollectionUtils.isEmpty(dto.getOrderItems())) {
+           throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
+       }
     }
 
     private List<OrderItemsEntity> getOrderItems(OrderEntity order, List<OrderItemsInputDTO> orderitems) {
@@ -136,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
         return orderitems
                 .stream()
                 .map(dto -> {
-                    ProductEntity product =  getProductIfUuidExistInDataBase(dto);
+                    ProductEntity product =  getProductInDatabase(dto);
 
                     return OrderItemsEntity
                             .builder()

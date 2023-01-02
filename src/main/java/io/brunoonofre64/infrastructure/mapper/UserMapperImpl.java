@@ -2,7 +2,6 @@ package io.brunoonofre64.infrastructure.mapper;
 
 import io.brunoonofre64.domain.dto.user.UserInputDTO;
 import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
-import io.brunoonofre64.domain.entities.EmployeeEntity;
 import io.brunoonofre64.domain.entities.UserEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
@@ -16,12 +15,12 @@ public class UserMapperImpl implements UserMapper {
 
 
     @Override
-    public UserEntity convertDTOToEntity(UserInputDTO dto, EmployeeEntity employee) {
+    public UserEntity convertDTOToEntity(UserInputDTO dto) {
         return UserEntity
                 .builder()
                 .role(dto.getRole())
                 .login(dto.getLogin())
-                .employeeEntity(employee)
+                .password(dto.getPassword())
                 .build();
     }
 
@@ -32,7 +31,6 @@ public class UserMapperImpl implements UserMapper {
                 .uuid(entity.getUuid())
                 .login(entity.getLogin())
                 .role(entity.getRole())
-                .employeeUuid(entity.getEmployeeEntity().getUuid())
                 .build();
     }
 

@@ -31,11 +31,17 @@ public class EmployeeEntity extends BaseEntity {
     @Column(name = "CPF", nullable = false)
     private String cpf;
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private UserEntity user;
+
     public EmployeeEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                          Long id, String name, String cpf) {
+                          Long id, String name, String email, String cpf, UserEntity user) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.name = name;
+        this.email = email;
         this.cpf = cpf;
+        this.user = user;
     }
 }

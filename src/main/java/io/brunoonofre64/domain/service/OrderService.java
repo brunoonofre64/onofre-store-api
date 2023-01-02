@@ -11,7 +11,7 @@ public interface OrderService {
 
     OrderInformationDTO getOrderItemsInformationByUuid(String uuid);
 
-    void cancelOrderByUuid(String uuid);
+    void deleteOrderByUuid(String uuid);
 
-    OrderInformationDTO updateStatusOfOrderByUuid(String uuid, OrderNewStatusDTO dto);
+    OrderInformationDTO updateStatusOrderByUuid(String uuid, OrderNewStatusDTO dto);
 }

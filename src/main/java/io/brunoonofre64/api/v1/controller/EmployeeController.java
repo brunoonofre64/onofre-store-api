@@ -1,5 +1,6 @@
 package io.brunoonofre64.api.v1.controller;
 
+import io.brunoonofre64.domain.dto.employee.EmployeeInformationDTO;
 import io.brunoonofre64.domain.dto.employee.EmployeeInputDTO;
 import io.brunoonofre64.domain.dto.employee.EmployeeOutputDTO;
 import io.brunoonofre64.domain.service.EmployeeService;
@@ -26,13 +27,13 @@ public class EmployeeController {
 
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public EmployeeOutputDTO getEmployeeByUuid(@PathVariable String uuid) {
+    public EmployeeInformationDTO getEmployeeByUuid(@PathVariable String uuid) {
         return service.getEmployeeByUuid(uuid);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<EmployeeOutputDTO> getAllEmployeePaged(Pageable pageable) {
+    public Page<EmployeeInformationDTO> getAllEmployeePaged(Pageable pageable) {
         return service.getAllEmployeePaged(pageable);
     }
 

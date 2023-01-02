@@ -24,19 +24,17 @@ public class UserEntity extends BaseEntity{
     @Column(name = "LOGIN", nullable = false, length = 30)
     private String login;
 
+    @Column(name = "PASSWORD", nullable = false, length = 16)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", nullable = false)
     private Roles role;
 
-    @ManyToOne
-    @JoinColumn(name = "EMPLOYEE_ID")
-    private EmployeeEntity employeeEntity;
-
     public UserEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                      Long id, Roles role, EmployeeEntity employeeEntity) {
+                      Long id, Roles role) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.role = role;
-        this.employeeEntity = employeeEntity;
     }
 }

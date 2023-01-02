@@ -32,12 +32,12 @@ public class OrderController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public OrderInformationDTO updateStatusOfOrderByUuid(@PathVariable String uuid,
                                                     @RequestBody OrderNewStatusDTO dto) {
-        return service.updateStatusOfOrderByUuid(uuid, dto);
+        return service.updateStatusOrderByUuid(uuid, dto);
     }
 
     @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelOrderByUuid(@PathVariable String uuid) {
-        service.cancelOrderByUuid(uuid);
+        service.deleteOrderByUuid(uuid);
     }
 }

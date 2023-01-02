@@ -14,4 +14,6 @@ public class EmployeeInputDTO {
     private String cpf;
 
     private String email;
+
+    private String userUuid;
 }

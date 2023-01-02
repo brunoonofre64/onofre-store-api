@@ -15,6 +15,4 @@ public class UserOutpuDTO {
     private String login;
 
     private Roles role;
-
-    private String employeeUuid;
 }

@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductOutputDTO saveNewProductInDb(ProductInputDTO dto) {
-        validateIfDtoFieldIsNotNullOrEmpty(dto);
+        validateProduct(dto);
 
         ProductEntity entity = mapper.convertDTOToEntity(dto);
 
@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductOutputDTO updateProductByUuid(String uuid, ProductInputDTO dto) {
-        validateIfDtoFieldIsNotNullOrEmpty(dto);
+        validateProduct(dto);
         validateProductUuid(uuid);
 
         ProductEntity entity = repository.findByUuid(uuid);
@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-   private void validateIfDtoFieldIsNotNullOrEmpty(ProductInputDTO dto) {
+   private void validateProduct(ProductInputDTO dto) {
         if(ObjectUtils.isEmpty(dto.getProductName()) || ObjectUtils.isEmpty(dto.getDescription())
                 || ObjectUtils.isEmpty(dto.getUnitValue())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);

@@ -10,7 +10,7 @@ public class UserInputDTO {
 
     private String login;
 
-    private Roles role;
+    private String password;
 
-    private String employeeUuid;
+    private Roles role;
 }

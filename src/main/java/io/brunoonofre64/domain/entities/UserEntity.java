@@ -21,6 +21,9 @@ public class UserEntity extends BaseEntity{
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "LOGIN", nullable = false, length = 30)
+    private String login;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE", nullable = false)
     private Roles role;

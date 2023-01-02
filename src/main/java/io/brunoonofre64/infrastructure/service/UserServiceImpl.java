@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
         return mapper.convertEntityToDTO(entity);
     }
 
-
     @Override
     public UserOutpuDTO getUserByUuid(String uuid) {
         validateIfExistsUuidAndIsNotNull(uuid);

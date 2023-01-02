@@ -1,7 +1,7 @@
 package io.brunoonofre64.api.v1.controller;
 
-import io.brunoonofre64.domain.dto.UserInputDTO;
-import io.brunoonofre64.domain.dto.UserOutpuDTO;
+import io.brunoonofre64.domain.dto.user.UserInputDTO;
+import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
 import io.brunoonofre64.domain.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserOutpuDTO saveNewUserIndDB(UserInputDTO userDTO) {
+    public UserOutpuDTO saveNewUserIndDB(@RequestBody UserInputDTO userDTO) {
         return service.saveNewUserIndDB(userDTO);
     }
 
@@ -46,5 +46,4 @@ public class UserController {
     public void deleteUserByUuid(@PathVariable String uuid) {
         service.deleteUserByUuid(uuid);
     }
-
 }

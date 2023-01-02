@@ -1,7 +1,7 @@
 package io.brunoonofre64.domain.service;
 
-import io.brunoonofre64.domain.dto.UserInputDTO;
-import io.brunoonofre64.domain.dto.UserOutpuDTO;
+import io.brunoonofre64.domain.dto.user.UserInputDTO;
+import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

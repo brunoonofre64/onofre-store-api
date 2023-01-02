@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.service;
 
-import io.brunoonofre64.domain.dto.UserInputDTO;
-import io.brunoonofre64.domain.dto.UserOutpuDTO;
+import io.brunoonofre64.domain.dto.user.UserInputDTO;
+import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
 import io.brunoonofre64.domain.entities.EmployeeEntity;
 import io.brunoonofre64.domain.entities.UserEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private static void validateIfInputDtoIsNotNull(UserInputDTO userDTO) {
-        if(ObjectUtils.isEmpty(userDTO)) {
+        if(ObjectUtils.isEmpty(userDTO.getLogin()) || ObjectUtils.isEmpty(userDTO.getRole())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
     }

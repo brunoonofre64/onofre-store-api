@@ -1,7 +1,7 @@
 package io.brunoonofre64.infrastructure.mapper;
 
-import io.brunoonofre64.domain.dto.UserInputDTO;
-import io.brunoonofre64.domain.dto.UserOutpuDTO;
+import io.brunoonofre64.domain.dto.user.UserInputDTO;
+import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
 import io.brunoonofre64.domain.entities.EmployeeEntity;
 import io.brunoonofre64.domain.entities.UserEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
@@ -29,6 +29,8 @@ public class UserMapperImpl implements UserMapper {
     public UserOutpuDTO convertEntityToDTO(UserEntity entity) {
         return UserOutpuDTO
                 .builder()
+                .uuid(entity.getUuid())
+                .login(entity.getLogin())
                 .role(entity.getRole())
                 .employeeUuid(entity.getEmployeeEntity().getUuid())
                 .build();

@@ -1,11 +1,15 @@
 package io.brunoonofre64.infrastructure.jpa;
 
 import io.brunoonofre64.domain.entities.EmployeeEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> {
+public interface EmployeeRepository extends PagingAndSortingRepository<EmployeeEntity, Long> {
 
     EmployeeEntity findByUuid(String uuid);
+
+    boolean existsByUuid(String uuid);
+
+    void deleteByUuid(String uuid);
 }

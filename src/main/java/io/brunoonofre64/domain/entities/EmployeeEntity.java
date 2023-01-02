@@ -24,19 +24,18 @@ public class EmployeeEntity extends BaseEntity {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    @Column(name = "EMAIL", nullable = false, length = 100)
+    private String email;
+
     @CPF
     @Column(name = "CPF", nullable = false)
     private String cpf;
 
-    @OneToOne(mappedBy = "employeeEntity")
-    private UserEntity userEntity;
-
     public EmployeeEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                          Long id, String name, String cpf, UserEntity userEntity) {
+                          Long id, String name, String cpf) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.name = name;
         this.cpf = cpf;
-        this.userEntity = userEntity;
     }
 }

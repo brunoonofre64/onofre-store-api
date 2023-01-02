@@ -1,16 +1,12 @@
-package io.brunoonofre64.domain.dto;
+package io.brunoonofre64.domain.dto.user;
 
 import io.brunoonofre64.domain.enums.Roles;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-public class UserOutpuDTO {
-
-    private String uuid;
+public class UserInputDTO {
 
     private String login;
 

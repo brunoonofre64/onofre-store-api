@@ -3,9 +3,7 @@ package io.brunoonofre64.infrastructure.mapper;
 import io.brunoonofre64.domain.dto.employee.EmployeeInformationDTO;
 import io.brunoonofre64.domain.dto.employee.EmployeeInputDTO;
 import io.brunoonofre64.domain.dto.employee.EmployeeOutputDTO;
-import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
 import io.brunoonofre64.domain.entities.EmployeeEntity;
-import io.brunoonofre64.domain.entities.UserEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.BusinessRuleException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
@@ -18,27 +16,6 @@ import org.springframework.util.ObjectUtils;
 public class EmployeeMapperImpl implements EmployeeMapper {
 
     @Override
-    public EmployeeOutputDTO convertEntityToDTO(EmployeeEntity entity, UserEntity user) {
-        if(entity == null || user == null) {
-            throw new BusinessRuleException(CodeMessage.OBJECTS_ISNULL_OR_EMPTY);
-        }
-        UserOutpuDTO userOutpuDTO = UserOutpuDTO
-                .builder()
-                .uuid(user.getUuid())
-                .login(user.getLogin())
-                .role(user.getRole())
-                .build();
-
-        return EmployeeOutputDTO
-                .builder()
-                .name(entity.getName())
-                .uuid(entity.getUuid())
-                .email(entity.getEmail())
-                .cpf(entity.getCpf())
-                .userInfo(userOutpuDTO)
-                .build();
-    }
-    @Override
     public EmployeeInformationDTO convertInInformationDTO(EmployeeEntity entity) {
         if(entity == null) {
             throw new BusinessRuleException(CodeMessage.OBJECTS_ISNULL_OR_EMPTY);
@@ -49,7 +26,6 @@ public class EmployeeMapperImpl implements EmployeeMapper {
                 .uuid(entity.getUuid())
                 .email(entity.getEmail())
                 .cpf(entity.getCpf())
-                .userInfo(getInformationOfUser(entity.getUser()))
                 .build();
     }
 
@@ -86,14 +62,5 @@ public class EmployeeMapperImpl implements EmployeeMapper {
          throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }
         return employeeList.map(this::convertInInformationDTO);
-    }
-
-    private UserOutpuDTO getInformationOfUser(UserEntity user) {
-        return UserOutpuDTO
-                .builder()
-                .uuid(user.getUuid())
-                .login(user.getLogin())
-                .role(user.getRole())
-                .build();
     }
 }

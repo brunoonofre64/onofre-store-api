@@ -4,12 +4,10 @@ import io.brunoonofre64.domain.entities.UserEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
 
-    boolean existsByUuid(String uuid);
-
-    UserEntity findByUuid(String uuid);
-
-    void deleteByUuid(String uuid);
+    Optional<UserEntity> findByUsername(String username);
 }

@@ -13,14 +13,13 @@ import org.springframework.util.ObjectUtils;
 @Component
 public class UserMapperImpl implements UserMapper {
 
-
     @Override
     public UserEntity convertDTOToEntity(UserInputDTO dto) {
         return UserEntity
                 .builder()
-                .role(dto.getRole())
-                .login(dto.getLogin())
+                .username(dto.getUsername())
                 .password(dto.getPassword())
+                .profiles(dto.getProfiles())
                 .build();
     }
 
@@ -28,9 +27,8 @@ public class UserMapperImpl implements UserMapper {
     public UserOutpuDTO convertEntityToDTO(UserEntity entity) {
         return UserOutpuDTO
                 .builder()
-                .uuid(entity.getUuid())
-                .login(entity.getLogin())
-                .role(entity.getRole())
+                .username(entity.getUsername())
+                .profiles(entity.getProfiles())
                 .build();
     }
 

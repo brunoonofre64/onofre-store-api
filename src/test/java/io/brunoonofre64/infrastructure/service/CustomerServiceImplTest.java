@@ -3,6 +3,7 @@ package io.brunoonofre64.infrastructure.service;
 import io.brunoonofre64.domain.dto.customer.CustomerInputDTO;
 import io.brunoonofre64.domain.dto.customer.CustomerOutputDTO;
 import io.brunoonofre64.domain.entities.CustomerEntity;
+import io.brunoonofre64.domain.enums.Profiles;
 import io.brunoonofre64.domain.exception.CpfRepeatedException;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
@@ -33,52 +34,35 @@ import static org.mockito.Mockito.*;
 class CustomerServiceImplTest {
 
     private final static Long ID = 1L;
-
     private final static String UUID = "8d9af531-1809-4f61-ad96-3e0f39b6e643";
-
     private final static String CPF = "38915839668"; //GERADO ALEATORIAMENTE
-
     private final static String CPF_2 = "86132623507"; //GERADO ALEATORIAMENTE
-
     private final static String UUID_NONEXISTENT = "123";
-
     private final static String NAME = "NAME";
-
     private final static String AGE = "AGE";
-
     private static final String NAME_2 = "NAME_2";
-
     private static final String AGE_2 = "AGE_2";
 
     private final static LocalDateTime INC_DATE = LocalDateTime.now();
-
     private final static LocalDateTime MODF_DATE = LocalDateTime.now();
+    private static final List<Profiles> PROFILES = List.of(Profiles.ADMIN);
 
     @InjectMocks
     private CustomerServiceImpl service;
-
     @Mock
     private CustomerServiceImpl serviceMock;
-
     @Mock
     private CustomerRepository repository;
-
     @Mock
     private CustomerMapper mapper;
-
     @Mock
     private Pageable pageable;
 
     private CustomerEntity customerEntity;
-
     private CustomerEntity customerEntityUpdate;
-
     private CustomerOutputDTO customerOutputDTO;
-
     private CustomerOutputDTO customerOutputDTOUpdate;
-
     private CustomerInputDTO createCustomerDTO;
-
     private CustomerInputDTO createCustomerDTOUpdate;
 
     @BeforeEach
@@ -454,13 +438,13 @@ class CustomerServiceImplTest {
     }
 
     private void startCustomer() {
-        customerEntity = new CustomerEntity(UUID, INC_DATE, MODF_DATE, ID, CPF, NAME, AGE);
+        customerEntity = new CustomerEntity(UUID, INC_DATE, MODF_DATE, PROFILES, ID, CPF, NAME, AGE);
         createCustomerDTO = new CustomerInputDTO(NAME, AGE, CPF);
         customerOutputDTO = new CustomerOutputDTO(ID, UUID, NAME, AGE, CPF, INC_DATE, MODF_DATE);
     }
 
     private void startCustomerDatatoUpdate() {
-        customerEntityUpdate = new CustomerEntity(UUID, INC_DATE, MODF_DATE, ID, CPF, NAME_2, AGE_2);
+        customerEntityUpdate = new CustomerEntity(UUID, INC_DATE, MODF_DATE, PROFILES, ID, CPF, NAME_2, AGE_2);
         customerOutputDTOUpdate = new CustomerOutputDTO(ID, UUID, NAME_2, AGE_2, CPF_2, INC_DATE, MODF_DATE);
         createCustomerDTOUpdate = new CustomerInputDTO(NAME_2, AGE_2, CPF_2);
     }

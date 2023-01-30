@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Builder
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_PRODUCT")
@@ -30,8 +30,7 @@ public class ProductEntity extends BaseEntity{
     @Column(name = "UNIT_VALUE", nullable = false)
     private BigDecimal unitValue;
 
-    public ProductEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id,
-                         String productName, String description, BigDecimal unitValue) {
+    public ProductEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id, String productName, String description, BigDecimal unitValue) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.productName = productName;

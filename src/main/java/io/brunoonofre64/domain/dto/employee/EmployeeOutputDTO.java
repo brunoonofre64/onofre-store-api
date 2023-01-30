@@ -10,15 +10,10 @@ import lombok.Setter;
 @Setter
 @Builder
 public class EmployeeOutputDTO {
-
     private String name;
-
     private String uuid;
-
     private String email;
-
     private String cpf;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private UserOutpuDTO userInfo;
 }

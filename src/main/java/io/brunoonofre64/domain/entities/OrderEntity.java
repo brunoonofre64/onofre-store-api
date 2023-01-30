@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Builder
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBL_ORDER")
@@ -43,8 +43,9 @@ public class OrderEntity extends BaseEntity{
     @OneToMany(mappedBy = "orderEntity")
     private List<OrderItemsEntity> orderItems;
 
-    public OrderEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate, Long id, Status status,
-                       BigDecimal total, CustomerEntity customer, List<OrderItemsEntity> orderItems) {
+    public OrderEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
+                       Long id, Status status, BigDecimal total, CustomerEntity customer,
+                       List<OrderItemsEntity> orderItems) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.status = status;

@@ -4,7 +4,6 @@ import io.brunoonofre64.domain.dto.employee.EmployeeInformationDTO;
 import io.brunoonofre64.domain.dto.employee.EmployeeInputDTO;
 import io.brunoonofre64.domain.dto.employee.EmployeeOutputDTO;
 import io.brunoonofre64.domain.entities.EmployeeEntity;
-import io.brunoonofre64.domain.entities.UserEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
 import io.brunoonofre64.domain.exception.ListIsEmptyException;
@@ -12,7 +11,6 @@ import io.brunoonofre64.domain.exception.UuidNotFoundOrNullException;
 import io.brunoonofre64.domain.mapper.EmployeeMapper;
 import io.brunoonofre64.domain.service.EmployeeService;
 import io.brunoonofre64.infrastructure.jpa.EmployeeRepository;
-import io.brunoonofre64.infrastructure.jpa.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,21 +26,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
 
-    private UserRepository userRepository;
-
     private EmployeeMapper mapper;
 
     @Override
     public EmployeeOutputDTO saveNewEmployeeInDb(EmployeeInputDTO dto) {
         validateEmployee(dto);
 
-        UserEntity user = getUserInDatabase(dto);
         EmployeeEntity entity = mapper.convertDTOToEntity(dto);
-        entity.setUser(user);
 
         employeeRepository.save(entity);
 
-        return mapper.convertEntityToDTO(entity, user);
+        return mapper.convertEntityToDTO(entity);
     }
 
     @Override
@@ -69,40 +63,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeOutputDTO updateEmployeeByUuid(String uuid, EmployeeInputDTO dto) {
-        validateEmployeeUuid(uuid);
-        validateEmployee(dto);
+        this.validateEmployeeUuid(uuid);
+        this.validateEmployee(dto);
 
-        UserEntity user = getUserInDatabase(dto);
         EmployeeEntity entity = employeeRepository.findByUuid(uuid);
         entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
 
         employeeRepository.save(entity);
 
-        return mapper.convertEntityToDTO(entity, user);
+        return mapper.convertEntityToDTO(entity);
     }
 
     @Override
     @Transactional
     public void deleteEmployeeByUuid(String uuid) {
-        validateEmployeeUuid(uuid);
+        this.validateEmployeeUuid(uuid);
 
         employeeRepository.deleteByUuid(uuid);
     }
 
-    private UserEntity getUserInDatabase(EmployeeInputDTO dto) {
-        if(ObjectUtils.isEmpty(dto.getUserUuid()) || !userRepository.existsByUuid(dto.getUserUuid())) {
-            throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
-        }
-        String uuid = dto.getUserUuid();
-
-        try {
-            return userRepository.findByUuid(uuid);
-        } catch(Exception ex) {
-            throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
-        }
-    }
-
-    private static void validateEmployee(EmployeeInputDTO dto) {
+    private void validateEmployee(EmployeeInputDTO dto) {
         if(ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getEmail())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }

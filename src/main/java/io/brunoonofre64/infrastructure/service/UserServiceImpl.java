@@ -5,7 +5,6 @@ import io.brunoonofre64.domain.dto.user.UserOutpuDTO;
 import io.brunoonofre64.domain.entities.UserEntity;
 import io.brunoonofre64.domain.enums.CodeMessage;
 import io.brunoonofre64.domain.exception.DtoNullOrIsEmptyException;
-import io.brunoonofre64.domain.exception.LoginNotFoundException;
 import io.brunoonofre64.domain.mapper.UserMapper;
 import io.brunoonofre64.infrastructure.jpa.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -23,19 +22,18 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class UserServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
     private UserMapper mapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new LoginNotFoundException(CodeMessage.USER_NOTFOUND));
+        if (!username.equals("bruno")) {
+            throw new UsernameNotFoundException("User not found: " + username);
+        }
 
-        return User
-                .builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .authorities(user.getAuthorities())
+        return User.withUsername(username)
+                .password(passwordEncoder.encode("1234"))
+                .roles("USER")
                 .build();
     }
 
@@ -43,7 +41,7 @@ public class UserServiceImpl implements UserDetailsService {
         this.validateUserInputDTO(userInputDTO);
 
         UserEntity userEntity = mapper.convertDTOToEntity(userInputDTO);
-        userEntity.setPassword(bCryptPasswordEncoder.encode(userInputDTO.getPassword()));
+        userEntity.setPassword(passwordEncoder.encode(userInputDTO.getPassword()));
 
         userRepository.save(userEntity);
 

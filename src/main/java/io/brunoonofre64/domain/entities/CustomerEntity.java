@@ -34,12 +34,11 @@ public class CustomerEntity extends BaseEntity{
     private List<OrderEntity> orders;
 
     public CustomerEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                          Long id, String cpf, String name, String age, List<OrderEntity> orders) {
+                          Long id, String cpf, String name, String age) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.cpf = cpf;
         this.name = name;
         this.age = age;
-        this.orders = orders;
     }
 }

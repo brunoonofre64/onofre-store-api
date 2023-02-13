@@ -24,12 +24,11 @@ import org.springframework.util.ObjectUtils;
 public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository repository;
-
     private CustomerMapper mapper;
 
     @Override
     public CustomerOutputDTO saveNewCustomerInDb(CustomerInputDTO dto) {
-        validateCustomer(dto);
+        this.validateCustomer(dto);
 
         if(repository.existsByCpf(dto.getCpf())) {
             throw new CpfRepeatedException(CodeMessage.CPF_REPEATED);
@@ -63,9 +62,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerOutputDTO updateCustomerByUuid(String uuid, CustomerInputDTO dto) {
-        validateCustomer(dto);
-
-        validateCustomerUuid(uuid);
+        this.validateCustomer(dto);
+        this.validateCustomerUuid(uuid);
 
         CustomerEntity entity = repository.findByUuid(uuid);
         entity.setName(dto.getName());
@@ -79,7 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void deleteCustomerOfDb(String uuid) {
-        validateCustomerUuid(uuid);
+        this.validateCustomerUuid(uuid);
 
         repository.deleteByUuid(uuid);
     }
@@ -90,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private static void validateCustomer(CustomerInputDTO dto) {
+    private void validateCustomer(CustomerInputDTO dto) {
         if(dto == null || ObjectUtils.isEmpty(dto.getName()) || ObjectUtils.isEmpty(dto.getAge())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }

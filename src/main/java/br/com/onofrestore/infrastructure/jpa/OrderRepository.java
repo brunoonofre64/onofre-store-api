@@ -8,14 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
-
     boolean existsByUuid(String uuid);
-
     @Query("SELECT C FROM OrderEntity C LEFT JOIN FETCH C.orderItems WHERE C.uuid = :uuid")
     OrderEntity findByUuidAndFetchOrderItems(@Param("uuid") String uuid);
-
     void deleteByUuid(String uuid);
-
     OrderEntity findByUuid(String uuid);
 }
 

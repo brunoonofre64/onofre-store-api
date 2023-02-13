@@ -6,11 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<ProductEntity, Long> {
-
     boolean existsByUuid(String uuid);
-
     ProductEntity findByUuid(String uuid);
-
     void deleteByUuid(String uuid);
 }
 

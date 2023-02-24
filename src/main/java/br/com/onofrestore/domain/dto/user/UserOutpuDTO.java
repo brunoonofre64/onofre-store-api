@@ -1,11 +1,10 @@
 package br.com.onofrestore.domain.dto.user;
 
-import br.com.onofrestore.domain.enums.Profiles;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,5 +12,5 @@ import java.util.List;
 public class UserOutpuDTO {
     private String uuid;
     private String username;
-    private List<Profiles> profiles;
+    private Set<String> profiles;
 }

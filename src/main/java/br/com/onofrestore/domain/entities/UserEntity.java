@@ -1,15 +1,10 @@
 package br.com.onofrestore.domain.entities;
 
-import br.com.onofrestore.domain.enums.Profiles;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.validation.constraints.Email;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -19,12 +14,16 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Table(name = "TBL_USER")
 @SequenceGenerator(name = "sequenceUser", sequenceName = "SQ_USER", allocationSize = 1)
-public class UserEntity implements UserDetails {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceUser")
     @Column(name = "ID")
     private Long id;
+
+    @Email(message = "Email inv\u00E1lido.")
+    @Column(name = "EMAIL")
+    private String email;
 
     @Column(name = "USUARIO", unique = true)
     private String username;
@@ -32,35 +31,9 @@ public class UserEntity implements UserDetails {
     @Column(name = "SENHA")
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private List<Profiles> profiles;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return profiles
-                .stream()
-                .map(x -> new SimpleGrantedAuthority(x.getRoles()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "TBL_USER_ROLES",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    private Set<RoleEntity> roles;
 }

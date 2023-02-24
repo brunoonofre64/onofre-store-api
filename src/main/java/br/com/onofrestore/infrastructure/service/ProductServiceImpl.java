@@ -9,7 +9,7 @@ import br.com.onofrestore.domain.exception.ListIsEmptyException;
 import br.com.onofrestore.domain.exception.UuidNotFoundOrNullException;
 import br.com.onofrestore.domain.mapper.ProductMapper;
 import br.com.onofrestore.domain.service.ProductService;
-import br.com.onofrestore.infrastructure.jpa.ProductRepository;
+import br.com.onofrestore.infrastructure.jpa.repositories.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

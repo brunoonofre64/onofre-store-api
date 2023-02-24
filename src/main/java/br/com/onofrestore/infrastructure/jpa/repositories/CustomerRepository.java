@@ -1,4 +1,4 @@
-package br.com.onofrestore.infrastructure.jpa;
+package br.com.onofrestore.infrastructure.jpa.repositories;
 
 import br.com.onofrestore.domain.entities.CustomerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

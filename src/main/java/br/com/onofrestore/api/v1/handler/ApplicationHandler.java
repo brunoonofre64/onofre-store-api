@@ -114,6 +114,84 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EmailException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerEmailException(EmailException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.EMAIL_IS_EMPTY))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.EMAIL_JA_REGISTRADO))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerUserNotFoundException(UserNotFoundException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.USER_NOTFOUND))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NewPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerUserNotFoundException(NewPasswordException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.SENHA_INVALIDA))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.USUARIO_JA_REGISTRADO))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IncorrectCurrentPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerIncorrectCurrentPasswordException(IncorrectCurrentPasswordException ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(getCodeMessage(CodeMessage.SENHA_ATUAL_INCORRETA))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
     private String getCodeMessage(CodeMessage codigoMensagem) {
         return messageBundle.getMessage(codigoMensagem.getValue(), null, LocaleContextHolder.getLocale());
     }

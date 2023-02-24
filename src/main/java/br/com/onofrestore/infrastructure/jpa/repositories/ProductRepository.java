@@ -1,4 +1,4 @@
-package br.com.onofrestore.infrastructure.jpa;
+package br.com.onofrestore.infrastructure.jpa.repositories;
 
 import br.com.onofrestore.domain.entities.ProductEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;

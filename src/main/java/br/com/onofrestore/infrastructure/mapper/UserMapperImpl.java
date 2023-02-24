@@ -2,6 +2,7 @@ package br.com.onofrestore.infrastructure.mapper;
 
 import br.com.onofrestore.domain.dto.user.UserInputDTO;
 import br.com.onofrestore.domain.dto.user.UserOutpuDTO;
+import br.com.onofrestore.domain.entities.RoleEntity;
 import br.com.onofrestore.domain.entities.UserEntity;
 import br.com.onofrestore.domain.enums.CodeMessage;
 import br.com.onofrestore.domain.exception.ListIsEmptyException;
@@ -10,25 +11,34 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapperImpl implements UserMapper {
 
     @Override
-    public UserEntity convertDTOToEntity(UserInputDTO dto) {
+    public UserEntity convertDTOToEntity(UserInputDTO dto, Set<RoleEntity> roles) {
         return UserEntity
                 .builder()
                 .username(dto.getUsername())
                 .password(dto.getPassword())
-                .profiles(dto.getProfiles())
+                .email(dto.getEmail())
+                .roles(roles)
                 .build();
     }
 
     @Override
     public UserOutpuDTO convertEntityToDTO(UserEntity entity) {
-        return UserOutpuDTO
-                .builder()
+        Set<String> profiles = entity.getRoles()
+                .stream()
+                .map(RoleEntity::getProfile)
+                .collect(Collectors.toSet());
+
+        return UserOutpuDTO.builder()
                 .username(entity.getUsername())
-                .profiles(entity.getProfiles())
+                .uuid(entity.getUuid())
+                .profiles(profiles)
                 .build();
     }
 

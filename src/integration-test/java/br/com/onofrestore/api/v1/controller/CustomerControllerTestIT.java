@@ -8,7 +8,7 @@ import br.com.onofrestore.domain.exception.CpfRepeatedException;
 import br.com.onofrestore.domain.exception.DtoNullOrIsEmptyException;
 import br.com.onofrestore.domain.exception.UuidNotFoundOrNullException;
 import br.com.onofrestore.domain.mapper.CustomerMapper;
-import br.com.onofrestore.infrastructure.jpa.CustomerRepository;
+import br.com.onofrestore.infrastructure.jpa.repositories.CustomerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

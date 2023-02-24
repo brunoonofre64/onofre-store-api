@@ -12,5 +12,6 @@ import java.util.Set;
 public class UserOutpuDTO {
     private String uuid;
     private String username;
+    private String fullName;
     private Set<String> profiles;
 }

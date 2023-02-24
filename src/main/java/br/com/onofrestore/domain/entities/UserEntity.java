@@ -21,12 +21,15 @@ public class UserEntity extends BaseEntity {
     @Column(name = "ID")
     private Long id;
 
-    @Email(message = "Email inv\u00E1lido.")
+    @Email(message = "EMAIL_FORMATO_INVALIDO")
     @Column(name = "EMAIL")
     private String email;
 
     @Column(name = "USUARIO", unique = true)
     private String username;
+
+    @Column(name = "NOME_COMPLETO")
+    private String fullName;
 
     @Column(name = "SENHA")
     private String password;

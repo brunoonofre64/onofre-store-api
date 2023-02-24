@@ -22,6 +22,7 @@ public class UserMapperImpl implements UserMapper {
         return UserEntity
                 .builder()
                 .username(dto.getUsername())
+                .fullName(dto.getFullName())
                 .password(dto.getPassword())
                 .email(dto.getEmail())
                 .roles(roles)
@@ -37,6 +38,7 @@ public class UserMapperImpl implements UserMapper {
 
         return UserOutpuDTO.builder()
                 .username(entity.getUsername())
+                .fullName(entity.getFullName())
                 .uuid(entity.getUuid())
                 .profiles(profiles)
                 .build();

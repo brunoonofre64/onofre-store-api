@@ -11,19 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerOutputDTO {
-
     private Long id;
-
     private String uuid;
-
     private String name;
-
     private String age;
-
     private String cpf;
-
     private LocalDateTime inclusionDate;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime modifyDate;
 }

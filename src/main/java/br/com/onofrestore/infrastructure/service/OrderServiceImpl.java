@@ -13,6 +13,7 @@ import br.com.onofrestore.domain.enums.CodeMessage;
 import br.com.onofrestore.domain.exception.*;
 import br.com.onofrestore.domain.mapper.OrderMapper;
 import br.com.onofrestore.domain.service.OrderService;
+import br.com.onofrestore.infrastructure.config.security.OnofreSecurity;
 import br.com.onofrestore.infrastructure.jpa.repositories.CustomerRepository;
 import br.com.onofrestore.infrastructure.jpa.repositories.OrderItemsRepository;
 import br.com.onofrestore.infrastructure.jpa.repositories.OrderRepository;
@@ -37,25 +38,26 @@ public class OrderServiceImpl implements OrderService {
     private ProductRepository productRepository;
 
     private OrderItemsRepository orderItemsRepository;
+    private OnofreSecurity onofreSecurity;
 
     private OrderMapper orderMapper;
 
     @Override
     @Transactional
     public OrderOutputDTO saveNewOrderInDb(OrderInputDTO dto) {
-       validateOrder(dto);
+        validateOrder(dto);
 
-       CustomerEntity customer = getCustomerInDatabase(dto);
-       OrderEntity order = orderMapper.convertDTOAndCustomerToOrderEntity(dto, customer);
+        CustomerEntity customer = getCustomerInDatabase(dto);
+        OrderEntity order = orderMapper.convertDTOAndCustomerToOrderEntity(dto, customer);
 
-       OrderEntity orderSuccess = orderRepository.save(order);
+        OrderEntity orderSuccess = orderRepository.save(order);
 
-       List<OrderItemsEntity> orderItems = getOrderItems(orderSuccess, dto.getOrderItems());
-       order.setOrderItems(orderItems);
+        List<OrderItemsEntity> orderItems = getOrderItems(orderSuccess, dto.getOrderItems());
+        order.setOrderItems(orderItems);
 
-       orderItemsRepository.saveAll(orderItems);
+        orderItemsRepository.saveAll(orderItems);
 
-       return orderMapper.convertEntityToDTO(order, customer, orderItems);
+        return orderMapper.convertEntityToDTO(order, customer, orderItems);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderInformationDTO updateStatusOrderByUuid(String uuid, OrderNewStatusDTO dto) {
         validateOrderUuid(uuid);
 
-        if(ObjectUtils.isEmpty(dto.getStatus())) {
+        if (ObjectUtils.isEmpty(dto.getStatus())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
         OrderEntity order = orderRepository.findByUuid(uuid);
@@ -89,25 +91,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public CustomerEntity getCustomerInDatabase(OrderInputDTO dto) {
-        if(ObjectUtils.isEmpty(dto)) {
+        if (ObjectUtils.isEmpty(dto)) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-            String uuidCustomer = dto.getCustomer();
 
-        try{
-           return customerRepository.findByUuid(uuidCustomer);
-        } catch(Exception ex) {
+        try {
+            return customerRepository.findByUuid(onofreSecurity.getUserUuid());
+        } catch (Exception ex) {
             throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
         }
     }
 
     public ProductEntity getProductInDatabase(OrderItemsInputDTO dto) {
-        if(ObjectUtils.isEmpty(dto)) {
+        if (ObjectUtils.isEmpty(dto)) {
             throw new UuidNotFoundOrNullException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-         String uuidProduct = dto.getUuidProduct();
+        String uuidProduct = dto.getUuidProduct();
 
-        try{
+        try {
             return productRepository.findByUuid(uuidProduct);
         } catch (Exception ex) {
             throw new ProductNotFoundException(CodeMessage.PRODUCT_NOT_FOUND);
@@ -115,30 +116,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void validateOrderUuid(String uuid) {
-        if(ObjectUtils.isEmpty(uuid) || !orderRepository.existsByUuid(uuid)) {
+        if (ObjectUtils.isEmpty(uuid) || !orderRepository.existsByUuid(uuid)) {
             throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
         }
     }
 
     private void validateOrder(OrderInputDTO dto) {
-       if(ObjectUtils.isEmpty(dto.getCustomer()) && ObjectUtils.isEmpty(dto.getTotal())
+        if (ObjectUtils.isEmpty(dto.getTotal())
                 && CollectionUtils.isEmpty(dto.getOrderItems())) {
-           throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
-       }
+            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
+        }
     }
 
     private List<OrderItemsEntity> getOrderItems(OrderEntity order, List<OrderItemsInputDTO> orderitems) {
-        if(CollectionUtils.isEmpty(orderitems)) {
+        if (CollectionUtils.isEmpty(orderitems)) {
             throw new ListIsEmptyException(CodeMessage.ORDER_NOT_FOUND);
         }
-        if(order == null) {
+        if (order == null) {
             throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
         }
 
         return orderitems
                 .stream()
                 .map(dto -> {
-                    ProductEntity product =  getProductInDatabase(dto);
+                    ProductEntity product = getProductInDatabase(dto);
 
                     return OrderItemsEntity
                             .builder()

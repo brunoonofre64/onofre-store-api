@@ -13,8 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderInputDTO {
 
-    private String customer;
-
     private BigDecimal total;
 
     private List<OrderItemsInputDTO> orderItems;

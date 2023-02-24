@@ -6,6 +6,7 @@ import br.com.onofrestore.domain.dto.order.OrderNewStatusDTO;
 import br.com.onofrestore.domain.dto.order.OrderOutputDTO;
 import br.com.onofrestore.domain.service.OrderService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +23,10 @@ public class OrderController {
         return service.saveNewOrderInDb(dto);
     }
 
-    @GetMapping("/{uuid}")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public OrderInformationDTO getOrderItemsInformationByUuid(@PathVariable String uuid) {
-       return service.getOrderItemsInformationByUuid(uuid);
+    public Page<OrderInformationDTO> getAllOrderPaged() {
+        return service.getAllOrderPaged();
     }
 
     @PatchMapping("/{uuid}")

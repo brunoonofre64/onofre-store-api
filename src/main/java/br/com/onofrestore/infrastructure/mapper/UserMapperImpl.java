@@ -21,10 +21,12 @@ public class UserMapperImpl implements UserMapper {
     public UserEntity convertDTOToEntity(UserInputDTO dto, Set<RoleEntity> roles) {
         return UserEntity
                 .builder()
+                .email(dto.getEmail())
                 .username(dto.getUsername())
+                .cpf(dto.getCpf())
+                .age(dto.getAge())
                 .fullName(dto.getFullName())
                 .password(dto.getPassword())
-                .email(dto.getEmail())
                 .roles(roles)
                 .build();
     }
@@ -37,6 +39,7 @@ public class UserMapperImpl implements UserMapper {
                 .collect(Collectors.toSet());
 
         return UserOutpuDTO.builder()
+                .email(entity.getEmail())
                 .username(entity.getUsername())
                 .fullName(entity.getFullName())
                 .uuid(entity.getUuid())

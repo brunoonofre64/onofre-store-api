@@ -25,7 +25,7 @@ public class OrderInformationDTO {
 
    private String cpf;
 
-   private String nameCustomer;
+   private String nameUser;
 
   private List<OrderItemsInformationtDTO> orderItems;
 }

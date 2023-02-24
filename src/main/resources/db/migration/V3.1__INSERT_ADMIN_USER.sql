@@ -1,7 +1,9 @@
-INSERT INTO TBL_USER (ID, EMAIL, USUARIO, NOME_COMPLETO, SENHA, UUID, INC_DATE)
+INSERT INTO TBL_USER (ID, EMAIL, USUARIO, CPF, AGE, NOME_COMPLETO, SENHA, UUID, INC_DATE)
 SELECT 1,
        'admin@admin',
        'admin',
+       '00000000000',
+       '0',
        'ADMIN ADMIN ADMIN',
        '$2a$12$FTaAku.nwfOHyjxLSaRmk.53cnomZpGGej5ITo05DC5O9R10eYofi',
        '68e86feb-8fc9-4a43-b47b-d85fc008bfe9',

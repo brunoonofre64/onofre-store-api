@@ -1,6 +1,6 @@
 package br.com.onofrestore.domain.dto.order;
 
-import br.com.onofrestore.domain.dto.customer.CustomerInformationDTO;
+import br.com.onofrestore.domain.dto.UserInfoDTO;
 import br.com.onofrestore.domain.enums.Status;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,5 +22,5 @@ public class OrderOutputDTO {
 
     private BigDecimal total;
 
-    private CustomerInformationDTO customer;
+    private UserInfoDTO userInfoDTO;
 }

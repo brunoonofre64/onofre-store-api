@@ -37,20 +37,20 @@ public class OrderEntity extends BaseEntity{
     private BigDecimal total;
 
     @ManyToOne
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
-    private CustomerEntity customer;
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private UserEntity users;
 
     @OneToMany(mappedBy = "orderEntity")
     private List<OrderItemsEntity> orderItems;
 
-    public OrderEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                       Long id, Status status, BigDecimal total, CustomerEntity customer,
-                       List<OrderItemsEntity> orderItems) {
+    public OrderEntity(String uuid, LocalDateTime inclusionDate,
+                       LocalDateTime modifyDate, Long id, Status status,
+                       BigDecimal total, UserEntity users, List<OrderItemsEntity> orderItems) {
         super(uuid, inclusionDate, modifyDate);
         this.id = id;
         this.status = status;
         this.total = total;
-        this.customer = customer;
+        this.users = users;
         this.orderItems = orderItems;
     }
 }

@@ -1,6 +1,5 @@
 package br.com.onofrestore.api.v1.utils;
 
-import br.com.onofrestore.domain.entities.CustomerEntity;
 import br.com.onofrestore.domain.entities.OrderEntity;
 
 import java.util.List;

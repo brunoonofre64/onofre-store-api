@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface UserMapper {
 
-    public UserEntity convertDTOToEntity(UserInputDTO dto, Set<RoleEntity> roles);
+    UserEntity convertDTOToEntity(UserInputDTO dto, Set<RoleEntity> roles);
 
     UserOutpuDTO convertEntityToDTO(UserEntity entity);
 

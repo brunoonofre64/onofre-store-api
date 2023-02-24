@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,11 +29,20 @@ public class UserEntity extends BaseEntity {
     @Column(name = "USUARIO", unique = true)
     private String username;
 
+    @Column(name = "CPF")
+    private String cpf;
+
+    @Column(name = "AGE", nullable = false, length = 3)
+    private String age;
+
     @Column(name = "NOME_COMPLETO")
     private String fullName;
 
     @Column(name = "SENHA")
     private String password;
+
+    @OneToMany(mappedBy = "users")
+    private List<OrderEntity> orders;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_USER_ROLES",

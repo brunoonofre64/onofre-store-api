@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 @Setter
 public class ProductInputDTO {
     private String productName;
-
     private String description;
-
     private BigDecimal unitValue;
 }

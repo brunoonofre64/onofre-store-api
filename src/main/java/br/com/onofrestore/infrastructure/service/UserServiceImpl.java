@@ -51,25 +51,25 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     @Transactional
-    public UserOutpuDTO saveNewUserInDb(UserInputDTO userInputDTO) {
-        this.validateUserInputDTO(userInputDTO);
+    public UserOutpuDTO saveNewUserInDb(UserInputDTO dto) {
+        this.validateUserInputDTO(dto);
 
-        if (userRepository.existsByEmail(userInputDTO.getEmail())) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
             throw new EmailAlreadyExistsException(CodeMessage.EMAIL_JA_REGISTRADO);
         }
-        if (userRepository.existsByUsername(userInputDTO.getUsername())) {
+        if (userRepository.existsByUsername(dto.getUsername())) {
             throw new UserAlreadyExistsException(CodeMessage.USUARIO_JA_REGISTRADO);
         }
 
-        Set<String> uuidRoles = userInputDTO.getUuidProfiles();
+        Set<String> uuidRoles = dto.getUuidProfiles();
         Set<RoleEntity> roles = roleRepository.findByUuidIn(uuidRoles);
 
         if (isEmpty(roles)) {
             throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }
 
-        UserEntity userEntity = mapper.convertDTOToEntity(userInputDTO, roles);
-        userEntity.setPassword(passwordEncoder.encode(userInputDTO.getPassword()));
+        UserEntity userEntity = mapper.convertDTOToEntity(dto, roles);
+        userEntity.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         userRepository.save(userEntity);
 
@@ -144,7 +144,8 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     private void validateUserInputDTO(UserInputDTO dto) {
-        if (isEmpty(dto.getUsername()) || isEmpty(dto.getPassword()) || isEmpty(dto.getUuidProfiles())) {
+        if (isEmpty(dto.getUsername()) || isEmpty(dto.getPassword()) || isEmpty(dto.getUuidProfiles())
+        || isEmpty(dto.getAge()) || isEmpty(dto.getEmail()) || isEmpty(dto.getFullName())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
     }

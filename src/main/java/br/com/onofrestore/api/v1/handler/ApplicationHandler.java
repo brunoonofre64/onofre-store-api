@@ -135,7 +135,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(this.getCodeMessage(CodeMessage.EMAIL_JA_REGISTRADO))
+                .details(this.getCodeMessage(CodeMessage.EMAIL_ALREADY_EXISTS))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -161,7 +161,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(this.getCodeMessage(CodeMessage.SENHA_INVALIDA))
+                .details(this.getCodeMessage(CodeMessage.INVALID_PASSWORD))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -174,7 +174,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(this.getCodeMessage(CodeMessage.USUARIO_JA_REGISTRADO))
+                .details(this.getCodeMessage(CodeMessage.USER_ALREADY_EXISTS))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -187,7 +187,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(this.getCodeMessage(CodeMessage.SENHA_ATUAL_INCORRETA))
+                .details(this.getCodeMessage(CodeMessage.INCORRECT_CURRENT_PASSWORD))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }

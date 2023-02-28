@@ -53,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
         if (user == null) {
             throw new UserNotFoundException(CodeMessage.USER_NOTFOUND);
         }
+
         OrderEntity order = orderMapper.convertItemsAndUserToOrder(dto, user);
 
         List<OrderItemsEntity> orderItems = this.getOrderItems(order, dto);
@@ -120,9 +121,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public void deleteOrderByUuid(String uuid) {
-        this.validateOrderUuid(uuid);
+        if (uuid == null) {
+            throw new UuidNotFoundOrNullException(CodeMessage.UUID_NOT_FOUND_OR_NULL);
+        }
 
-        orderRepository.deleteByUuid(uuid);
+        try {
+
+            orderRepository.deleteByUuid(uuid);
+        } catch (Exception ex) {
+            throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
+        }
     }
 
     public ProductEntity getProductInDatabase(OrderItemsInputDTO dto) {
@@ -136,12 +144,6 @@ public class OrderServiceImpl implements OrderService {
             return productRepository.findByUuid(uuidProduct);
         } catch (Exception ex) {
             throw new ProductNotFoundException(CodeMessage.PRODUCT_NOT_FOUND);
-        }
-    }
-
-    private void validateOrderUuid(String uuid) {
-        if (isEmpty(uuid) || !orderRepository.existsByUuid(uuid)) {
-            throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
         }
     }
 
@@ -164,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
         }).collect(Collectors.toList());
     }
 
-    private BigDecimal calculateOrderTotal(List<OrderItemsEntity> orderItems) {
+    public BigDecimal calculateOrderTotal(List<OrderItemsEntity> orderItems) {
         if (CollectionUtils.isEmpty(orderItems)) {
             throw new ListIsEmptyException((CodeMessage.LIST_IS_EMPTY));
         }

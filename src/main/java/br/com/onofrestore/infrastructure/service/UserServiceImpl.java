@@ -53,12 +53,13 @@ public class UserServiceImpl implements UserDetailsService {
     @Transactional
     public UserOutpuDTO saveNewUserInDb(UserInputDTO dto) {
         this.validateUserInputDTO(dto);
+        this.mapperToLoweCase(dto);
 
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new EmailAlreadyExistsException(CodeMessage.EMAIL_JA_REGISTRADO);
+            throw new EmailAlreadyExistsException(CodeMessage.EMAIL_ALREADY_EXISTS);
         }
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new UserAlreadyExistsException(CodeMessage.USUARIO_JA_REGISTRADO);
+            throw new UserAlreadyExistsException(CodeMessage.USER_ALREADY_EXISTS);
         }
 
         Set<String> uuidRoles = dto.getUuidProfiles();
@@ -79,16 +80,16 @@ public class UserServiceImpl implements UserDetailsService {
     @Transactional
     public void changePassword(String uuid, ChangePasswordDTO dto) {
         if (dto == null || isEmpty(dto.getNewPassword()) || isEmpty(dto.getCurrentPassword())) {
-            throw new NewPasswordException(CodeMessage.SENHA_INVALIDA);
+            throw new NewPasswordException(CodeMessage.INVALID_PASSWORD);
         }
 
         UserEntity userEntity = userRepository.findByUuid(uuid);
 
         if (userEntity == null) {
-            throw new UserNotFoundException(CodeMessage.USUARIO_NAO_ENCONTRADO);
+            throw new UserNotFoundException(CodeMessage.USER_NOT_FOUND);
         }
         if (!passwordEncoder.matches(dto.getCurrentPassword(), userEntity.getPassword())) {
-            throw new IncorrectCurrentPasswordException(CodeMessage.SENHA_ATUAL_INCORRETA);
+            throw new IncorrectCurrentPasswordException(CodeMessage.INCORRECT_CURRENT_PASSWORD);
         }
 
         userEntity.setPassword(passwordEncoder.encode(dto.getNewPassword()));
@@ -103,7 +104,6 @@ public class UserServiceImpl implements UserDetailsService {
 
         try {
             userRepository.deleteByUuid(uuid);
-
         } catch (Exception ex) {
             throw new UserNotFoundException(CodeMessage.USER_NOTFOUND);
         }
@@ -147,6 +147,18 @@ public class UserServiceImpl implements UserDetailsService {
         if (isEmpty(dto.getUsername()) || isEmpty(dto.getPassword()) || isEmpty(dto.getUuidProfiles())
         || isEmpty(dto.getAge()) || isEmpty(dto.getEmail()) || isEmpty(dto.getFullName())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
+        }
+    }
+
+    private void mapperToLoweCase(UserInputDTO dto) {
+        if (!isEmpty(dto.getFullName())) {
+            dto.setFullName(dto.getFullName().toLowerCase());
+        }
+        if (!isEmpty(dto.getUsername())) {
+            dto.setUsername(dto.getUsername().toLowerCase());
+        }
+        if (!isEmpty(dto.getEmail())) {
+            dto.setEmail(dto.getEmail().toLowerCase());
         }
     }
 }

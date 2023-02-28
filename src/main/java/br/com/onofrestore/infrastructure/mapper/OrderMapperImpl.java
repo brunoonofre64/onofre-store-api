@@ -2,9 +2,9 @@ package br.com.onofrestore.infrastructure.mapper;
 
 import br.com.onofrestore.domain.dto.UserInfoDTO;
 import br.com.onofrestore.domain.dto.order.OrderInformationDTO;
-import br.com.onofrestore.domain.dto.order.OrderInputDTO;
 import br.com.onofrestore.domain.dto.order.OrderOutputDTO;
 import br.com.onofrestore.domain.dto.orderitems.OrderItemsInformationtDTO;
+import br.com.onofrestore.domain.dto.orderitems.OrderItemsInputDTO;
 import br.com.onofrestore.domain.entities.OrderEntity;
 import br.com.onofrestore.domain.entities.OrderItemsEntity;
 import br.com.onofrestore.domain.entities.UserEntity;
@@ -16,6 +16,7 @@ import br.com.onofrestore.domain.mapper.OrderMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,11 @@ public class OrderMapperImpl implements OrderMapper {
         if (order == null || user == null || isEmpty(items)) {
             throw new BusinessRuleException(CodeMessage.OBJECTS_ISNULL_OR_EMPTY);
         }
+        return this.convertOrderToDTO(order, user);
+    }
+
+    @Override
+    public OrderOutputDTO convertOrderToDTO(OrderEntity order, UserEntity user) {
         UserInfoDTO userInfoDTO = UserInfoDTO
                 .builder()
                 .email(user.getEmail())
@@ -73,24 +79,23 @@ public class OrderMapperImpl implements OrderMapper {
                 .total(orders.getTotal())
                 .nameUser(orders.getUsers().getFullName())
                 .cpf(orders.getUsers().getCpf())
-                .orderItems(convertOrdertoDTO(orders.getOrderItems()))
+                .orderItems(convertOrderItemsToDTO(orders.getOrderItems()))
                 .build();
     }
 
     @Override
-    public OrderEntity convertDTOAndCustomerToOrderEntity(OrderInputDTO dto, UserEntity user) {
-        if (dto == null || user == null) {
+    public OrderEntity convertItemsAndUserToOrder(List<OrderItemsInputDTO> orderItems, UserEntity user) {
+        if (CollectionUtils.isEmpty(orderItems) || user == null) {
             throw new BusinessRuleException(CodeMessage.OBJECTS_ISNULL_OR_EMPTY);
         }
         return OrderEntity
                 .builder()
                 .status(Status.APPROVED)
-                .total(dto.getTotal())
                 .users(user)
                 .build();
     }
 
-    private List<OrderItemsInformationtDTO> convertOrdertoDTO(List<OrderItemsEntity> items) {
+    private List<OrderItemsInformationtDTO> convertOrderItemsToDTO(List<OrderItemsEntity> items) {
         if (isEmpty(items)) {
             throw new ListIsEmptyException(CodeMessage.LIST_IS_EMPTY);
         }

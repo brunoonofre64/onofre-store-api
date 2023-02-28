@@ -9,4 +9,5 @@ public interface EmployeeRepository extends PagingAndSortingRepository<EmployeeE
     EmployeeEntity findByUuid(String uuid);
     boolean existsByUuid(String uuid);
     void deleteByUuid(String uuid);
+    boolean existsByCpf(String cpf);
 }

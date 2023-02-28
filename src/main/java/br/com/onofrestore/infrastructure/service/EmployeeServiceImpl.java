@@ -6,6 +6,7 @@ import br.com.onofrestore.domain.dto.employee.EmployeeOutputDTO;
 import br.com.onofrestore.domain.entities.EmployeeEntity;
 import br.com.onofrestore.domain.enums.CodeMessage;
 import br.com.onofrestore.domain.exception.DtoNullOrIsEmptyException;
+import br.com.onofrestore.domain.exception.EmployeeAlreadyExists;
 import br.com.onofrestore.domain.exception.ListIsEmptyException;
 import br.com.onofrestore.domain.exception.UuidNotFoundOrNullException;
 import br.com.onofrestore.domain.mapper.EmployeeMapper;
@@ -30,7 +31,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeOutputDTO saveNewEmployeeInDb(EmployeeInputDTO dto) {
-        validateEmployee(dto);
+        this.validateEmployee(dto);
+
+        if (employeeRepository.existsByCpf(dto.getCpf())) {
+            throw new EmployeeAlreadyExists(CodeMessage.CPF_REPEATED);
+        }
 
         EmployeeEntity entity = mapper.convertDTOToEntity(dto);
 
@@ -41,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeInformationDTO getEmployeeByUuid(String uuid) {
-        validateEmployeeUuid(uuid);
+        this.validateEmployeeUuid(uuid);
 
         EmployeeEntity employee = employeeRepository.findByUuid(uuid);
 

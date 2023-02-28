@@ -31,7 +31,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.FIELD_NULL_OR_IS_EMPTY))
+                .details(this.getCodeMessage(CodeMessage.FIELD_NULL_OR_IS_EMPTY))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -44,7 +44,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.DTO_NULL_OR_IS_EMPTY))
+                .details(this.getCodeMessage(CodeMessage.DTO_NULL_OR_IS_EMPTY))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -57,7 +57,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.LIST_IS_EMPTY))
+                .details(this.getCodeMessage(CodeMessage.LIST_IS_EMPTY))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -70,7 +70,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.UUID_NOT_FOUND_OR_NULL))
+                .details(this.getCodeMessage(CodeMessage.UUID_NOT_FOUND_OR_NULL))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -83,7 +83,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
+                .details(this.getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -96,7 +96,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.CPF_REPEATED))
+                .details(this.getCodeMessage(CodeMessage.CPF_REPEATED))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -109,7 +109,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
+                .details(this.getCodeMessage(CodeMessage.CPF_INVALID_FORMAT))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -122,7 +122,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.EMAIL_IS_EMPTY))
+                .details(this.getCodeMessage(CodeMessage.EMAIL_IS_EMPTY))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -135,7 +135,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.EMAIL_JA_REGISTRADO))
+                .details(this.getCodeMessage(CodeMessage.EMAIL_JA_REGISTRADO))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -148,7 +148,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.USER_NOTFOUND))
+                .details(this.getCodeMessage(CodeMessage.USER_NOTFOUND))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -161,7 +161,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.SENHA_INVALIDA))
+                .details(this.getCodeMessage(CodeMessage.SENHA_INVALIDA))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -174,7 +174,7 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.USUARIO_JA_REGISTRADO))
+                .details(this.getCodeMessage(CodeMessage.USUARIO_JA_REGISTRADO))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }
@@ -187,7 +187,20 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler {
                 .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
                 .codeStatus(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
-                .details(getCodeMessage(CodeMessage.SENHA_ATUAL_INCORRETA))
+                .details(this.getCodeMessage(CodeMessage.SENHA_ATUAL_INCORRETA))
+                .build();
+        return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmployeeAlreadyExists.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrors> handlerEmployeeAlreadyExists(EmployeeAlreadyExists ex) {
+        ApiErrors apiErrors = ApiErrors
+                .builder()
+                .title(getCodeMessage(CodeMessage.INVALID_REQUEST))
+                .codeStatus(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .details(this.getCodeMessage(CodeMessage.CPF_REPEATED))
                 .build();
         return new ResponseEntity<>(apiErrors, HttpStatus.BAD_REQUEST);
     }

@@ -32,14 +32,4 @@ public interface ConstantsTest {
     interface WEB_METHOD_TEST {
         String V1_CUSTOMER = "/api/v1/cliente";
     }
-    static CustomerEntity buildCustomerDefault() {
-        return CustomerEntity
-                .builder()
-                .id(CUSTOMER_ENTITY.ID)
-                .name(CUSTOMER_ENTITY.NAME)
-                .age(CUSTOMER_ENTITY.AGE)
-                .cpf(CUSTOMER_ENTITY.CPF)
-                .orders(CUSTOMER_ENTITY.REQUESTS_LIST)
-                .build();
-    }
 }

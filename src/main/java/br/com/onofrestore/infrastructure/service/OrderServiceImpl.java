@@ -1,7 +1,6 @@
 package br.com.onofrestore.infrastructure.service;
 
 import br.com.onofrestore.domain.dto.order.OrderInformationDTO;
-import br.com.onofrestore.domain.dto.order.OrderInputDTO;
 import br.com.onofrestore.domain.dto.order.OrderNewStatusDTO;
 import br.com.onofrestore.domain.dto.order.OrderOutputDTO;
 import br.com.onofrestore.domain.dto.orderitems.OrderItemsInputDTO;
@@ -24,9 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -42,30 +43,53 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderOutputDTO saveNewOrderInDb(OrderInputDTO dto) {
-        this.validateOrder(dto);
+    public OrderOutputDTO saveNewOrderInDb(List<OrderItemsInputDTO> dto) {
+        if (CollectionUtils.isEmpty(dto)) {
+            throw new ListIsEmptyException(CodeMessage.ORDER_NOT_FOUND);
+        }
 
-        String uuidUser = onofreSecurity.getUserUuid();
-        UserEntity user = userRepository.findByUuid(uuidUser);
+        UserEntity user = this.getUserByUuidInJwt();
 
         if (user == null) {
             throw new UserNotFoundException(CodeMessage.USER_NOTFOUND);
         }
-        OrderEntity order = orderMapper.convertDTOAndCustomerToOrderEntity(dto, user);
-        OrderEntity orderSuccess = orderRepository.save(order);
+        OrderEntity order = orderMapper.convertItemsAndUserToOrder(dto, user);
 
-        List<OrderItemsEntity> orderItems = this.getOrderItems(orderSuccess, dto.getOrderItems());
+        List<OrderItemsEntity> orderItems = this.getOrderItems(order, dto);
         order.setOrderItems(orderItems);
 
+        BigDecimal totalOrder = this.calculateOrderTotal(orderItems);
+        order.setTotal(totalOrder);
+
+        orderRepository.save(order);
         orderItemsRepository.saveAll(orderItems);
 
         return orderMapper.convertEntityToDTO(order, user, orderItems);
     }
 
     @Override
+    public OrderOutputDTO getOrderByUuid(String uuid) {
+        OrderEntity order = orderRepository.findByUuid(uuid);
+
+        if (order == null) {
+            throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
+        }
+
+        UserEntity user = this.getUserByUuidInJwt();
+
+        if (user == null) {
+            throw new UserNotFoundException(CodeMessage.USER_NOTFOUND);
+        }
+        return orderMapper.convertOrderToDTO(order, user);
+    }
+
+    @Override
     public Page<OrderInformationDTO> getAllOrderPaged() {
-        String userUuid = onofreSecurity.getUserUuid();
-        UserEntity user = userRepository.findByUuid(userUuid);
+        UserEntity user = this.getUserByUuidInJwt();
+
+        if (user == null) {
+            throw new UserNotFoundException(CodeMessage.USER_NOTFOUND);
+        }
 
         Page<OrderInformationDTO> orderPaged = orderMapper.convertToPageDTO(user.getOrders());
 
@@ -81,11 +105,17 @@ public class OrderServiceImpl implements OrderService {
         if (isEmpty(dto.getStatus())) {
             throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
-        OrderEntity order = orderRepository.findByUuid(uuid);
-        order.setStatus(dto.getStatus());
 
-        orderRepository.save(order);
-        return orderMapper.convertOrderItemsToInformationsDTO(order);
+        OrderEntity order = orderRepository.findByUuid(uuid);
+
+        if (order == null) {
+            throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);
+        } else {
+            order.setStatus(dto.getStatus());
+
+            orderRepository.save(order);
+            return orderMapper.convertOrderItemsToInformationsDTO(order);
+        }
     }
 
     @Transactional
@@ -99,6 +129,7 @@ public class OrderServiceImpl implements OrderService {
         if (isEmpty(dto)) {
             throw new UuidNotFoundOrNullException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
         }
+
         String uuidProduct = dto.getUuidProduct();
 
         try {
@@ -114,14 +145,8 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void validateOrder(OrderInputDTO dto) {
-        if (isEmpty(dto.getTotal()) && CollectionUtils.isEmpty(dto.getOrderItems())) {
-            throw new DtoNullOrIsEmptyException(CodeMessage.DTO_NULL_OR_IS_EMPTY);
-        }
-    }
-
     private List<OrderItemsEntity> getOrderItems(OrderEntity order, List<OrderItemsInputDTO> orderitems) {
-        if (CollectionUtils.isEmpty(orderitems)) {
+        if (isEmpty(orderitems)) {
             throw new ListIsEmptyException(CodeMessage.ORDER_NOT_FOUND);
         }
         if (order == null) {
@@ -135,8 +160,24 @@ public class OrderServiceImpl implements OrderService {
                     .builder()
                     .orderEntity(order)
                     .amount(dto.getAmount())
-                    .product(product)
-                    .build();
+                    .product(product).build();
         }).collect(Collectors.toList());
+    }
+
+    private BigDecimal calculateOrderTotal(List<OrderItemsEntity> orderItems) {
+        if (CollectionUtils.isEmpty(orderItems)) {
+            throw new ListIsEmptyException((CodeMessage.LIST_IS_EMPTY));
+        }
+
+        return orderItems
+                .stream()
+                .map(item -> item.getProduct().getUnitValue().multiply(
+                        BigDecimal.valueOf(item.getAmount())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private UserEntity getUserByUuidInJwt() {
+        String userUuid = onofreSecurity.getUserUuid();
+        return userRepository.findByUuid(userUuid);
     }
 }

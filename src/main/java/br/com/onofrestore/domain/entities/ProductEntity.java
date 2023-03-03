@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -30,12 +29,4 @@ public class ProductEntity extends BaseEntity{
     @Column(name = "UNIT_VALUE", nullable = false)
     private BigDecimal unitValue;
 
-    public ProductEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                         Long id, String productName, String description, BigDecimal unitValue) {
-        super(uuid, inclusionDate, modifyDate);
-        this.id = id;
-        this.productName = productName;
-        this.description = description;
-        this.unitValue = unitValue;
-    }
 }

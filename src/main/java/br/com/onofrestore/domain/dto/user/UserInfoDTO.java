@@ -1,4 +1,4 @@
-package br.com.onofrestore.domain.dto;
+package br.com.onofrestore.domain.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;

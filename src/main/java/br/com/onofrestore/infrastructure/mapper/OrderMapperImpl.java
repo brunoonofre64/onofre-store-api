@@ -1,6 +1,6 @@
 package br.com.onofrestore.infrastructure.mapper;
 
-import br.com.onofrestore.domain.dto.UserInfoDTO;
+import br.com.onofrestore.domain.dto.user.UserInfoDTO;
 import br.com.onofrestore.domain.dto.order.OrderInformationDTO;
 import br.com.onofrestore.domain.dto.order.OrderOutputDTO;
 import br.com.onofrestore.domain.dto.orderitems.OrderItemsInformationtDTO;

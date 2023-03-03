@@ -126,7 +126,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         try {
-
             orderRepository.deleteByUuid(uuid);
         } catch (Exception ex) {
             throw new OrderNotFoundException(CodeMessage.ORDER_NOT_FOUND);

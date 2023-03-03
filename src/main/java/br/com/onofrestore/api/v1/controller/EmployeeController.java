@@ -37,7 +37,7 @@ public class EmployeeController {
     @CheckSecurity.Permit.CanAuthenticated
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<EmployeeInformationDTO> getAllEmployeePaged(SearchDTO dto) {
+    public Page<EmployeeInformationDTO> getAllEmployeePaged(@ModelAttribute SearchDTO dto) {
         return service.getAllEmployeePaged(dto);
     }
 

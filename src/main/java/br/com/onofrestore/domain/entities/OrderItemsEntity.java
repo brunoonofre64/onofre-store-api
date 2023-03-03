@@ -3,7 +3,6 @@ package br.com.onofrestore.domain.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,12 +30,4 @@ public class OrderItemsEntity extends BaseEntity {
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity orderEntity;
 
-    public OrderItemsEntity(String uuid, LocalDateTime inclusionDate, LocalDateTime modifyDate,
-                            Long id, Long amount, ProductEntity product, OrderEntity orderEntity) {
-        super(uuid, inclusionDate, modifyDate);
-        this.id = id;
-        this.amount = amount;
-        this.product = product;
-        this.orderEntity = orderEntity;
-    }
 }

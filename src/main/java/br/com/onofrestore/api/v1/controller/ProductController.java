@@ -2,11 +2,11 @@ package br.com.onofrestore.api.v1.controller;
 
 import br.com.onofrestore.domain.dto.product.ProductInputDTO;
 import br.com.onofrestore.domain.dto.product.ProductOutputDTO;
+import br.com.onofrestore.domain.dto.util.SearchDTO;
 import br.com.onofrestore.domain.service.ProductService;
 import br.com.onofrestore.infrastructure.config.security.CheckSecurity;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +34,8 @@ public class ProductController {
     @CheckSecurity.Permit.CanAuthenticated
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ProductOutputDTO> getAllProducts(Pageable pageable) {
-        return service.getAllProducts(pageable);
+    public Page<ProductOutputDTO> getAllProducts(@ModelAttribute SearchDTO dto) {
+        return service.getAllProducts(dto);
     }
 
     @CheckSecurity.Permit.CanSave

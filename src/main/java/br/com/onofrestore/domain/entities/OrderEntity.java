@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -42,15 +41,4 @@ public class OrderEntity extends BaseEntity{
 
     @OneToMany(mappedBy = "orderEntity")
     private List<OrderItemsEntity> orderItems;
-
-    public OrderEntity(String uuid, LocalDateTime inclusionDate,
-                       LocalDateTime modifyDate, Long id, Status status,
-                       BigDecimal total, UserEntity users, List<OrderItemsEntity> orderItems) {
-        super(uuid, inclusionDate, modifyDate);
-        this.id = id;
-        this.status = status;
-        this.total = total;
-        this.users = users;
-        this.orderItems = orderItems;
-    }
 }

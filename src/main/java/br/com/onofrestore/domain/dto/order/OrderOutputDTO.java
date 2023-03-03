@@ -1,6 +1,6 @@
 package br.com.onofrestore.domain.dto.order;
 
-import br.com.onofrestore.domain.dto.UserInfoDTO;
+import br.com.onofrestore.domain.dto.user.UserInfoDTO;
 import br.com.onofrestore.domain.enums.Status;
 import lombok.Builder;
 import lombok.Getter;

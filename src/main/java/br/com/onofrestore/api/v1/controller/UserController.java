@@ -28,7 +28,8 @@ public class UserController {
     @CheckSecurity.Permit.CanChangePassword
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(@PathVariable String uuid, @RequestBody ChangePasswordDTO dto) {
+    public void changePassword(@PathVariable String uuid,
+                               @RequestBody ChangePasswordDTO dto) {
         service.changePassword(uuid, dto);
     }
 
@@ -47,7 +48,7 @@ public class UserController {
     }
 
     @CheckSecurity.Permit.CanSearchUser
-    @GetMapping("/paginado")
+    @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public Page<UserOutpuDTO> getAllUserPaged(@ModelAttribute SearchDTO dto) {
         return service.getAllUserPaged(dto);

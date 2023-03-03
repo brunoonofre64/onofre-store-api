@@ -1,0 +1,44 @@
+version: '3'
+services:
+  app1:
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+    container_name: app
+    image: onofrestore-image
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - flyway
+    env_file:
+      - ../secrets.env
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/onofre_store
+    restart: unless-stopped
+  oauth2:
+    build:
+      context: ../onofre-store-auth
+      dockerfile: ./Dockerfile
+    container_name: oauth2
+    image: my-oauth2-image
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    env_file:
+      - ../secrets.env
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/onofre_store
+    restart: unless-stopped
+  db:
+    container_name: db
+    image: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../secrets.env
+    environment:
+      - POSTGRES_DB=onofre_store
+    restart: unless-stopped
+

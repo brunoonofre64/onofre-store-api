@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -30,14 +29,4 @@ public class EmployeeEntity extends BaseEntity {
     @CPF
     @Column(name = "CPF", nullable = false)
     private String cpf;
-
-    public EmployeeEntity(String uuid, LocalDateTime inclusionDate,
-                          LocalDateTime modifyDate, Long id, String name,
-                          String email, String cpf) {
-        super(uuid, inclusionDate, modifyDate);
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.cpf = cpf;
-    }
 }

@@ -38,7 +38,7 @@ public class OrderController {
     @PatchMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public OrderInformationDTO updateStatusOfOrderByUuid(@PathVariable String uuid,
-                                                    @RequestBody OrderNewStatusDTO dto) {
+                                                         @RequestBody OrderNewStatusDTO dto) {
         return service.updateStatusOrderByUuid(uuid, dto);
     }
 

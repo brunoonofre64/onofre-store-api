@@ -13,6 +13,7 @@ import br.com.onofrestore.infrastructure.jpa.repositories.RoleRepository;
 import br.com.onofrestore.infrastructure.jpa.repositories.UserRepository;
 import br.com.onofrestore.infrastructure.jpa.specifications.UserSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserDetailsService {
 

@@ -15,6 +15,8 @@
     <description>I&apos; API to online clothing store</description>
     <properties>
         <java.version>11</java.version>
+        <spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
+        <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
         <oauth2-oidc-sdk.version>6.21.2</oauth2-oidc-sdk.version>
     </properties>
 
@@ -56,12 +58,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>8.21</version>
         </dependency>
 
         <dependency>
@@ -149,6 +145,44 @@
             <artifactId>liquibase-core</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--SECURITY OUATH2 E JWT-->
+
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring-security-oauth2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${javax-jaxb.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>${spring-security-jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>8.21</version>
+        </dependency>
+
     </dependencies>
 
     <build>
